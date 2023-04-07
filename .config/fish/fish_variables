@@ -2,6 +2,7 @@
 # VERSION: 3.0
 SETUVAR --export CLOUD_ENV:collin
 SETUVAR --export PYENV_ROOT:/Users/collindutter/\x2epyenv
+SETUVAR --export XDG_CONFIG_HOME:/Users/collindutter/\x2econfig
 SETUVAR ZO_CMD:zo
 SETUVAR Z_CMD:z
 SETUVAR Z_DATA:/Users/collindutter/\x2elocal/share/z/data
