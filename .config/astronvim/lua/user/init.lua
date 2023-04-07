@@ -15,7 +15,6 @@ return {
           null_ls.builtins.code_actions.eslint,
           null_ls.builtins.diagnostics.eslint,
           null_ls.builtins.diagnostics.pylint,
-          null_ls.builtins.diagnostics.cfn_lint,
         }
         return config -- return final config table
       end,
