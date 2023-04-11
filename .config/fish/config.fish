@@ -1,5 +1,6 @@
 set fish_key_bindings fish_user_key_bindings
 fish_config theme choose "Catppuccin Mocha"
+set fish_greeting
 
 # tabtab source for packages
 # uninstall by removing these lines
@@ -11,13 +12,17 @@ fish_add_path /usr/local/opt/openjdk@11/bin
 fish_add_path /usr/local/opt/openjdk/bin
 
 # pyenv
-pyenv init - | source
+if type -q pyenv
+	pyenv init - | source
+	. ~/.config/fish/auto_source_venv.fish
+end
 
-. ~/.config/fish/auto_source_venv.fish
 
 # jenv
-set PATH $HOME/.jenv/bin $PATH
-status --is-interactive; and jenv init - | source
+if type -q jenv
+	set PATH $HOME/.jenv/bin $PATH
+	status --is-interactive; and jenv init - | source
+end
 
 # Adapted from https://github.com/fish-shell/fish-shell/issues/4434#issuecomment-332626369
 # only run in interactive (not automated SSH for example)
