@@ -11,15 +11,20 @@ return {
         -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
         -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
         config.sources = {
-          null_ls.builtins.formatting.prettier,
-          null_ls.builtins.code_actions.eslint,
-          null_ls.builtins.diagnostics.eslint,
-          null_ls.builtins.diagnostics.pylint,
+          null_ls.builtins.formatting.prettier.with({
+            prefer_local = "node_modules/.bin",
+          }),
+          null_ls.builtins.diagnostics.pylint
         }
         return config -- return final config table
       end,
     },
-    { "catppuccin/nvim", name = "catppuccin" },
+    { "catppuccin/nvim",     name = "catppuccin" },
+  },
+  options = {
+    g = {
+      editorconfig = false
+    }
   },
   lsp = {
     formatting = {
