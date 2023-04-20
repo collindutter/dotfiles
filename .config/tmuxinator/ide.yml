@@ -2,8 +2,8 @@ name: ide
 root: . 
 
 windows:
-  - editor:
-      layout: editor
+  - ide:
+      layout: main-vertical
       panes:
         - nvim
         - 
