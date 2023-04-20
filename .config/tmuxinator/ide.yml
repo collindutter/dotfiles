@@ -1,0 +1,9 @@
+name: ide
+root: . 
+
+windows:
+  - editor:
+      layout: editor
+      panes:
+        - nvim
+        - 
