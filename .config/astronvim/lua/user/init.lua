@@ -20,6 +20,7 @@ return {
       end,
     },
     { "catppuccin/nvim",     name = "catppuccin" },
+    { 'christoomey/vim-tmux-navigator', lazy=false}
   },
   options = {
     g = {
