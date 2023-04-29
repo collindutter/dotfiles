@@ -11,6 +11,8 @@ fish_add_path /usr/local/opt/yq@3/bin
 fish_add_path /usr/local/opt/openjdk@11/bin
 fish_add_path /usr/local/opt/openjdk/bin
 
+zoxide init fish | source
+
 # pyenv
 if type -q pyenv
 	pyenv init - | source
