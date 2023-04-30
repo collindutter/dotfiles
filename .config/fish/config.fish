@@ -12,6 +12,7 @@ fish_add_path /usr/local/opt/openjdk@11/bin
 fish_add_path /usr/local/opt/openjdk/bin
 
 zoxide init fish | source
+thefuck --alias | source
 
 # nvm
 function nvm
