@@ -61,7 +61,8 @@ return {
   },
   options = {
     g = {
-      editorconfig = false
+      editorconfig = false,
+      python3_host_prog = '/home/collindutter/.pyenv/versions/py3nvim/bin/python'
     }
   },
   lsp = {

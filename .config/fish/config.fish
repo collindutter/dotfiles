@@ -26,6 +26,10 @@ if type -q pyenv
 	. ~/.config/fish/auto_source_venv.fish
 end
 
+# nvim hack https://vi.stackexchange.com/questions/7644/use-vim-with-virtualenv/34996#34996
+if test -e $VIRTUAL_ENV 
+	source $VIRTUAL_ENV/bin/activate.fish
+end
 
 # jenv
 if type -q jenv
