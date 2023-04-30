@@ -19,8 +19,45 @@ return {
         return config -- return final config table
       end,
     },
-    { "catppuccin/nvim",     name = "catppuccin" },
-    { 'christoomey/vim-tmux-navigator', lazy=false}
+    {
+      "catppuccin/nvim",
+      name = "catppuccin"
+    },
+    {
+      'alexghergh/nvim-tmux-navigation',
+      lazy = false,
+      config = function()
+        require('nvim-tmux-navigation').setup {
+          disable_when_zoomed = true,
+          keybindings = {
+            left = "<C-h>",
+            down = "<C-j>",
+            up = "<C-k>",
+            right = "<C-l>",
+            last_active = "<C-\\>",
+            next = "<C-Space>",
+          }
+        }
+      end
+    },
+    {
+      "zbirenbaum/copilot.lua",
+      cmd = "Copilot",
+      event = "InsertEnter",
+      config = function()
+        require("copilot").setup({
+          panel = {
+            auto_refresh = true,
+            layout = {
+              position = "right"
+            }
+          },
+          suggestion = {
+            auto_trigger = true
+          }
+        })
+      end,
+    },
   },
   options = {
     g = {
