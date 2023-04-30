@@ -14,14 +14,11 @@ return {
           null_ls.builtins.formatting.prettier.with({
             prefer_local = "node_modules/.bin",
           }),
-          null_ls.builtins.diagnostics.pylint
+          null_ls.builtins.diagnostics.pylint,
+          null_ls.builtins.formatting.black
         }
         return config -- return final config table
       end,
-    },
-    {
-      "catppuccin/nvim",
-      name = "catppuccin"
     },
     {
       'alexghergh/nvim-tmux-navigation',
@@ -40,28 +37,13 @@ return {
         }
       end
     },
-    {
-      "zbirenbaum/copilot.lua",
-      cmd = "Copilot",
-      event = "InsertEnter",
-      config = function()
-        require("copilot").setup({
-          panel = {
-            auto_refresh = true,
-            layout = {
-              position = "right"
-            }
-          },
-          suggestion = {
-            auto_trigger = true
-          }
-        })
-      end,
-    },
+    { "AstroNvim/astrocommunity" },
+    { import = "astrocommunity.colorscheme.catppuccin" },
+   { import = "astrocommunity.completion.copilot-lua" },
+   { import = "astrocommunity.completion.copilot-lua-cmp" },
   },
   options = {
     g = {
-      editorconfig = false,
       python3_host_prog = '/home/collindutter/.pyenv/versions/py3nvim/bin/python'
     }
   },
