@@ -23,12 +23,7 @@ nvm use default --silent
 # pyenv
 if type -q pyenv
 	pyenv init - | source
-	. ~/.config/fish/auto_source_venv.fish
-end
-
-# nvim hack https://vi.stackexchange.com/questions/7644/use-vim-with-virtualenv/34996#34996
-if test -e $VIRTUAL_ENV 
-	source $VIRTUAL_ENV/bin/activate.fish
+	. ~/.config/fish/functions/auto_source_venv.fish
 end
 
 # jenv
