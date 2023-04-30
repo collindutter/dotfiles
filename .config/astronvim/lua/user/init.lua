@@ -37,13 +37,37 @@ return {
         }
       end
     },
+    {
+      -- override nvim-cmp plugin
+      "hrsh7th/nvim-cmp",
+      -- override the options table that is used in the `require("cmp").setup()` call
+      opts = function(_, opts)
+        -- opts parameter is the default options table
+        -- the function is lazy loaded so cmp is able to be required
+        local cmp = require "cmp"
+        opts.mapping["<C-e>"] = function(fallback)
+          cmp.mapping.abort()
+          local copilot_keys = vim.fn["copilot#Accept"]()
+          if copilot_keys ~= "" then
+            vim.api.nvim_feedkeys(copilot_keys, "i", true)
+          else
+            fallback()
+          end
+        end
+
+        -- return the new table to be used
+        return opts
+      end,
+    },
+    { "github/copilot.vim",                            lazy = false },
     { "AstroNvim/astrocommunity" },
     { import = "astrocommunity.colorscheme.catppuccin" },
-   { import = "astrocommunity.completion.copilot-lua" },
-   { import = "astrocommunity.completion.copilot-lua-cmp" },
   },
   options = {
     g = {
+      copilot_no_tab_map = true,
+      copilot_assume_mapped = true,
+      copilot_tab_fallback = "",
       python3_host_prog = '/home/collindutter/.pyenv/versions/py3nvim/bin/python'
     }
   },
