@@ -59,7 +59,7 @@ return {
         return opts
       end,
     },
-    { "github/copilot.vim",                            lazy = false },
+    { "github/copilot.vim", lazy = false },
     { "AstroNvim/astrocommunity" },
     { import = "astrocommunity.colorscheme.catppuccin" },
   },
@@ -69,6 +69,9 @@ return {
       copilot_assume_mapped = true,
       copilot_tab_fallback = "",
       python3_host_prog = '/home/collindutter/.pyenv/versions/py3nvim/bin/python'
+    },
+    opt = {
+      shell = "/bin/bash"
     }
   },
   lsp = {
