@@ -4,21 +4,38 @@ return {
     {
       "jose-elias-alvarez/null-ls.nvim",
       opts = function(_, config)
-        -- config variable is the default configuration table for the setup function call
         local null_ls = require "null-ls"
 
-        -- Check supported formatters and linters
         -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
         -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
         config.sources = {
           null_ls.builtins.formatting.prettier.with({
-            prefer_local = "node_modules/.bin",
+            only_local = true,
           }),
-          null_ls.builtins.diagnostics.pylint,
-          null_ls.builtins.formatting.black
+          null_ls.builtins.formatting.eslint.with({
+            only_local = true,
+          }),
+          null_ls.builtins.diagnostics.pylint.with({
+            only_local = true
+          }),
+          null_ls.builtins.formatting.black.with({
+            only_local = true
+          }),
         }
-        return config -- return final config table
+        return config
       end,
+    },
+    {
+      "williamboman/mason-lspconfig.nvim",
+      opts = {
+        ensure_installed = { "tsserver", 'jedi_language_server', 'eslint', 'lua_ls' },
+      },
+    },
+    {
+      "nvim-treesitter/nvim-treesitter",
+      opts = {
+        ensure_installed = "all",
+      },
     },
     {
       'alexghergh/nvim-tmux-navigation',
@@ -38,12 +55,8 @@ return {
       end
     },
     {
-      -- override nvim-cmp plugin
       "hrsh7th/nvim-cmp",
-      -- override the options table that is used in the `require("cmp").setup()` call
       opts = function(_, opts)
-        -- opts parameter is the default options table
-        -- the function is lazy loaded so cmp is able to be required
         local cmp = require "cmp"
         opts.mapping["<C-e>"] = function(fallback)
           cmp.mapping.abort()
@@ -55,11 +68,10 @@ return {
           end
         end
 
-        -- return the new table to be used
         return opts
       end,
     },
-    { "github/copilot.vim", lazy = false },
+    { "github/copilot.vim",                            lazy = false },
     { "AstroNvim/astrocommunity" },
     { import = "astrocommunity.colorscheme.catppuccin" },
   },
