@@ -80,7 +80,7 @@ return {
       copilot_no_tab_map = true,
       copilot_assume_mapped = true,
       copilot_tab_fallback = "",
-      python3_host_prog = '/Users/collindutter/.virtualenvs/py3nvim/bin/python'
+      python3_host_prog = '~/.virtualenvs/py3nvim/bin/python'
     },
     opt = {
       shell = "/bin/bash"
