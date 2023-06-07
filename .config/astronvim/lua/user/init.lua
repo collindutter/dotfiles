@@ -10,16 +10,16 @@ return {
         -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
         config.sources = {
           null_ls.builtins.formatting.prettier.with({
-            only_local = true,
+            only_local = 'node_modules/.bin',
           }),
           null_ls.builtins.formatting.eslint.with({
-            only_local = true,
+            only_local = 'node_modules/.bin',
           }),
           null_ls.builtins.diagnostics.pylint.with({
-            only_local = true
+            prefer_local = '.venv/bin'
           }),
           null_ls.builtins.formatting.black.with({
-            only_local = true
+            prefer_local = '.venv/bin'
           }),
         }
         return config
@@ -71,7 +71,35 @@ return {
         return opts
       end,
     },
-    { "github/copilot.vim",                            lazy = false },
+    {
+      "jay-babu/mason-nvim-dap.nvim",
+      opts = {
+        handlers = {
+          python = function()
+            local dap = require "dap"
+            dap.adapters.python = {
+              type = "executable",
+              command = ".venv/bin/python",
+              args = {
+                "-m",
+                "debugpy.adapter",
+              },
+            }
+
+            dap.configurations.python = {
+              {
+                type = "python",
+                request = "launch",
+                name = "Test File",
+                program = "${workspaceFolder}/.venv/bin/pytest",
+                args = { "${file}" },
+              },
+            }
+          end,
+        },
+      },
+    },
+    { "github/copilot.vim", lazy = false },
     { "AstroNvim/astrocommunity" },
     { import = "astrocommunity.colorscheme.catppuccin" },
   },
@@ -88,7 +116,7 @@ return {
   },
   lsp = {
     formatting = {
-      timeout_ms = 6000,
+      timeout_ms = 15000,
       format_on_save = false
     },
     config = {
