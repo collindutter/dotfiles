@@ -1,9 +1,0 @@
-name: ide
-root: . 
-
-windows:
-  - ide:
-      layout: main-vertical
-      panes:
-        - nvim
-        - 
