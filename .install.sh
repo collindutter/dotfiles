@@ -68,3 +68,10 @@ poetry config virtualenvs.in-project true
 
 echo "Configuring git..."
 git config --global user.name "Collin Dutter"
+
+echo "Configuring dotfiles"
+alias --save dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+echo ".dotfiles" >> .gitignore
+git clone --bare https://github.com/collindutter $HOME/.dotfiles
+dotfiles checkout
+dotfiles config --local status.showUntrackedFiles no
