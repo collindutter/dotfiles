@@ -2,7 +2,9 @@ fish_add_path /usr/local/sbin
 fish_add_path /usr/local/opt/yq@3/bin
 fish_add_path /usr/local/opt/openjdk@11/bin
 fish_add_path /usr/local/opt/openjdk/bin
+fish_add_path ~/.local/bin
 fish_add_path $HOME/.jenv/bin 
+fish_add_path /opt/homebrew/bin
 
 if status --is-interactive
 	set -gx COLORTERM truecolor
@@ -15,7 +17,6 @@ if status --is-interactive
 	fish_config theme choose "Catppuccin Mocha"
 	
 	zoxide init fish | source
-	thefuck --alias | source
 
 	if not set -q TMUX
     set -g TMUX tmux new-session -d -s personal
