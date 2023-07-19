@@ -68,6 +68,7 @@ poetry config virtualenvs.in-project true
 
 echo "Configuring git..."
 git config --global user.name "Collin Dutter"
+git config --global user.email "collindutter@gmail.com"
 
 echo "Configuring dotfiles"
 alias --save dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
