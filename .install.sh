@@ -49,15 +49,21 @@ echo "Installing nodejs..."
 asdf install nodejs latest
 asdf global nodejs latest
 
-echo "Installing python"
+echo "Installing python..."
 asdf plugin add python
 asdf global python latest
 
 echo "Installing poetry..."
 curl -sSL https://install.python-poetry.org | python3 -
 
-echo "Installing tpm"
+echo "Installing tpm..."
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+echo "Installing omf..."
+curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+
+echo "Installing bass..."
+omf install bass
 
 echo "Starting Services..."
 yabai --start-service
@@ -70,7 +76,7 @@ echo "Configuring git..."
 git config --global user.name "Collin Dutter"
 git config --global user.email "collindutter@gmail.com"
 
-echo "Configuring dotfiles"
+echo "Configuring dotfiles..."
 alias --save dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 echo ".dotfiles" >> .gitignore
 git clone --bare https://github.com/collindutter $HOME/.dotfiles
