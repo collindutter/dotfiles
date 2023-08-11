@@ -97,7 +97,7 @@ return {
       config = function()
         require('dap-python').setup('~/.virtualenvs/debugpy/bin/python')
       end,
-      lazy = false
+      event = "User AstroFile",
     },
     {
       "jose-elias-alvarez/null-ls.nvim",
@@ -134,7 +134,6 @@ return {
     },
     {
       'alexghergh/nvim-tmux-navigation',
-      lazy = false,
       config = function()
         require('nvim-tmux-navigation').setup {
           disable_when_zoomed = true,
@@ -147,7 +146,8 @@ return {
             next = "<C-Space>",
           }
         }
-      end
+      end,
+      lazy = false
     },
     {
       "hrsh7th/nvim-cmp",
@@ -168,7 +168,7 @@ return {
     },
     {
       "github/copilot.vim",
-      lazy = false
+      event = "User AstroFile",
     },
     {
       "rcarriga/nvim-dap-ui",
@@ -179,35 +179,6 @@ return {
         local dap, dapui = require("dap"), require("dapui")
         dap.listeners.before.event_terminated["dapui_config"] = nil
         dap.listeners.before.event_exited["dapui_config"] = nil
-
-        dapui.setup({
-          layouts = {
-            {
-              elements = {
-                {
-                  id = "scopes",
-                  size = 0.75
-                },
-                {
-                  id = "breakpoints",
-                  size = 0.25
-                },
-              },
-              position = "left",
-              size = 40
-            },
-            {
-              elements = {
-                {
-                  id = "repl",
-                  size = 1
-                },
-              },
-              position = "bottom",
-              size = 15
-            }
-          },
-        })
       end,
     },
     {
@@ -260,9 +231,43 @@ return {
           },
         })
       end,
+      event = "User AstroFile",
+
+    },
+    {
+      "folke/flash.nvim",
+      event = "VeryLazy",
+      ---@type Flash.Config
+      opts = {},
+      keys = {
+        { "s", mode = { "n", "x", "o" }, function() require("flash").jump() end, desc = "Flash" },
+        {
+          "S",
+          mode = { "n", "o", "x" },
+          function() require("flash").treesitter() end,
+          desc =
+          "Flash Treesitter"
+        },
+      },
+    },
+    {
+      "m4xshen/hardtime.nvim",
+      opts = {
+        disabled_filetypes = { "lazy", "mason", "neo-tree", "neo-tree-popup", "dapui_breakpoints", "dapui_scopes",
+          "dapui_stacks",
+          "dapui_watches", "dap-repl", "dapui_console", "alpha", "vim" },
+      },
+      lazy = false,
+    },
+    {
+      "catppuccin/nvim",
+      name = "catppuccin",
+      priority = 1000,
       lazy = false
     },
-    { "AstroNvim/astrocommunity" },
-    { import = "astrocommunity.colorscheme.catppuccin" },
+    {
+      "junegunn/vim-easy-align",
+      lazy = false
+    }
   },
 }
