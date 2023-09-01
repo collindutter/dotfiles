@@ -14,7 +14,7 @@ if status --is-interactive
 	set -g fish_bind_mode insert
 	set fish_greeting
 	
-	fish_config theme choose "Catppuccin Mocha"
+	fish_config theme choose "tokyonight_storm"
 	
 	zoxide init fish | source
 
