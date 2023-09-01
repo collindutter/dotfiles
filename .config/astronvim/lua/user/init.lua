@@ -38,6 +38,7 @@ return {
         }
     },
     polish = function()
+        -- Spider
         vim.keymap.set({"n", "o", "x"}, "w",
                        "<cmd>lua require('spider').motion('w')<CR>",
                        {desc = "Spider-w"})
@@ -50,6 +51,7 @@ return {
         vim.keymap.set({"n", "o", "x"}, "ge",
                        "<cmd>lua require('spider').motion('ge')<CR>",
                        {desc = "Spider-ge"})
+        vim.keymap.set({"n", "o", "x"}, "cw", "ce", {desc = "Spider-ce"})
     end,
     options = {
         g = {
@@ -218,7 +220,7 @@ return {
             "folke/flash.nvim",
             event = "VeryLazy",
             ---@type Flash.Config
-            opts = {},
+            opts = {modes = {search = {enabled = false}}},
             keys = {
                 {
                     "s",
@@ -249,6 +251,6 @@ return {
             name = "tokyonight",
             priority = 1000,
             lazy = false
-        }, {"chrisgrieser/nvim-spider", lazy = false}
+        }, {"chrisgrieser/nvim-spider", lazy = false}, {}
     }
 }
