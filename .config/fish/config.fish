@@ -14,7 +14,7 @@ if status --is-interactive
 	set -g fish_bind_mode insert
 	set fish_greeting
 	
-	fish_config theme choose "tokyonight_storm"
+	fish_config theme choose "Catppuccin Macchiato"
 	
 	zoxide init fish | source
 
@@ -27,3 +27,6 @@ if status --is-interactive
 	source ~/.asdf/asdf.fish
 end
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/collindutter/Documents/griptape/google-cloud-sdk/path.fish.inc' ]; . '/Users/collindutter/Documents/griptape/google-cloud-sdk/path.fish.inc'; end
