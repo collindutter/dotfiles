@@ -142,7 +142,6 @@ return {
                         pythonPath = ".venv/bin/python"
                     }
                 }
-
             },
             yamlls = {
                 settings = {
@@ -415,13 +414,15 @@ return {
                 require("neotest").setup(opts)
             end
         },
-        { "folke/zen-mode.nvim", opts = {}, lazy = false },
+        {
+            "folke/zen-mode.nvim",
+            opts = {},
+            event = "User AstroFile"
+        },
         {
             "folke/flash.nvim",
             event = "VeryLazy",
-            opts = {
-                modes = { search = { enabled = false } }
-            },
+            opts = { modes = { search = { enabled = true } } },
             keys = {
                 {
                     "s",
@@ -467,7 +468,7 @@ return {
         },
         {
             "chrisgrieser/nvim-spider",
-            lazy = false,
+            event = "User AstroFile",
             opts = { skipInsignificantPunctuation = false }
         },
         {
@@ -512,6 +513,37 @@ return {
             "folke/trouble.nvim",
             dependencies = { "nvim-tree/nvim-web-devicons" },
             opts = {}
+        },
+        {
+            "kylechui/nvim-surround",
+            version = "*", -- Use for stability; omit to use `main` branch for the latest features
+            event = "VeryLazy",
+            opts = {}
+        },
+        {
+            "nvim-treesitter/nvim-treesitter-context",
+            event = "User AstroFile",
+            opts = {
+                enable = true,            -- Enable this plugin (Can be enabled/disabled later via commands)
+                max_lines = 0,            -- How many lines the window should span. Values <= 0 mean no limit.
+                min_window_height = 0,    -- Minimum editor window height to enable context. Values <= 0 mean no limit.
+                line_numbers = true,
+                multiline_threshold = 20, -- Maximum number of lines to show for a single context
+                trim_scope = "outer",     -- Which context lines to discard if `max_lines` is exceeded. Choices: 'inner', 'outer'
+                mode = 'cursor',          -- Line used to calculate context. Choices: 'cursor', 'topline'
+                -- Separator between context and content. Should be a single character string, like '-'.
+                -- When separator is set, the context will only show up when there are at least 2 lines above cursorline.
+                separator = nil,
+                zindex = 20,    -- The Z-index of the context window
+                on_attach = nil -- (fun(buf: integer): boolean) return false to disable attaching
+            }
+        },
+        {
+            "rebelot/heirline.nvim",
+            opts = function(_, opts)
+                opts.winbar = nil
+                return opts
+            end
         }
     }
 }

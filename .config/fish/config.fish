@@ -26,7 +26,3 @@ if status --is-interactive
 
 	source ~/.asdf/asdf.fish
 end
-
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/collindutter/Documents/griptape/google-cloud-sdk/path.fish.inc' ]; . '/Users/collindutter/Documents/griptape/google-cloud-sdk/path.fish.inc'; end

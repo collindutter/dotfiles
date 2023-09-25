@@ -59,11 +59,14 @@ curl -sSL https://install.python-poetry.org | python3 -
 echo "Installing tpm..."
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
-echo "Installing omf..."
-curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install | fish
+echo "Installing Fisher..."
+curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
 
 echo "Installing bass..."
-omf install bass
+fisher install bass
+
+$ echo "Installing fish catpuccin..."
+fisher install catppuccin/fish
 
 echo "Starting Services..."
 yabai --start-service
