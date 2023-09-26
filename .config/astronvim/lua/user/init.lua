@@ -268,7 +268,8 @@ return {
                 ensure_installed = {
                     "tsserver",
                     'ruff_lsp',
-                    'lua_ls'
+                    'lua_ls',
+                    'pyright',
                 }
             }
         },
@@ -276,7 +277,6 @@ return {
             "jay-babu/mason-null-ls.nvim",
             opts = {
                 ensure_installed = {
-                    "pyright",
                     'ruff',
                     'black',
                     'eslint',
