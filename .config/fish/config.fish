@@ -10,6 +10,7 @@ if status --is-interactive
 	set -gx COLORTERM truecolor
 	set -gx EDITOR nvim --clean
 	set -gx HOMEBREW_AUTO_UPDATE_SECS 86400
+	set -gx BAT_THEME "Catppuccin-macchiato"
 	set -g fish_key_bindings fish_vi_key_bindings
 	set -g fish_bind_mode insert
 	set fish_greeting
@@ -25,4 +26,6 @@ if status --is-interactive
 	end
 
 	source ~/.asdf/asdf.fish
+
+	starship init fish | source
 end

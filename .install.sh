@@ -17,6 +17,7 @@ brew install tmux
 brew install fish
 brew install yabai
 brew install skhd
+brew install starship
 
 echo "Switching to fish shell..."
 sudo echo /usr/local/bin/fish >> /etc/shells
@@ -70,7 +71,7 @@ fisher install catppuccin/fish
 
 echo "Starting Services..."
 yabai --start-service
-brew services start skhd
+skhd --start-service
 
 echo "Configuring poetry..."
 poetry config virtualenvs.in-project true

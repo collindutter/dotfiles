@@ -2,20 +2,20 @@ return {
     colorscheme = "catppuccin-macchiato",
     mappings = {
         n = {
-            ["<leader>T"] = { name = "Test" },
-            ["<leader>Tn"] = {
+            ["<leader>t"] = { name = "Test" },
+            ["<leader>tn"] = {
                 function()
                     require("neotest").run.run()
                 end,
                 desc = "Run the nearest test"
             },
-            ["<leader>Tc"] = {
+            ["<leader>tc"] = {
                 function()
                     require("neotest").run.run(vim.fn.expand("%"))
                 end,
                 desc = "Run the current file"
             },
-            ["<leader>Td"] = {
+            ["<leader>td"] = {
                 function()
                     require("neotest").run.run({
                         suite = false,
@@ -33,7 +33,7 @@ return {
                 end,
                 desc = "Debug the nearest test"
             },
-            ["<leader>Ts"] = {
+            ["<leader>ts"] = {
                 function()
                     require("neotest").run.stop()
                 end,
@@ -89,36 +89,48 @@ return {
                         jump = true
                     });
                 end
-            }
-
+            },
+            ["<leader>q"] = false
         }
     },
     polish = function()
         -- Spider
-        vim.keymap.set({ "n", "o", "x" }, "w",
-            "<cmd>lua require('spider').motion('w')<CR>", {
-                desc = "Spider-w"
-            })
-        vim.keymap.set({ "n", "o", "x" }, "e",
-            "<cmd>lua require('spider').motion('e')<CR>", {
-                desc = "Spider-e"
-            })
-        vim.keymap.set({ "n", "o", "x" }, "b",
-            "<cmd>lua require('spider').motion('b')<CR>", {
-                desc = "Spider-b"
-            })
-        vim.keymap.set({ "n", "o", "x" }, "ge",
-            "<cmd>lua require('spider').motion('ge')<CR>",
-            { desc = "Spider-ge" })
+        vim.keymap.set({ "n", "o", "x" }, "w", function()
+            require('spider').motion('w')
+        end, { desc = "Spider-w" })
+        vim.keymap.set({ "n", "o", "x" }, "e", function()
+            require('spider').motion('e')
+        end, { desc = "Spider-e" })
+        vim.keymap.set({ "n", "o", "x" }, "b", function()
+            require('spider').motion('b')
+        end, { desc = "Spider-b" })
+        vim.keymap.set({ "n", "o", "x" }, "ge", function()
+            require('spider').motion('ge')
+        end, { desc = "Spider-ge" })
         vim.keymap.set({ "n", "o", "x" }, "cw", "ce",
             { desc = "Spider-ce", remap = true })
+
+        -- Page movement
+        vim.keymap.set("n", "<C-d>", "<C-d>zz",
+            {
+                desc = "Center cursor after moving down half-page"
+            })
+        vim.keymap.set("n", "<C-u>", "<C-u>zz",
+            {
+                desc = "Center cursor after moving up half-page"
+            })
+
+        -- Dap UI
+        vim.keymap.set('n', "<leader>du", function()
+            require("dapui").toggle({ reset = true })
+        end, { desc = "Toggle Debugger UI" })
     end,
     options = {
         g = {
             python3_host_prog = '~/.virtualenvs/py3nvim/bin/python',
             editorconfig = false
         },
-        opt = { shell = "/bin/bash" }
+        opt = { shell = "/bin/bash", fixeol = false }
     },
     lsp = {
         formatting = {
@@ -270,6 +282,7 @@ return {
                     'ruff_lsp',
                     'lua_ls',
                     'pyright',
+                    'jsonls'
                 }
             }
         },
@@ -319,8 +332,8 @@ return {
                 local function has_words_before()
                     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
                     return col ~= 0 and
-                        vim.api
-                        .nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(
+                               vim.api
+                                   .nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(
                             col, col):match "%s" == nil
                 end
                 if not opts.mapping then
@@ -365,12 +378,30 @@ return {
         {
             "rcarriga/nvim-dap-ui",
             config = function(plugin, opts)
-                require "plugins.configs.nvim-dap-ui" (plugin, opts)
+                require "plugins.configs.nvim-dap-ui"(plugin, opts)
 
                 local dap = require("dap")
                 dap.listeners.before.event_terminated["dapui_config"] = nil
                 dap.listeners.before.event_exited["dapui_config"] = nil
-            end
+            end,
+            opts = {
+
+                layouts = {
+                    {
+                        elements = {
+                            { id = "scopes", size = 0.25 },
+                            {
+                                id = "breakpoints",
+                                size = 0.25
+                            },
+                            { id = "stacks", size = 0.25 },
+                            { id = "watches", size = 0.25 }
+                        },
+                        position = "left",
+                        size = 40
+                    }
+                }
+            }
         },
         {
             "nvim-neotest/neotest",
@@ -454,14 +485,16 @@ return {
                     "dapui_scopes",
                     "dapui_stacks",
                     "dapui_watches",
-                    "dap-repl",
                     "dapui_console",
+                    "dap-repl",
+                    "dap-float",
                     "alpha",
                     "vim",
                     "qf",
                     "dressinginput",
                     "TelescopePrompt",
-                    "trouble"
+                    "trouble",
+                    "help"
                 }
             },
             lazy = false
@@ -520,5 +553,7 @@ return {
             event = "VeryLazy",
             opts = {}
         },
+        { "Shatur/neovim-session-manager", enabled = false },
+        { "akinsho/toggleterm.nvim", enabled = false }
     }
 }
