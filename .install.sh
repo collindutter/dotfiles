@@ -17,7 +17,6 @@ brew install tmux
 brew install fish
 brew install yabai
 brew install skhd
-brew install starship
 
 echo "Switching to fish shell..."
 sudo echo /usr/local/bin/fish >> /etc/shells
@@ -63,8 +62,9 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 echo "Installing Fisher..."
 curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fisher.fish | source && fisher install jorgebucaran/fisher
 
-echo "Installing bass..."
+echo "Installing Fisher packages..."
 fisher install bass
+fisher install IlanCosman/tide@v6
 
 $ echo "Installing fish catpuccin..."
 fisher install catppuccin/fish
@@ -75,6 +75,7 @@ skhd --start-service
 
 echo "Configuring poetry..."
 poetry config virtualenvs.in-project true
+poetry config virtualenvs.prefer-active-python true
 
 echo "Configuring git..."
 git config --global user.name "Collin Dutter"
@@ -86,3 +87,13 @@ echo ".dotfiles" >> .gitignore
 git clone --bare https://github.com/collindutter $HOME/.dotfiles
 dotfiles checkout
 dotfiles config --local status.showUntrackedFiles no
+
+echo "Configuring tide prompt..."
+tide configure --auto --style=Lean --prompt_colors='True color' --show_time='12-hour format' --lean_prompt_height='Two lines' --prompt_connection=Dotted --prompt_connection_andor_frame_color=Dark --prompt_spacing=Compact --icons='Few icons' --transient=Yes
+
+echo "Configuring python virtualenvs..."
+mkdir .virtualenvs
+python -m venv .virtualenvs/py3nvim 
+./virtualenvs/bin/pip install pynvim
+python -m venv .virtualenvs/debugpy 
+./virtualenvs/bin/pip install debugpy
