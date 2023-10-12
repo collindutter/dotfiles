@@ -26,6 +26,4 @@ if status --is-interactive
 	end
 
 	source ~/.asdf/asdf.fish
-
-	starship init fish | source
 end
