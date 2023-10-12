@@ -332,8 +332,8 @@ return {
                 local function has_words_before()
                     local line, col = unpack(vim.api.nvim_win_get_cursor(0))
                     return col ~= 0 and
-                               vim.api
-                                   .nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(
+                        vim.api
+                        .nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(
                             col, col):match "%s" == nil
                 end
                 if not opts.mapping then
@@ -378,7 +378,7 @@ return {
         {
             "rcarriga/nvim-dap-ui",
             config = function(plugin, opts)
-                require "plugins.configs.nvim-dap-ui"(plugin, opts)
+                require "plugins.configs.nvim-dap-ui" (plugin, opts)
 
                 local dap = require("dap")
                 dap.listeners.before.event_terminated["dapui_config"] = nil
@@ -389,12 +389,12 @@ return {
                 layouts = {
                     {
                         elements = {
-                            { id = "scopes", size = 0.25 },
+                            { id = "scopes",  size = 0.25 },
                             {
                                 id = "breakpoints",
                                 size = 0.25
                             },
-                            { id = "stacks", size = 0.25 },
+                            { id = "stacks",  size = 0.25 },
                             { id = "watches", size = 0.25 }
                         },
                         position = "left",
@@ -453,7 +453,9 @@ return {
         {
             "folke/flash.nvim",
             event = "VeryLazy",
-            opts = { modes = { search = { enabled = true } } },
+            opts = {
+                modes = { search = { enabled = false } }
+            },
             keys = {
                 {
                     "s",
@@ -494,7 +496,9 @@ return {
                     "dressinginput",
                     "TelescopePrompt",
                     "trouble",
-                    "help"
+                    "help",
+                    "spectre_panel",
+
                 }
             },
             lazy = false
@@ -554,6 +558,20 @@ return {
             opts = {}
         },
         { "Shatur/neovim-session-manager", enabled = false },
-        { "akinsho/toggleterm.nvim", enabled = false }
+        { "akinsho/toggleterm.nvim",       enabled = false },
+        {
+            "nvim-pack/nvim-spectre",
+            cmd = "Spectre",
+            keys = {
+                {
+                    "<leader>fr",
+                    function()
+                        require("spectre").toggle()
+                    end,
+                    desc = "Find and replace"
+                },
+            },
+            event = "User AstroFile",
+        }
     }
 }
