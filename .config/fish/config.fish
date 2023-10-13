@@ -6,12 +6,20 @@ fish_add_path ~/.local/bin
 fish_add_path $HOME/.jenv/bin 
 fish_add_path /opt/homebrew/bin
 
+function fish_hybrid_key_bindings --description \
+"Vi-style bindings that inherit emacs-style bindings in all modes"
+    for mode in default insert visual
+        fish_default_key_bindings -M $mode
+    end
+    fish_vi_key_bindings --no-erase
+end
+
 if status --is-interactive
 	set -gx COLORTERM truecolor
 	set -gx EDITOR nvim --clean
 	set -gx HOMEBREW_AUTO_UPDATE_SECS 86400
 	set -gx BAT_THEME "Catppuccin-macchiato"
-	set -g fish_key_bindings fish_vi_key_bindings
+	set -g fish_key_bindings fish_hybrid_key_bindings
 	set -g fish_bind_mode insert
 	set fish_greeting
 	

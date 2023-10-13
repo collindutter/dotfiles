@@ -89,7 +89,7 @@ dotfiles checkout
 dotfiles config --local status.showUntrackedFiles no
 
 echo "Configuring tide prompt..."
-tide configure --auto --style=Lean --prompt_colors='True color' --show_time='12-hour format' --lean_prompt_height='Two lines' --prompt_connection=Dotted --prompt_connection_andor_frame_color=Dark --prompt_spacing=Compact --icons='Few icons' --transient=Yes
+tide configure --auto --style=Lean --prompt_colors='True color' --show_time='12-hour format' --lean_prompt_height='One line' --prompt_spacing=Compact --icons='Few icons' --transient=No
 
 echo "Configuring python virtualenvs..."
 mkdir .virtualenvs
