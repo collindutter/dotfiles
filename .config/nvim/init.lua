@@ -17,13 +17,10 @@ vim.opt.rtp:prepend(lazypath)
 
 -- [[ Plugins ]]
 require('lazy').setup({
-  -- NOTE: First, some plugins that don't require any configuration
-
-  -- Detect tabstop and shiftwidth automatically
-  'tpope/vim-sleuth',
-
-  -- NOTE: This is where your plugins related to LSP can be installed.
-  --  The configuration is done below. Search for lspconfig to find it below.
+  {
+    -- Detect tabstop and shiftwidth automatically
+    'tpope/vim-sleuth',
+  },
   {
     -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
@@ -33,7 +30,6 @@ require('lazy').setup({
       'williamboman/mason-lspconfig.nvim',
 
       -- Useful status updates for LSP
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
@@ -109,18 +105,16 @@ require('lazy').setup({
     init = function()
       -- document existing key chains
       require('which-key').register {
-        ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-        ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-        ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
-        ['<leader>h'] = { name = 'More git', _ = 'which_key_ignore' },
-        ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-        ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-        ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
+        ['<leader>l'] = { name = 'LSP', _ = 'which_key_ignore' },
+        ['<leader>d'] = { name = 'Debugger', _ = 'which_key_ignore' },
+        ['<leader>g'] = { name = 'Git', _ = 'which_key_ignore' },
+        ['<leader>b'] = { name = 'Buffers', _ = 'which_key_ignore' },
+        ['<leader>f'] = { name = 'Find', _ = 'which_key_ignore' },
       }
     end
   },
   {
-    -- Adds git related signs to the gutter, as well as utilities for managing changes
+    -- Adds git related signs to the gutter
     'lewis6991/gitsigns.nvim',
     opts = {
       -- See `:help gitsigns.txt`
@@ -131,30 +125,6 @@ require('lazy').setup({
         topdelete = { text = '‾' },
         changedelete = { text = '~' },
       },
-      on_attach = function(bufnr)
-        vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
-
-        -- don't override the built-in and fugitive keymaps
-        local gs = package.loaded.gitsigns
-        vim.keymap.set({ 'n', 'v' }, ']c', function()
-          if vim.wo.diff then
-            return ']c'
-          end
-          vim.schedule(function()
-            gs.next_hunk()
-          end)
-          return '<Ignore>'
-        end, { expr = true, buffer = bufnr, desc = 'Jump to next hunk' })
-        vim.keymap.set({ 'n', 'v' }, '[c', function()
-          if vim.wo.diff then
-            return '[c'
-          end
-          vim.schedule(function()
-            gs.prev_hunk()
-          end)
-          return '<Ignore>'
-        end, { expr = true, buffer = bufnr, desc = 'Jump to previous hunk' })
-      end,
     },
   },
   {
@@ -192,22 +162,6 @@ require('lazy').setup({
     -- "gc" to comment visual regions/lines
     'numToStr/Comment.nvim',
     opts = {},
-    keys = {
-      {
-        "<leader>/",
-        function()
-          require("Comment.api").toggle.linewise.count(vim.v.count > 0 and vim.v.count or 1)
-        end,
-        mode = { "n", "v" },
-        desc = "Toggle comment line"
-      },
-      {
-        "<leader>/",
-        mode = { "n", "v" },
-        "<esc><cmd>lua require('Comment.api').toggle.linewise(vim.fn.visualmode())<cr>",
-        desc = "Toggle comment line"
-      }
-    }
   },
   {
     -- Fuzzy Finder (files, lsp, etc)
@@ -256,7 +210,10 @@ require('lazy').setup({
               ["<C-j>"] = actions.move_selection_next,
               ["<C-k>"] = actions.move_selection_previous,
             },
-            n = { ["q"] = actions.close },
+            n = {
+              ["q"] = actions.close,
+              ['d'] = "delete_buffer"
+            },
           },
         },
       }
@@ -274,6 +231,15 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>fw', require('telescope.builtin').live_grep, { desc = '[f]ind [w]word' })
       vim.keymap.set('n', '<leader>fd', require('telescope.builtin').diagnostics, { desc = '[f]ind [d]iagnostics' })
       vim.keymap.set('n', '<leader>fr', require('telescope.builtin').resume, { desc = '[f]ind [r]esume' })
+      vim.keymap.set('n', '<leader>fa',
+        function()
+          require("telescope.builtin").find_files {
+            prompt_title = "Config Files",
+            search_file = "init.lua",
+            cwd = '~/.config',
+          }
+        end, { desc = "[f]ind [a] config" }
+      )
     end
   },
   -- Highlight, edit, and navigate code
@@ -424,45 +390,42 @@ require('lazy').setup({
     opts = {}
   },
   {
-    -- Pretty notifications
-    "rcarriga/nvim-notify",
-    opts = {}
-  }
-
+    'mrjones2014/smart-splits.nvim',
+    opts = {},
+    config = function()
+      -- resizing splits
+      vim.keymap.set('n', '<C-Left>', require('smart-splits').resize_left)
+      vim.keymap.set('n', '<C-Down>', require('smart-splits').resize_down)
+      vim.keymap.set('n', '<C-Up>', require('smart-splits').resize_up)
+      vim.keymap.set('n', '<C-Right>', require('smart-splits').resize_right)
+      -- moving between splits
+      vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
+      vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
+      vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
+      vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
+    end
+  },
 }, {})
 
 -- [[ LSP ]]
 local on_attach = function(_, bufnr)
   local nmap = function(keys, func, desc)
-    if desc then
-      desc = 'LSP: ' .. desc
-    end
-
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
 
-  nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-  nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+  nmap('<leader>lr', vim.lsp.buf.rename, 'Rename current symbol')
+  nmap('<leader>la', vim.lsp.buf.code_action, 'Code action')
 
-  nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-  nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-  nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-  nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
-  nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-  nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+  nmap('gd', vim.lsp.buf.definition, 'Goto definition')
+  nmap('gD', vim.lsp.buf.declaration, 'Goto declartion')
+  nmap('gr', require('telescope.builtin').lsp_references, 'Goto references')
+  nmap('gI', require('telescope.builtin').lsp_implementations, 'Goto implementation')
 
   -- See `:help K` for why this keymap
-  nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+  nmap('K', vim.lsp.buf.hover, 'Hover documentation')
+  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature documentation')
 
-  -- Lesser used LSP functionality
-  nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-  nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-  nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
-  nmap('<leader>wl', function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, '[W]orkspace [L]ist Folders')
-  nmap('<leader>lf', vim.lsp.buf.format(), 'Format')
+  -- nmap('<leader>lf', vim.lsp.buf.format(), 'Format buffer')
 end
 
 -- mason-lspconfig requires that these setup functions are called in this order
@@ -557,7 +520,7 @@ vim.opt.termguicolors = true
 -- Set shell to bash (fish doesn't work well)
 vim.opt.shell = '/bin/bash'
 -- Hide command line unless needed
-vim.cmdheight = 0
+vim.opt.cmdheight = 0
 
 
 -- [[ Keymaps ]]
@@ -573,8 +536,12 @@ vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = tr
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Center cursor after moving down half-page" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Center cursor after moving up half-page" })
 
+-- Tab movement
 vim.keymap.set("n", "]t", function() vim.cmd.tabnext() end, { desc = "Next tab" })
 vim.keymap.set("n", "[t", function() vim.cmd.tabprevious() end, { desc = "Previous tab" })
+
+vim.keymap.set("n", "|", "<cmd>vsplit<cr>", { desc = 'Vertical split' })
+vim.keymap.set("n", "\\", "<cmd>split<cr>", { desc = 'Horizontal split' })
 
 -- [[ Autocommands ]]
 -- Highlight on yank
