@@ -24,6 +24,7 @@ require('lazy').setup({
   {
     -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
+    event="BufEnter",
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
       'williamboman/mason.nvim',
@@ -47,6 +48,7 @@ require('lazy').setup({
       -- Adds LSP completion capabilities
       'hrsh7th/cmp-nvim-lsp',
     },
+    event="InsertEnter",
     config = function()
       -- [[ Configure nvim-cmp ]]
       -- See `:help cmp`
@@ -116,6 +118,7 @@ require('lazy').setup({
   {
     -- Adds git related signs to the gutter
     'lewis6991/gitsigns.nvim',
+    event="BufEnter",
     opts = {
       -- See `:help gitsigns.txt`
       signs = {
@@ -131,14 +134,15 @@ require('lazy').setup({
     -- Catpuccin theme
     'catppuccin/nvim',
     priority = 1000,
+    lazy=false,
     config = function()
       vim.cmd.colorscheme 'catppuccin-macchiato'
     end,
   },
-
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
+    event="BufEnter",
     -- See `:help lualine.txt`
     opts = {
       options = {
@@ -149,18 +153,19 @@ require('lazy').setup({
       },
     },
   },
-
   {
     -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help ibl`
     main = 'ibl',
+    event="BufEnter",
     opts = {},
   },
   {
     -- "gc" to comment visual regions/lines
     'numToStr/Comment.nvim',
+    event="BufEnter",
     opts = {},
   },
   {
@@ -249,6 +254,7 @@ require('lazy').setup({
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     build = ':TSUpdate',
+    event="BufEnter",
     config = function()
       -- [[ Configure Treesitter ]]
       -- See `:help nvim-treesitter`
@@ -332,39 +338,39 @@ require('lazy').setup({
   {
     -- Go to normal mode with jk
     "max397574/better-escape.nvim",
+    event="InsertCharPre",
     opts = {}
   },
   {
     -- Move by subwords
     "chrisgrieser/nvim-spider",
     opts = { skipInsignificantPunctuation = false },
-    config = function(_, opts)
-      vim.keymap.set({ "n", "o", "x" }, "w", function()
-        require('spider').motion('w')
-      end, { desc = "Spider-w" })
-      vim.keymap.set({ "n", "o", "x" }, "e", function()
-        require('spider').motion('e')
-      end, { desc = "Spider-e" })
-      vim.keymap.set({ "n", "o", "x" }, "b", function()
-        require('spider').motion('b')
-      end, { desc = "Spider-b" })
-      vim.keymap.set({ "n", "o", "x" }, "ge", function()
-        require('spider').motion('ge')
-      end, { desc = "Spider-ge" })
+    keys = {
+      {
+        "w", function() require("spider").motion("w") end, mode = {"n", "o", "x"}, desc="Spider-w",
+      },
+      {
+        "e", function() require("spider").motion("e") end, mode = {"n", "o", "x"}, desc="Spider-e",
+      },
+      {
+        "b", function() require("spider").motion("b") end, mode = {"n", "o", "x"}, desc="Spider-b",
+      },
+      {
+        "ge", function() require("spider").motion("ge") end, mode = {"n", "o", "x"}, desc="Spider-ge",
+      }
+    },
+    init = function()
       vim.keymap.set({ "n", "o", "x" }, "cw", "ce",
         { desc = "Spider-ce", remap = true })
-
-      require("spider").setup(opts)
     end,
   },
   {
     -- Center buffer without noise
     "folke/zen-mode.nvim",
     opts = {},
-    config = function(_, opts)
-      vim.keymap.set({ "n" }, "<leader>m", function() require("zen-mode").toggle({}) end, { desc = "Toggle Zen Mode" })
-      require("zen-mode").setup(opts)
-    end
+    keys={
+      { "<leader>m", mode="n",  function() require("zen-mode").toggle({}) end, desc="Toggle Zen Mode"}
+    },
   },
   {
     -- Easy motion
@@ -380,7 +386,6 @@ require('lazy').setup({
     -- Surround motions
     "kylechui/nvim-surround",
     version = "*", -- Use for stability; omit to use `main` branch for the latest features
-    event = "VeryLazy",
     opts = {}
   },
   {
@@ -392,20 +397,24 @@ require('lazy').setup({
   {
     'mrjones2014/smart-splits.nvim',
     opts = {},
-    config = function()
+    keys = {
       -- resizing splits
-      vim.keymap.set('n', '<C-Left>', require('smart-splits').resize_left)
-      vim.keymap.set('n', '<C-Down>', require('smart-splits').resize_down)
-      vim.keymap.set('n', '<C-Up>', require('smart-splits').resize_up)
-      vim.keymap.set('n', '<C-Right>', require('smart-splits').resize_right)
+      {"<C-Left>", mode="n", function() require("smart-splits").resize_left() end , desc="Resize left"},
+      {"<C-Down>", mode="n", function() require("smart-splits").resize_down() end,  desc="Resize down"},
+      {"<C-Up>", mode="n", function() require("smart-splits").resize_up() end,  desc="Resize up"},
+      {"<C-Right>", mode="n", function() require("smart-splits").resize_right() end,  desc="Resize right"},
       -- moving between splits
-      vim.keymap.set('n', '<C-h>', require('smart-splits').move_cursor_left)
-      vim.keymap.set('n', '<C-j>', require('smart-splits').move_cursor_down)
-      vim.keymap.set('n', '<C-k>', require('smart-splits').move_cursor_up)
-      vim.keymap.set('n', '<C-l>', require('smart-splits').move_cursor_right)
-    end
+      {"<C-h>", mode="n", function() require("smart-splits").move_cursor_left() end,  desc="Move cursor left"},
+      {"<C-j>", mode="n", function() require("smart-splits").move_cursor_down() end,  desc="Move cursor down"},
+      {"<C-k>", mode="n", function() require("smart-splits").move_cursor_up() end,  desc="Move cursor up"},
+      {"<C-l>", mode="n", function() require("smart-splits").move_cursor_right() end,  desc="Move cursor right"},
+    }
   },
-}, {})
+}, {
+    defaults = {
+      lazy = true
+    }
+  })
 
 -- [[ LSP ]]
 local on_attach = function(_, bufnr)
@@ -583,9 +592,9 @@ vim.api.nvim_create_autocmd('BufRead', {
         local ft = vim.bo[opts.buf].filetype
         local last_known_line = vim.api.nvim_buf_get_mark(opts.buf, '"')[1]
         if
-            not (ft:match('commit') and ft:match('rebase'))
-            and last_known_line > 1
-            and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
+          not (ft:match('commit') and ft:match('rebase'))
+          and last_known_line > 1
+          and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
         then
           vim.api.nvim_feedkeys([[g`"]], 'nx', false)
         end
