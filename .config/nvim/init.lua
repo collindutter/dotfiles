@@ -24,7 +24,7 @@ require('lazy').setup({
   {
     -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
-    event="BufEnter",
+    event = "BufEnter",
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
       'williamboman/mason.nvim',
@@ -34,7 +34,7 @@ require('lazy').setup({
       { 'j-hui/fidget.nvim', tag = 'legacy', opts = {} },
 
       -- Additional lua configuration, makes nvim stuff amazing!
-      'folke/neodev.nvim',
+      'folke/neodev.nvim'
     },
   },
   {
@@ -48,7 +48,7 @@ require('lazy').setup({
       -- Adds LSP completion capabilities
       'hrsh7th/cmp-nvim-lsp',
     },
-    event="InsertEnter",
+    event = "InsertEnter",
     config = function()
       -- [[ Configure nvim-cmp ]]
       -- See `:help cmp`
@@ -99,7 +99,6 @@ require('lazy').setup({
       }
     end
   },
-
   {
     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
@@ -118,7 +117,7 @@ require('lazy').setup({
   {
     -- Adds git related signs to the gutter
     'lewis6991/gitsigns.nvim',
-    event="BufEnter",
+    event = "BufEnter",
     opts = {
       -- See `:help gitsigns.txt`
       signs = {
@@ -134,7 +133,7 @@ require('lazy').setup({
     -- Catpuccin theme
     'catppuccin/nvim',
     priority = 1000,
-    lazy=false,
+    lazy = false,
     config = function()
       vim.cmd.colorscheme 'catppuccin-macchiato'
     end,
@@ -142,7 +141,7 @@ require('lazy').setup({
   {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
-    event="BufEnter",
+    event = "BufEnter",
     -- See `:help lualine.txt`
     opts = {
       options = {
@@ -159,19 +158,20 @@ require('lazy').setup({
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help ibl`
     main = 'ibl',
-    event="BufEnter",
+    event = "BufEnter",
     opts = {},
   },
   {
     -- "gc" to comment visual regions/lines
     'numToStr/Comment.nvim',
-    event="BufEnter",
+    event = "BufEnter",
     opts = {},
   },
   {
     -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
+    event = "BufEnter",
     dependencies = {
       'nvim-lua/plenary.nvim',
       -- Fuzzy Finder Algorithm which requires local dependencies to be built.
@@ -241,7 +241,7 @@ require('lazy').setup({
           require("telescope.builtin").find_files {
             prompt_title = "Config Files",
             search_file = "init.lua",
-            cwd = '~/.config',
+            cwd = '~/.config/nvim',
           }
         end, { desc = "[f]ind [a] config" }
       )
@@ -254,7 +254,7 @@ require('lazy').setup({
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     build = ':TSUpdate',
-    event="BufEnter",
+    event = "BufEnter",
     config = function()
       -- [[ Configure Treesitter ]]
       -- See `:help nvim-treesitter`
@@ -327,18 +327,12 @@ require('lazy').setup({
           },
         }
       end, 0)
-
-      -- Diagnostic keymaps
-      vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
-      vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
-      vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
-      vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
     end
   },
   {
     -- Go to normal mode with jk
     "max397574/better-escape.nvim",
-    event="InsertCharPre",
+    event = "InsertCharPre",
     opts = {}
   },
   {
@@ -347,16 +341,16 @@ require('lazy').setup({
     opts = { skipInsignificantPunctuation = false },
     keys = {
       {
-        "w", function() require("spider").motion("w") end, mode = {"n", "o", "x"}, desc="Spider-w",
+        "w", function() require("spider").motion("w") end, mode = { "n", "o", "x" }, desc = "Spider-w",
       },
       {
-        "e", function() require("spider").motion("e") end, mode = {"n", "o", "x"}, desc="Spider-e",
+        "e", function() require("spider").motion("e") end, mode = { "n", "o", "x" }, desc = "Spider-e",
       },
       {
-        "b", function() require("spider").motion("b") end, mode = {"n", "o", "x"}, desc="Spider-b",
+        "b", function() require("spider").motion("b") end, mode = { "n", "o", "x" }, desc = "Spider-b",
       },
       {
-        "ge", function() require("spider").motion("ge") end, mode = {"n", "o", "x"}, desc="Spider-ge",
+        "ge", function() require("spider").motion("ge") end, mode = { "n", "o", "x" }, desc = "Spider-ge",
       }
     },
     init = function()
@@ -368,8 +362,8 @@ require('lazy').setup({
     -- Center buffer without noise
     "folke/zen-mode.nvim",
     opts = {},
-    keys={
-      { "<leader>m", mode="n",  function() require("zen-mode").toggle({}) end, desc="Toggle Zen Mode"}
+    keys = {
+      { "<leader>m", mode = "n", function() require("zen-mode").toggle({}) end, desc = "Toggle Zen Mode" }
     },
   },
   {
@@ -399,22 +393,78 @@ require('lazy').setup({
     opts = {},
     keys = {
       -- resizing splits
-      {"<C-Left>", mode="n", function() require("smart-splits").resize_left() end , desc="Resize left"},
-      {"<C-Down>", mode="n", function() require("smart-splits").resize_down() end,  desc="Resize down"},
-      {"<C-Up>", mode="n", function() require("smart-splits").resize_up() end,  desc="Resize up"},
-      {"<C-Right>", mode="n", function() require("smart-splits").resize_right() end,  desc="Resize right"},
+      { "<C-Left>",  mode = "n", function() require("smart-splits").resize_left() end,       desc = "Resize left" },
+      { "<C-Down>",  mode = "n", function() require("smart-splits").resize_down() end,       desc = "Resize down" },
+      { "<C-Up>",    mode = "n", function() require("smart-splits").resize_up() end,         desc = "Resize up" },
+      { "<C-Right>", mode = "n", function() require("smart-splits").resize_right() end,      desc = "Resize right" },
       -- moving between splits
-      {"<C-h>", mode="n", function() require("smart-splits").move_cursor_left() end,  desc="Move cursor left"},
-      {"<C-j>", mode="n", function() require("smart-splits").move_cursor_down() end,  desc="Move cursor down"},
-      {"<C-k>", mode="n", function() require("smart-splits").move_cursor_up() end,  desc="Move cursor up"},
-      {"<C-l>", mode="n", function() require("smart-splits").move_cursor_right() end,  desc="Move cursor right"},
+      { "<C-h>",     mode = "n", function() require("smart-splits").move_cursor_left() end,  desc = "Move cursor left" },
+      { "<C-j>",     mode = "n", function() require("smart-splits").move_cursor_down() end,  desc = "Move cursor down" },
+      { "<C-k>",     mode = "n", function() require("smart-splits").move_cursor_up() end,    desc = "Move cursor up" },
+      { "<C-l>",     mode = "n", function() require("smart-splits").move_cursor_right() end, desc = "Move cursor right" },
     }
   },
-}, {
-    defaults = {
-      lazy = true
+  {
+    'akinsho/bufferline.nvim',
+    version = "*",
+    dependencies = 'nvim-tree/nvim-web-devicons',
+    event = "BufEnter",
+    opts = {},
+    keys = {
+      { "<leader>bc", "<cmd>BufferLineCloseOthers<cr>", desc = "Close other buffers" },
+      { "<leader>bl", "<cmd>BufferLineCloseLeft<cr>",   desc = "Close buffers to the left" },
+      { "<leader>br", "<cmd>BufferLineCloseRight<cr>",  desc = "Close buffers to the right" },
+      { "<leader>bb", "<cmd>BufferLinePick<cr>",        desc = "Pick buffer" },
+      { "<leader>bs", "<cmd>BufferLinePick<cr>",        desc = "Sort buffer" },
+      { "]b",         "<cmd>BufferLineCycleNext<cr>",   desc = "Cycle next buffer" },
+      { "]b",         "<cmd>BufferLineCyclePrev<cr>",   desc = "Cycle prev buffer" },
     }
-  })
+  },
+  {
+    'famiu/bufdelete.nvim',
+    version = '*',
+    keys = {
+      { "<leader>c", function() require('bufdelete').bufdelete(0, false) end, desc = "Close buffer" },
+      { "<leader>C", function() require('bufdelete').bufdelete(0, true) end,  desc = "Force close buffer" },
+    }
+  },
+  {
+    'stevearc/conform.nvim',
+    opts = {
+      formatters_by_ft = {
+        python = { "black" },
+      }
+    },
+    keys = {
+      {
+        "<leader>lf",
+        function() require("conform").format({ async = true, lsp_fallback = true }) end,
+        desc = "Format buffer"
+      },
+    },
+  },
+  {
+    "stevearc/oil.nvim",
+    opts = {
+      keymaps = {
+        ["<C-l>"] = false,
+        ["<C-h>"] = false,
+      }
+    },
+    keys = {
+      {
+        "-", "<cmd>Oil<cr>", desc = "Open Oil"
+      }
+    }
+  }
+}, {
+  defaults = {
+    lazy = true
+  },
+  install = {
+    colorscheme = { "catppuccin-macchiato" },
+  }
+})
 
 -- [[ LSP ]]
 local on_attach = function(_, bufnr)
@@ -425,6 +475,11 @@ local on_attach = function(_, bufnr)
   nmap('<leader>lr', vim.lsp.buf.rename, 'Rename current symbol')
   nmap('<leader>la', vim.lsp.buf.code_action, 'Code action')
 
+  -- Diagnostics
+  nmap('<leader>ld', vim.diagnostic.open_float, 'Hover diagnostic')
+  nmap('[d', vim.diagnostic.goto_prev, { desc = 'Go to previous diagnostic message' })
+  nmap(']d', vim.diagnostic.goto_next, { desc = 'Go to next diagnostic message' })
+
   nmap('gd', vim.lsp.buf.definition, 'Goto definition')
   nmap('gD', vim.lsp.buf.declaration, 'Goto declartion')
   nmap('gr', require('telescope.builtin').lsp_references, 'Goto references')
@@ -432,9 +487,7 @@ local on_attach = function(_, bufnr)
 
   -- See `:help K` for why this keymap
   nmap('K', vim.lsp.buf.hover, 'Hover documentation')
-  nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature documentation')
-
-  -- nmap('<leader>lf', vim.lsp.buf.format(), 'Format buffer')
+  nmap('<leader>lh', vim.lsp.buf.signature_help, 'Signature help')
 end
 
 -- mason-lspconfig requires that these setup functions are called in this order
@@ -552,6 +605,10 @@ vim.keymap.set("n", "[t", function() vim.cmd.tabprevious() end, { desc = "Previo
 vim.keymap.set("n", "|", "<cmd>vsplit<cr>", { desc = 'Vertical split' })
 vim.keymap.set("n", "\\", "<cmd>split<cr>", { desc = 'Horizontal split' })
 
+vim.keymap.set("n", "<leader>q", "<cmd>confirm q<cr>", { desc = 'Confirm quit' })
+vim.keymap.set("n", "<leader>w", "<cmd>confirm q<cr>", { desc = 'Save buffer' })
+vim.keymap.set("n", "<leader>n", "<cmd>enew<cr>", { desc = 'New buffer' })
+
 -- [[ Autocommands ]]
 -- Highlight on yank
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -592,9 +649,9 @@ vim.api.nvim_create_autocmd('BufRead', {
         local ft = vim.bo[opts.buf].filetype
         local last_known_line = vim.api.nvim_buf_get_mark(opts.buf, '"')[1]
         if
-          not (ft:match('commit') and ft:match('rebase'))
-          and last_known_line > 1
-          and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
+            not (ft:match('commit') and ft:match('rebase'))
+            and last_known_line > 1
+            and last_known_line <= vim.api.nvim_buf_line_count(opts.buf)
         then
           vim.api.nvim_feedkeys([[g`"]], 'nx', false)
         end
