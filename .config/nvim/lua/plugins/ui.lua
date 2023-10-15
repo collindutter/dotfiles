@@ -1,10 +1,19 @@
 return {
   {
+    -- Better ui elements
     'stevearc/dressing.nvim',
     event = 'BufEnter',
-    opts = {},
+    opts = {
+      input = { default_prompt = '➤ ', mappings = {
+        n = {
+          ['q'] = 'Close',
+        },
+      } },
+      select = { backend = { 'telescope', 'builtin' } },
+    },
   },
   {
+    -- Tabs for buffers (sue me)
     'akinsho/bufferline.nvim',
     version = '*',
     dependencies = 'nvim-tree/nvim-web-devicons',
