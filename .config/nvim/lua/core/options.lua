@@ -1,28 +1,20 @@
 vim.opt.viewoptions:remove 'curdir' -- disable saving current directory with views
 vim.opt.shortmess:append { s = true, I = true } -- disable search count wrap and startup messages
 vim.opt.backspace:append { 'nostop' } -- don't stop backspace at insert
-if vim.fn.has 'nvim-0.9' == 1 then
-  vim.opt.diffopt:append 'linematch:60' -- enable linematch diff algorithm
-end
+vim.opt.diffopt:append 'linematch:60' -- enable linematch diff algorithm
 local options = {
   opt = {
     breakindent = true, -- wrap indent to match  line start
     clipboard = 'unnamedplus', -- connection to the system clipboard
-    cmdheight = 0, -- hide command line unless needed
     completeopt = { 'menu', 'menuone', 'noselect' }, -- Options for insert mode completion
     copyindent = true, -- copy the previous indentation on autoindenting
     cursorline = true, -- highlight the text line of the cursor
     expandtab = true, -- enable the use of space in tab
     fileencoding = 'utf-8', -- file content encoding for the buffer
     fillchars = { eob = ' ' }, -- disable `~` on nonexistent lines
-    foldenable = true, -- enable fold for nvim-ufo
-    foldlevel = 99, -- set high foldlevel for nvim-ufo
-    foldlevelstart = 99, -- start with all code unfolded
-    foldcolumn = vim.fn.has 'nvim-0.9' == 1 and '1' or nil, -- show foldcolumn in nvim 0.9
     history = 100, -- number of commands to remember in a history table
     ignorecase = true, -- case insensitive searching
     infercase = true, -- infer cases in keyword completion
-    laststatus = 3, -- global statusline
     linebreak = true, -- wrap lines at 'breakat'
     mouse = 'a', -- enable mouse support
     number = true, -- show numberline
@@ -46,9 +38,8 @@ local options = {
     writebackup = false, -- disable making a backup before overwriting a file
   },
   g = {
-    python3_host_prog = '~/.virtualenvs/py3nvim/bin/python' -- set python provider
+    python3_host_prog = '~/.virtualenvs/py3nvim/bin/python', -- set python provider
   },
-  t = vim.t.bufs and vim.t.bufs or { bufs = vim.api.nvim_list_bufs() }, -- initialize buffers for the current tab
 }
 
 for scope, table in pairs(options) do
