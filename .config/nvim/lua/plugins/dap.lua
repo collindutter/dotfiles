@@ -40,9 +40,22 @@ return {
       {
         '<leader>db',
         function()
-          require('dap').step_out()
+          require('dap').toggle_breakpoint()
         end,
         desc = 'Debugger: Toggle Breakpoint',
+      },
+      {
+        '<leader>dq',
+        function()
+          require('dap').close()
+        end,
+        desc = 'Debugger: Close Session',
+      }, {
+        '<leader>dQ',
+        function()
+          require('dap').terminate()
+        end,
+        desc = 'Debugger: Terminate Session',
       },
       {
         '<leader>du',

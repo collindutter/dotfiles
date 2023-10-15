@@ -24,14 +24,6 @@ return {
       return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match '%s' == nil
     end
 
-    cmp.event:on('menu_opened', function()
-      vim.b.copilot_suggestion_hidden = true
-    end)
-
-    cmp.event:on('menu_closed', function()
-      vim.b.copilot_suggestion_hidden = false
-    end)
-
     cmp.setup {
       snippet = {
         expand = function(args)
