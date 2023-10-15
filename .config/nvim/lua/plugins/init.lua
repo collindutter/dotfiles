@@ -1,10 +1,8 @@
 return {
   {
-    -- Better buffer deletion
-    'famiu/bufdelete.nvim',
+    'echasnovski/mini.bufremove',
     version = '*',
-    keys = require 'plugins.keys.bufdelete',
-    opts = {},
+    keys = require 'plugins.keys.bufremove',
   },
   {
     -- Better window resizing, navigation (integrates with tmux)
@@ -45,7 +43,7 @@ return {
     init = function()
       -- Document existing key chains
       require('which-key').register {
-        ['<leader>l'] = { name = 'LSP', _ = 'which_key_ignore' },
+        ['<leader>c'] = { name = 'Code', _ = 'which_key_ignore' },
         ['<leader>d'] = { name = 'Debugger', _ = 'which_key_ignore' },
         ['<leader>g'] = { name = 'Git', _ = 'which_key_ignore' },
         ['<leader>b'] = { name = 'Buffers', _ = 'which_key_ignore' },
@@ -100,6 +98,109 @@ return {
       -- Additional lua configuration
       'folke/neodev.nvim',
     },
+    opts = {
+      diagnostic_config = {
+        virtual_text = false,
+        update_in_insert = true,
+        underline = true,
+        severity_sort = true,
+        float = {
+          -- focusable = false,
+          style = 'minimal',
+          border = 'rounded',
+          source = 'always',
+          header = '',
+          prefix = '',
+        },
+      },
+      mason_ensure_installed = {
+        'stylua',
+        'luacheck',
+      },
+      mason_lspconfig_ensure_installed = {
+        ruff_lsp = {},
+        jsonls = {},
+        pyright = {
+          python = {
+            pythonPath = '.venv/bin/python',
+          },
+        },
+        tsserver = {},
+        html = {},
+        yamlls = {
+          yaml = {
+            customTags = {
+              '!And scalar',
+              '!And mapping',
+              '!And sequence',
+              '!If scalar',
+              '!If mapping',
+              '!If sequence',
+              '!Not scalar',
+              '!Not mapping',
+              '!Not sequence',
+              '!Equals scalar',
+              '!Equals mapping',
+              '!Equals sequence',
+              '!Or scalar',
+              '!Or mapping',
+              '!Or sequence',
+              '!FindInMap scalar',
+              '!FindInMap mapping',
+              '!FindInMap sequence',
+              '!Base64 scalar',
+              '!Base64 mapping',
+              '!Base64 sequence',
+              '!Cidr scalar',
+              '!Cidr mapping',
+              '!Cidr sequence',
+              '!Ref scalar',
+              '!Ref mapping',
+              '!Ref sequence',
+              '!Sub scalar',
+              '!Sub mapping',
+              '!Sub sequence',
+              '!GetAtt scalar',
+              '!GetAtt mapping',
+              '!GetAtt sequence',
+              '!GetAZs scalar',
+              '!GetAZs mapping',
+              '!GetAZs sequence',
+              '!ImportValue scalar',
+              '!ImportValue mapping',
+              '!ImportValue sequence',
+              '!Select scalar',
+              '!Select mapping',
+              '!Select sequence',
+              '!Split scalar',
+              '!Split mapping',
+              '!Split sequence',
+              '!Join scalar',
+              '!Join mapping',
+              '!Join sequence',
+            },
+          },
+        },
+        lua_ls = {
+          Lua = {
+            telemetry = { enable = false },
+            completion = {
+              callSnippet = 'Replace',
+            },
+            diagnostics = {
+              globals = { 'vim' },
+            },
+            workspace = {
+              checkThirdParty = false,
+              library = {
+                [vim.fn.expand '$VIMRUNTIME/lua'] = true,
+                [vim.fn.stdpath 'config' .. '/lua'] = true,
+              },
+            },
+          },
+        },
+      },
+    },
     config = require 'plugins.configs.lsp',
   },
   {
@@ -118,6 +219,20 @@ return {
     },
     config = require 'plugins.configs.cmp',
     event = 'InsertEnter',
+  },
+  {
+    -- Copilot
+    'zbirenbaum/copilot.lua',
+    cmd = 'Copilot',
+    event = 'InsertEnter',
+    opts = {
+      panel = { enabled = false },
+      suggestion = {
+        auto_trigger = true,
+        debounce = 150,
+      },
+      filetypes = { yaml = true, markdown = true, help = true },
+    },
   },
   {
     -- Formatter
@@ -246,7 +361,22 @@ return {
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
     event = 'BufEnter',
-    opts = {},
+    opts = {
+      exclude = {
+        filetypes = {
+          'help',
+          'alpha',
+          'dashboard',
+          'neo-tree',
+          'Trouble',
+          'lazy',
+          'mason',
+          'notify',
+          'toggleterm',
+          'lazyterm',
+        },
+      },
+    },
   },
   {
     -- Catpuccin theme

@@ -23,4 +23,4 @@ map('n', '\\', '<cmd>split<cr>', 'Horizontal split')
 
 map('n', '<leader>q', '<cmd>confirm q<cr>', 'Confirm quit')
 map('n', '<leader>w', '<cmd>confirm q<cr>', 'Save buffer')
-map('n', '<leader>n', '<cmd>enew<cr>', 'New buffer')
+map('n', '<leader>fn', '<cmd>enew<cr>', 'File new')

@@ -6,7 +6,6 @@ local options = {
   opt = {
     breakindent = true, -- wrap indent to match  line start
     clipboard = 'unnamedplus', -- connection to the system clipboard
-    cmdheight = 0, -- hide command line unless needed
     completeopt = { 'menu', 'menuone', 'noselect' }, -- Options for insert mode completion
     copyindent = true, -- copy the previous indentation on autoindenting
     cursorline = true, -- highlight the text line of the cursor
