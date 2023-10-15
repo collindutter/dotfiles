@@ -7,7 +7,7 @@ require 'core.keymaps'
 -- Other options
 require 'core.options'
 
--- Autocmds
-require 'core.autocommands'
+-- Autocommands + User commands
+require 'core.commands'
 
 -- vim: ts=2 sts=2 sw=2 et

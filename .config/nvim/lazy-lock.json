@@ -24,6 +24,7 @@
   "neotest-python": { "branch": "master", "commit": "81d2265efac717bb567bc15cc652ae10801286b3" },
   "nvim": { "branch": "main", "commit": "f03cbfb65664e55451d91616242bd1c63919da10" },
   "nvim-autopairs": { "branch": "master", "commit": "748e72c05495a3d30e88a6ef04b21697019a9aa9" },
+  "nvim-bqf": { "branch": "main", "commit": "8784eebf34371049b641646d00232c2603215297" },
   "nvim-cmp": { "branch": "main", "commit": "5dce1b778b85c717f6614e3f4da45e9f19f54435" },
   "nvim-dap": { "branch": "master", "commit": "92dc531eea2c9a3ef504a5c8ac0decd1fa59a6a3" },
   "nvim-dap-python": { "branch": "master", "commit": "37b4cba02e337a95cb62ad1609b3d1dccb2e5d42" },
