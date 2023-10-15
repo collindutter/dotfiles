@@ -129,6 +129,7 @@ return {
         ['<leader>g'] = { name = 'Git', _ = 'which_key_ignore' },
         ['<leader>b'] = { name = 'Buffers', _ = 'which_key_ignore' },
         ['<leader>f'] = { name = 'Find', _ = 'which_key_ignore' },
+        ['<leader>t'] = { name = 'Test', _ = 'which_key_ignore' },
       }
     end,
   },

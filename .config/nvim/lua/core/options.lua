@@ -6,15 +6,16 @@ local options = {
   opt = {
     breakindent = true, -- wrap indent to match  line start
     clipboard = 'unnamedplus', -- connection to the system clipboard
+    cmdheight = 0, -- hide command line unless needed
     completeopt = { 'menu', 'menuone', 'noselect' }, -- Options for insert mode completion
     copyindent = true, -- copy the previous indentation on autoindenting
     cursorline = true, -- highlight the text line of the cursor
     expandtab = true, -- enable the use of space in tab
-    fileencoding = 'utf-8', -- file content encoding for the buffer
     fillchars = { eob = ' ' }, -- disable `~` on nonexistent lines
     history = 100, -- number of commands to remember in a history table
     ignorecase = true, -- case insensitive searching
     infercase = true, -- infer cases in keyword completion
+    laststatus = 3, -- global statusline
     linebreak = true, -- wrap lines at 'breakat'
     mouse = 'a', -- enable mouse support
     number = true, -- show numberline
@@ -35,7 +36,7 @@ local options = {
     updatetime = 300, -- length of time to wait before triggering the plugin
     virtualedit = 'block', -- allow going past end of line in visual block mode
     wrap = false, -- disable wrapping of lines longer than the width of window
-    writebackup = false, -- disable making a backup before overwriting a file
+    writebackup = false, -- disable making a backup before overwriting a file,
   },
   g = {
     python3_host_prog = '~/.virtualenvs/py3nvim/bin/python', -- set python provider
