@@ -4,63 +4,63 @@ return {
     function()
       require('telescope.builtin').git_files()
     end,
-    desc = '[f]ind [g]it',
+    desc = 'Find Git',
   },
   {
     '<leader>fb',
     function()
       require('telescope.builtin').buffers()
     end,
-    desc = '[f]ind [b]uffers',
+    desc = 'Find buffers',
   },
   {
     '<leader>fo',
     function()
       require('telescope.builtin').oldfiles()
     end,
-    desc = '[f]ind [o]ld files',
+    desc = 'Find old files',
   },
   {
     '<leader>ff',
     function()
       require('telescope.builtin').find_files()
     end,
-    desc = '[f]ind [f]iles',
+    desc = 'Find files',
   },
   {
     '<leader>fh',
     function()
       require('telescope.builtin').help_tags()
     end,
-    desc = '[f]ind [h]elp',
+    desc = 'Find help',
   },
   {
     '<leader>fc',
     function()
       require('telescope.builtin').grep_string()
     end,
-    desc = '[f]ind [c]urrent word',
+    desc = 'Find current word',
   },
   {
     '<leader>fw',
     function()
       require('telescope.builtin').live_grep()
     end,
-    desc = '[f]ind [w]ord',
+    desc = 'Find words',
   },
   {
     '<leader>fd',
     function()
       require('telescope.builtin').diagnostics()
     end,
-    desc = '[f]ind [d]iagnostics',
+    desc = 'Find diagnostics',
   },
   {
     '<leader>fr',
     function()
       require('telescope.builtin').resume()()
     end,
-    desc = '[f]ind [r]esume',
+    desc = 'Find resume',
   },
   {
     '<leader>fa',
@@ -72,6 +72,6 @@ return {
         cwd = '~/.config/nvim',
       }
     end,
-    desc = '[f]ind [a] config',
+    desc = 'Find a config',
   },
 }
