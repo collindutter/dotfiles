@@ -4,7 +4,7 @@ return {
     function()
       require('neotest').run.run(vim.fn.expand '%')
     end,
-    desc = 'Run the current file',
+    desc = 'Test current file',
   },
   {
     '<leader>td',
@@ -14,7 +14,7 @@ return {
         strategy = 'dap',
       }
     end,
-    desc = 'Debug the nearest test',
+    desc = 'Test debug',
   },
   {
     '<leader>dt',
@@ -24,13 +24,13 @@ return {
         strategy = 'dap',
       }
     end,
-    desc = 'Debug the nearest test',
+    desc = 'Debug test',
   },
   {
     '<leader>ts',
     function()
       require('neotest').run.stop()
     end,
-    desc = 'Stop the nearest test',
+    desc = 'Test stop',
   },
 }

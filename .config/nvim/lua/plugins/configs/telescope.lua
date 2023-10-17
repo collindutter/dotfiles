@@ -2,7 +2,6 @@ return function()
   local actions = require 'telescope.actions'
   require('telescope').setup {
     defaults = {
-      git_worktrees = vim.g.git_worktrees,
       path_display = { 'truncate' },
       sorting_strategy = 'ascending',
       layout_config = {
@@ -31,6 +30,5 @@ return function()
     },
   }
 
-  -- Enable telescope fzf native, if installed
-  pcall(require('telescope').load_extension, 'fzf')
+  require('telescope').load_extension('fzf')
 end
