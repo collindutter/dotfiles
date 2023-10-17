@@ -5,7 +5,7 @@ return {
       require('spider').motion 'w'
     end,
     mode = { 'n', 'o', 'x' },
-    desc = 'Spider-w',
+    desc = 'Spider w',
   },
   {
     'e',
@@ -13,7 +13,7 @@ return {
       require('spider').motion 'e'
     end,
     mode = { 'n', 'o', 'x' },
-    desc = 'Spider-e',
+    desc = 'Spider e',
   },
   {
     'b',
@@ -21,7 +21,7 @@ return {
       require('spider').motion 'b'
     end,
     mode = { 'n', 'o', 'x' },
-    desc = 'Spider-b',
+    desc = 'Spider b',
   },
   {
     'ge',
@@ -29,6 +29,6 @@ return {
       require('spider').motion 'ge'
     end,
     mode = { 'n', 'o', 'x' },
-    desc = 'Spider-ge',
+    desc = 'Spider ge',
   },
 }
