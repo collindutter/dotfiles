@@ -100,7 +100,7 @@ return {
     },
     opts = {
       diagnostic_config = {
-        virtual_text = false,
+        virtual_text = true,
         update_in_insert = true,
         underline = true,
         severity_sort = true,
@@ -183,7 +183,6 @@ return {
         },
         lua_ls = {
           Lua = {
-            telemetry = { enable = false },
             completion = {
               callSnippet = 'Replace',
             },
@@ -286,6 +285,16 @@ return {
     event = { 'BufReadPre', 'BufNewFile' },
     config = function()
       local lint = require 'lint'
+      local luacheck = require('lint').linters.luacheck
+      luacheck.args = {
+        '--formatter',
+        'plain',
+        '--codes',
+        '--ranges',
+        '--globals',
+        'vim',
+        '-',
+      }
 
       lint.linters_by_ft = {
         python = { 'ruff' },
