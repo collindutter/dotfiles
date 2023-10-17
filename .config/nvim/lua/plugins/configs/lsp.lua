@@ -45,11 +45,12 @@ return function(_, opts)
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
-  -- Ensure the servers above are installed
+  -- Create a user command for installing all the servers
   vim.api.nvim_create_user_command('MasonInstallAll', function()
     vim.cmd('MasonInstall ' .. table.concat(opts.mason_ensure_installed, ' '))
   end, {})
 
+  -- Ensure the servers above are installed
   local lsp_servers = opts.mason_lspconfig_ensure_installed
   require('mason-lspconfig').setup_handlers {
     function(server_name)
