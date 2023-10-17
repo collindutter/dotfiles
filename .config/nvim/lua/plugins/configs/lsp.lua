@@ -36,7 +36,12 @@ return function(_, opts)
   -- mason-lspconfig requires that these setup functions are called in this order
   -- before setting up the servers.
   require('mason').setup()
-  require('mason-lspconfig').setup()
+  local mason_lspconfig = require 'mason-lspconfig'
+
+  local lsp_servers = opts.mason_lspconfig_ensure_installed
+  mason_lspconfig.setup {
+    ensure_installed = vim.tbl_keys(lsp_servers)
+  }
 
   -- Setup neovim lua configuration
   require('neodev').setup()
@@ -51,8 +56,7 @@ return function(_, opts)
   end, {})
 
   -- Ensure the servers above are installed
-  local lsp_servers = opts.mason_lspconfig_ensure_installed
-  require('mason-lspconfig').setup_handlers {
+  mason_lspconfig.setup_handlers {
     function(server_name)
       require('lspconfig')[server_name].setup {
         capabilities = capabilities,
