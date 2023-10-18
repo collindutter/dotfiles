@@ -1,6 +1,6 @@
 return function()
   local cmp = require 'cmp'
-  local copilot = require 'copilot.suggestion'
+  local copilot_suggestion = require 'copilot.suggestion'
   local luasnip = require 'luasnip'
   require('luasnip.loaders.from_vscode').lazy_load()
   luasnip.config.setup {}
@@ -33,8 +33,8 @@ return function()
         if cmp.visible() then
           cmp.confirm { behavior = cmp.ConfirmBehavior.Insert, select = true }
           cmp.mapping.confirm { behavior = cmp.ConfirmBehavior.Insert, select = true }
-        elseif require('copilot.suggestion').is_visible() then
-          require('copilot.suggestion').accept()
+        elseif copilot_suggestion.is_visible() then
+          copilot_suggestion.accept()
         elseif luasnip.expand_or_locally_jumpable() then
           luasnip.expand_or_jump()
         elseif has_words_before() then

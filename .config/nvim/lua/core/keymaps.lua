@@ -18,9 +18,13 @@ map('n', '[t', function()
   vim.cmd.tabprevious()
 end, 'Previous tab')
 
-map('n', '|', '<cmd>vsplit<cr>', 'Vertical split')
-map('n', '\\', '<cmd>split<cr>', 'Horizontal split')
+-- Quickfix list movement
+map('n', ']q', function() vim.cmd.cn() end, "Next quickfix item")
+map('n', '[q', function() vim.cmd.cp() end, "Previous quickfix item")
+
+map('n', '|', function() vim.cmd.vsplit() end, 'Vertical split')
+map('n', '\\', function() vim.cmd.split() end, 'Horizontal split')
 
 map('n', '<leader>q', '<cmd>confirm q<cr>', 'Confirm quit')
-map('n', '<leader>w', '<cmd>confirm q<cr>', 'Save buffer')
-map('n', '<leader>fn', '<cmd>enew<cr>', 'File new')
+map('n', '<leader>fn', function() vim.cmd.enew() end, 'File new')
+
