@@ -105,7 +105,6 @@ return {
         underline = true,
         severity_sort = true,
         float = {
-          -- focusable = false,
           style = 'minimal',
           border = 'rounded',
           source = 'always',
@@ -225,7 +224,7 @@ return {
     cmd = 'Copilot',
     event = 'InsertEnter',
     init = function()
-      -- hide copilot suggestions when cmp menu is open
+      -- Hide copilot suggestions when cmp menu is open
       -- to prevent odd behavior/garbled up suggestions
       local cmp_status_ok, cmp = pcall(require, 'cmp')
       if cmp_status_ok then
@@ -423,6 +422,13 @@ return {
     -- Center buffer without noise
     'folke/zen-mode.nvim',
     keys = require 'plugins.keys.zen-mode',
+    opts = {},
+  },
+  {
+    -- Diagnostics signs and list
+    'folke/trouble.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    keys = require 'plugins.keys.trouble',
     opts = {},
   },
 }

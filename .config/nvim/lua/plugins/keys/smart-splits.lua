@@ -2,7 +2,6 @@ return {
   -- resizing splits
   {
     '<C-Left>',
-    mode = 'n',
     function()
       require('smart-splits').resize_left()
     end,
@@ -10,7 +9,6 @@ return {
   },
   {
     '<C-Down>',
-    mode = 'n',
     function()
       require('smart-splits').resize_down()
     end,
@@ -18,7 +16,6 @@ return {
   },
   {
     '<C-Up>',
-    mode = 'n',
     function()
       require('smart-splits').resize_up()
     end,
@@ -26,7 +23,6 @@ return {
   },
   {
     '<C-Right>',
-    mode = 'n',
     function()
       require('smart-splits').resize_right()
     end,
@@ -35,7 +31,6 @@ return {
   -- moving between splits
   {
     '<C-h>',
-    mode = 'n',
     function()
       require('smart-splits').move_cursor_left()
     end,
@@ -43,7 +38,6 @@ return {
   },
   {
     '<C-j>',
-    mode = 'n',
     function()
       require('smart-splits').move_cursor_down()
     end,
@@ -51,7 +45,6 @@ return {
   },
   {
     '<C-k>',
-    mode = 'n',
     function()
       require('smart-splits').move_cursor_up()
     end,
@@ -59,7 +52,6 @@ return {
   },
   {
     '<C-l>',
-    mode = 'n',
     function()
       require('smart-splits').move_cursor_right()
     end,
