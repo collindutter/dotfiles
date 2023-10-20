@@ -1,7 +1,6 @@
 -- Plugins that integrate with the LSP
 return {
   'neovim/nvim-lspconfig',
-  event = 'BufEnter',
   dependencies = {
     -- Install LSPs to stdpath for neovim
     'williamboman/mason.nvim',

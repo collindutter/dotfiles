@@ -6,7 +6,6 @@ return {
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     build = ':TSUpdate',
-    event = 'BufEnter',
     config = function()
       vim.defer_fn(function()
         require('nvim-treesitter.configs').setup {

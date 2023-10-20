@@ -9,14 +9,12 @@ return {
         lua = { 'stylua' },
       },
     },
-    keys = {
-      {
-        '<leader>cf',
-        function()
-          require('conform').format { async = true, lsp_fallback = false }
-        end,
-        desc = 'Code format',
-      },
-    },
+    init = function()
+      local map = require("helpers.keys").map
+
+      map('n', '<leader>cf', function()
+        require('conform').format { async = true, lsp_fallback = false }
+      end, 'Code format')
+    end,
   },
 }

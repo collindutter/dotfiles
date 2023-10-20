@@ -5,17 +5,17 @@ return {
     'akinsho/bufferline.nvim',
     version = '*',
     dependencies = 'nvim-tree/nvim-web-devicons',
-    event = 'BufEnter',
+    init = function()
+      local map = require('helpers.keys').map
+      map('n', '<leader>bo', '<cmd>BufferLineCloseOthers<cr>', 'Close other buffers')
+      map('n', '<leader>bl', '<cmd>BufferLineCloseLeft<cr>', 'Close buffers to the left')
+      map('n', '<leader>br', '<cmd>BufferLineCloseRight<cr>', 'Close buffers to the right')
+      map('n', '<leader>bb', '<cmd>BufferLinePick<cr>', 'Pick buffer')
+      map('n', '<leader>bs', '<cmd>BufferLinePick<cr>', 'Sort buffer')
+      map('n', ']b', '<cmd>BufferLineCycleNext<cr>', 'Cycle next buffer')
+      map('n', '[b', '<cmd>BufferLineCyclePrev<cr>', 'Cycle prev buffer')
+    end,
     opts = {},
-    keys = {
-      { '<leader>bo', '<cmd>BufferLineCloseOthers<cr>', desc = 'Close other buffers' },
-      { '<leader>bl', '<cmd>BufferLineCloseLeft<cr>', desc = 'Close buffers to the left' },
-      { '<leader>br', '<cmd>BufferLineCloseRight<cr>', desc = 'Close buffers to the right' },
-      { '<leader>bb', '<cmd>BufferLinePick<cr>', desc = 'Pick buffer' },
-      { '<leader>bs', '<cmd>BufferLinePick<cr>', desc = 'Sort buffer' },
-      { ']b', '<cmd>BufferLineCycleNext<cr>', desc = 'Cycle next buffer' },
-      { '[b', '<cmd>BufferLineCyclePrev<cr>', desc = 'Cycle prev buffer' },
-    },
   },
   {
     -- Catppuccin theme
@@ -26,7 +26,6 @@ return {
       vim.cmd.colorscheme 'catppuccin-macchiato'
     end,
     priority = 1000,
-    lazy = false,
     opts = {
       integrations = {
         cmp = true,
@@ -58,7 +57,6 @@ return {
   {
     -- Better statusline
     'nvim-lualine/lualine.nvim',
-    event = 'BufEnter',
     opts = {
       options = {
         component_separators = '|',
@@ -69,7 +67,6 @@ return {
   {
     -- Prettier UI
     'folke/noice.nvim',
-    event = 'VeryLazy',
     opts = {
       lsp = {
         override = {
@@ -93,7 +90,6 @@ return {
   {
     -- Better ui elements
     'stevearc/dressing.nvim',
-    event = 'BufEnter',
     opts = {
       input = { default_prompt = '➤ ', mappings = {
         n = {
@@ -107,7 +103,6 @@ return {
     -- Indentation guides
     'lukas-reineke/indent-blankline.nvim',
     main = 'ibl',
-    event = 'BufEnter',
     opts = {
       exclude = {
         filetypes = {
