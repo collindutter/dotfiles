@@ -1,4 +1,4 @@
--- Plugins that provide new editor UI components 
+-- Plugins that provide new editor UI components
 return {
   {
     -- Fuzzy Finder (files, lsp, etc)
@@ -14,83 +14,44 @@ return {
         end,
       },
     },
-    keys = {
-      {
-        '<leader>fg',
-        function()
-          require('telescope.builtin').git_files()
-        end,
-        desc = 'Find Git',
-      },
-      {
-        '<leader>fb',
-        function()
-          require('telescope.builtin').buffers()
-        end,
-        desc = 'Find buffers',
-      },
-      {
-        '<leader>fo',
-        function()
-          require('telescope.builtin').oldfiles()
-        end,
-        desc = 'Find old files',
-      },
-      {
-        '<leader>ff',
-        function()
-          require('telescope.builtin').find_files()
-        end,
-        desc = 'Find files',
-      },
-      {
-        '<leader>fh',
-        function()
-          require('telescope.builtin').help_tags()
-        end,
-        desc = 'Find help',
-      },
-      {
-        '<leader>fc',
-        function()
-          require('telescope.builtin').grep_string()
-        end,
-        desc = 'Find current word',
-      },
-      {
-        '<leader>fw',
-        function()
-          require('telescope.builtin').live_grep()
-        end,
-        desc = 'Find words',
-      },
-      {
-        '<leader>fd',
-        function()
-          require('telescope.builtin').diagnostics()
-        end,
-        desc = 'Find diagnostics',
-      },
-      {
-        '<leader>fr',
-        function()
-          require('telescope.builtin').resume()
-        end,
-        desc = 'Find resume',
-      },
-      {
-        '<leader>fa',
-        function()
-          require('telescope.builtin').find_files {
+    init = function()
+      local map = require('helpers.keys').map
 
-            prompt_title = 'Config Files',
-            hidden = true,
-            cwd = '~/.config/nvim',
-          }
-        end,
-        desc = 'Find a config',
-      },
-    },
+      map('n', '<leader>fg', function()
+        require('telescope.builtin').git_files()
+      end, 'Find files')
+      map('n', '<leader>fb', function()
+        require('telescope.builtin').buffers()
+      end, 'Find buffers')
+      map('n', '<leader>fo', function()
+        require('telescope.builtin').oldfiles()
+      end, 'Find old files')
+      map('n', '<leader>ff', function()
+        require('telescope.builtin').find_files()
+      end, 'Find files')
+      map('n', '<leader>fh', function()
+        require('telescope.builtin').help_tags()
+      end, 'Find help')
+      map('n', '<leader>fc', function()
+        require('telescope.builtin').grep_string()
+      end, 'Find current word')
+      map('n', '<leader>fw', function()
+        require('telescope.builtin').live_grep()
+      end, 'Find words')
+      map('n', '<leader>fd', function()
+        require('telescope.builtin').diagnostics()
+      end, 'Find diagnostics')
+      map('n', '<leader>fr', function()
+        require('telescope.builtin').resume()
+      end, 'Find resume')
+      map('n', '<leader>fa', function()
+        require('telescope.builtin').find_files {
+          prompt_title = 'Config Files',
+          hidden = true,
+          cwd = '~/.config/nvim',
+        }
+      end, 'Find a config')
+    end,
     config = function()
       local actions = require 'telescope.actions'
       require('telescope').setup {
@@ -137,19 +98,18 @@ return {
         ['H'] = 'actions.toggle_hidden',
       },
     },
-    keys = {
-      {
-        '-',
-        '<cmd>Oil<cr>',
-        desc = 'Open Oil',
-      },
-    },
+    init = function()
+      local map = require('helpers.keys').map
+
+      map('n', '-', function()
+        require('oil').open()
+      end, 'Open Oil')
+    end,
   },
   {
     -- Show pending keybinds
     'folke/which-key.nvim',
     opts = {},
-    event = 'VeryLazy',
     init = function()
       -- Document existing key chains
       require('which-key').register {
@@ -165,67 +125,46 @@ return {
   {
     -- Center buffer without noise
     'folke/zen-mode.nvim',
-    keys = {
-      {
-        '<leader>m',
-        mode = 'n',
-        function()
-          require('zen-mode').toggle {}
-        end,
-        desc = 'Toggle Zen Mode',
-      },
-    },
+    init = function()
+      local map = require('helpers.keys').map
+
+      map('n', '<leader>m', function()
+        require('zen-mode').toggle {}
+      end, 'Toggle Zen Mode')
+    end,
     opts = {},
   },
   {
     -- Diagnostics signs and list
     'folke/trouble.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    keys = {
-      -- Lua
-      {
-        '<leader>xx',
-        function()
-          require('trouble').toggle()
-        end,
-        desc = 'Trouble toggle',
-      },
-      {
-        '<leader>xw',
-        function()
-          require('trouble').toggle 'workspace_diagnostics'
-        end,
-        desc = 'Trouble workspace diagnostics',
-      },
-      {
-        '<leader>xd',
-        function()
-          require('trouble').toggle 'document_diagnostics'
-        end,
-        desc = 'Trouble document diagnostics',
-      },
-      {
-        '<leader>xq',
-        function()
-          require('trouble').toggle 'quickfix'
-        end,
-        desc = 'Trouble quickfix',
-      },
-      {
-        '<leader>xl',
-        function()
-          require('trouble').toggle 'loclist'
-        end,
-        desc = 'Trouble loclist',
-      },
-      {
-        'gR',
-        function()
-          require('trouble').toggle 'lsp_references'
-        end,
-        desc = 'Trouble lsp lsp references',
-      },
-    },
+    init = function()
+      local map = require('helpers.keys').map
+
+      map('n', '<leader>xx', function()
+        require('trouble').toggle()
+      end, 'Trouble toggle')
+
+      map('n', '<leader>xw', function()
+        require('trouble').toggle 'workspace_diagnostics'
+      end, 'Trouble workspace diagnostics')
+
+      map('n', '<leader>xd', function()
+        require('trouble').toggle 'document_diagnostics'
+      end, 'Trouble document diagnostics')
+
+      map('n', '<leader>xq', function()
+        require('trouble').toggle 'quickfix'
+      end, 'Trouble quickfix')
+
+      map('n', '<leader>xl', function()
+        require('trouble').toggle 'loclist'
+      end, 'Trouble loclist')
+
+      map('n', 'gR', function()
+        require('trouble').toggle 'lsp_references'
+      end, 'Trouble lsp lsp references')
+    end,
     opts = {},
   },
   {
@@ -236,42 +175,31 @@ return {
       'nvim-treesitter/nvim-treesitter',
       'nvim-neotest/neotest-python',
     },
-    keys = {
-      {
-        '<leader>tc',
-        function()
-          require('neotest').run.run(vim.fn.expand '%')
-        end,
-        desc = 'Test current file',
-      },
-      {
-        '<leader>td',
-        function()
-          require('neotest').run.run {
-            suite = false,
-            strategy = 'dap',
-          }
-        end,
-        desc = 'Test debug',
-      },
-      {
-        '<leader>dt',
-        function()
-          require('neotest').run.run {
-            suite = false,
-            strategy = 'dap',
-          }
-        end,
-        desc = 'Debug test',
-      },
-      {
-        '<leader>ts',
-        function()
-          require('neotest').run.stop()
-        end,
-        desc = 'Test stop',
-      },
-    },
+    init = function()
+      local map = require('helpers.keys').map
+
+      map('n', '<leader>tc', function()
+        require('neotest').run(vim.fn.expand '%')
+      end, 'Test current file')
+
+      map('n', '<leader>td', function()
+        require('neotest').run {
+          suite = false,
+          strategy = 'dap',
+        }
+      end, 'Test debug')
+
+      map('n', '<leader>dt', function()
+        require('neotest').run {
+          suite = false,
+          strategy = 'dap',
+        }
+      end, 'Debug test')
+
+      map('n', '<leader>ts', function()
+        require('neotest').run.stop()
+      end, 'Test stop')
+    end,
     opts = function()
       return {
         adapters = {
