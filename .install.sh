@@ -13,6 +13,7 @@ echo "Installing Homebrew packages..."
 brew install neovim
 brew install jq
 brew install ripgrep
+brew install fd
 brew install tmux
 brew install fish
 brew install yabai
