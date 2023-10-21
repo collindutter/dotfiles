@@ -13,6 +13,9 @@ return {
           return vim.fn.executable 'make' == 1
         end,
       },
+      {
+        'nvim-telescope/telescope-frecency.nvim',
+      },
     },
     init = function()
       local map = require('helpers.keys').map
@@ -21,10 +24,10 @@ return {
         require('telescope.builtin').git_files()
       end, 'Find files')
       map('n', '<leader>fb', function()
-        require('telescope.builtin').buffers()
+        require('telescope.builtin').buffers { sort_mru = true, ignore_current_buffer = true }
       end, 'Find buffers')
       map('n', '<leader>fo', function()
-        require('telescope.builtin').oldfiles()
+        vim.cmd 'Telescope frecency'
       end, 'Find old files')
       map('n', '<leader>ff', function()
         require('telescope.builtin').find_files()
@@ -85,7 +88,15 @@ return {
       }
 
       require('telescope').load_extension 'fzf'
+      require('telescope').load_extension 'frecency'
     end,
+  },
+  {
+    -- Autoclose buffers
+    'axkirillov/hbac.nvim',
+    opts = {
+      threshold = 5,
+    },
   },
   {
     -- File explorer as buffer
@@ -132,7 +143,14 @@ return {
         require('zen-mode').toggle {}
       end, 'Toggle Zen Mode')
     end,
-    opts = {},
+    opts = {
+      window = {
+        width = 160,
+      },
+      plugins = {
+        tmux = { enabled = true },
+      },
+    },
   },
   {
     -- Diagnostics signs and list

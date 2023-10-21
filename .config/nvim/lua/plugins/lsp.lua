@@ -128,9 +128,6 @@ return {
       -- See `:help K` for why this keymap
       lsp_map('K', vim.lsp.buf.hover, bufnr, 'Hover documentation')
       lsp_map('<leader>ch', vim.lsp.buf.signature_help, bufnr, 'Code signature help')
-
-      -- Make diagnostics pretty
-      vim.diagnostic.config(opts.diagnostic_config)
     end
 
     -- mason-lspconfig requires that these setup functions are called in this order
@@ -154,6 +151,25 @@ return {
     vim.api.nvim_create_user_command('MasonInstallAll', function()
       vim.cmd('MasonInstall ' .. table.concat(opts.mason_ensure_installed, ' '))
     end, {})
+
+    -- Define pretty signs
+    local signs = {
+      DiagnosticSignError = '',
+      DiagnosticSignWarn = '',
+      DiagnosticSignHint = '󰌵',
+      DiagnosticInfo = '󰋼',
+      DapBreakpoint = '',
+      DapBreakpointCondition = '',
+      DapBreakpointRejected = '',
+      DapLogPoint = '.>',
+      DapStopped = '󰁕',
+    }
+    for type, icon in pairs(signs) do
+      vim.fn.sign_define(type, { text = icon, texthl = type, numhl = type })
+    end
+
+    -- Make diagnostics pretty
+    vim.diagnostic.config(opts.diagnostic_config)
 
     -- Ensure the servers above are installed
     mason_lspconfig.setup_handlers {

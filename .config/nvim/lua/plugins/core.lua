@@ -7,16 +7,16 @@ return {
   },
   {
     -- Better buffer deletion, preserves window layout
-    'echasnovski/mini.bufremove',
+    'famiu/bufdelete.nvim',
     version = '*',
     init = function()
       local map = require('helpers.keys').map
       map('n', '<leader>bc', function()
-        require('mini.bufremove').delete(0, false)
+        require('bufdelete').bufdelete(0, true)
       end, 'Buffer close')
-      map('n', '<leader>bd', function()
-        require('mini.bufremove').delete(0, true)
-      end, 'Buffer delete')
+      map('n', '<leader>bo', function()
+        vim.cmd '%Bdelete | e # | normal `"'
+      end, 'Buffer close others')
     end,
   },
   {

@@ -1,23 +1,6 @@
 -- Plugins that change the UI of Neovim
 return {
   {
-    -- Tabs for buffers (sue me)
-    'akinsho/bufferline.nvim',
-    version = '*',
-    dependencies = 'nvim-tree/nvim-web-devicons',
-    init = function()
-      local map = require('helpers.keys').map
-      map('n', '<leader>bo', '<cmd>BufferLineCloseOthers<cr>', 'Close other buffers')
-      map('n', '<leader>bl', '<cmd>BufferLineCloseLeft<cr>', 'Close buffers to the left')
-      map('n', '<leader>br', '<cmd>BufferLineCloseRight<cr>', 'Close buffers to the right')
-      map('n', '<leader>bb', '<cmd>BufferLinePick<cr>', 'Pick buffer')
-      map('n', '<leader>bs', '<cmd>BufferLinePick<cr>', 'Sort buffer')
-      map('n', ']b', '<cmd>BufferLineCycleNext<cr>', 'Cycle next buffer')
-      map('n', '[b', '<cmd>BufferLineCyclePrev<cr>', 'Cycle prev buffer')
-    end,
-    opts = {},
-  },
-  {
     -- Catppuccin theme
     'catppuccin/nvim',
     name = 'catppuccin',
