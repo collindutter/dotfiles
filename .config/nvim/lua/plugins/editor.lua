@@ -179,18 +179,22 @@ return {
       local map = require('helpers.keys').map
 
       map('n', '<leader>tc', function()
-        require('neotest').run(vim.fn.expand '%')
+        require('neotest').run.run(vim.fn.expand '%')
       end, 'Test current file')
 
+      map('n', '<leader>tn', function()
+        require('neotest').run.run()
+      end, 'Test nearest')
+
       map('n', '<leader>td', function()
-        require('neotest').run {
+        require('neotest').run.run {
           suite = false,
           strategy = 'dap',
         }
       end, 'Test debug')
 
       map('n', '<leader>dt', function()
-        require('neotest').run {
+        require('neotest').run.run {
           suite = false,
           strategy = 'dap',
         }
