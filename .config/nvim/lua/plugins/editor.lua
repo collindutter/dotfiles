@@ -16,6 +16,9 @@ return {
       {
         'nvim-telescope/telescope-frecency.nvim',
       },
+      {
+        'nvim-telescope/telescope-live-grep-args.nvim',
+      },
     },
     init = function()
       local map = require('helpers.keys').map
@@ -26,8 +29,11 @@ return {
       map('n', '<leader>fb', function()
         require('telescope.builtin').buffers { sort_mru = true, ignore_current_buffer = true }
       end, 'Find buffers')
-      map('n', '<leader>fo', function()
+      map('n', '<leader>fO', function()
         vim.cmd 'Telescope frecency'
+      end, 'Find old files (frecency)')
+      map('n', '<leader>fo', function()
+        require('telescope.builtin').oldfiles()
       end, 'Find old files')
       map('n', '<leader>ff', function()
         require('telescope.builtin').find_files()
@@ -40,7 +46,10 @@ return {
       end, 'Find current word')
       map('n', '<leader>fw', function()
         require('telescope.builtin').live_grep()
-      end, 'Find words')
+      end, 'Find word')
+      map('n', '<leader>fW', function()
+        vim.cmd 'lua require("telescope").extensions.live_grep_args.live_grep_args()'
+      end, 'Find word with args')
       map('n', '<leader>fd', function()
         require('telescope.builtin').diagnostics()
       end, 'Find diagnostics')
@@ -82,21 +91,21 @@ return {
             },
             n = {
               ['q'] = actions.close,
+              ['dd'] = actions.delete_buffer,
             },
           },
         },
+        extentions = {
+          frecency = {
+            db_safe_mode = false
+          },
+        }
       }
 
       require('telescope').load_extension 'fzf'
       require('telescope').load_extension 'frecency'
+      require('telescope').load_extension 'live_grep_args'
     end,
-  },
-  {
-    -- Autoclose buffers
-    'axkirillov/hbac.nvim',
-    opts = {
-      threshold = 5,
-    },
   },
   {
     -- File explorer as buffer
@@ -221,6 +230,10 @@ return {
       map('n', '<leader>ts', function()
         require('neotest').run.stop()
       end, 'Test stop')
+
+      map('n', '<leader>tu', function()
+        require("neotest").output_panel.toggle()
+      end, 'Test UI')
     end,
     opts = function()
       return {

@@ -26,5 +26,6 @@ map('n', '|', function() vim.cmd.vsplit() end, 'Vertical split')
 map('n', '\\', function() vim.cmd.split() end, 'Horizontal split')
 
 map('n', '<leader>q', '<cmd>confirm q<cr>', 'Confirm quit')
+map('n', '<leader>Q', '<cmd>qa!<cr>', 'Quit all')
 map('n', '<leader>fn', function() vim.cmd.enew() end, 'File new')
 

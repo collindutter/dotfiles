@@ -64,21 +64,26 @@ return {
         long_message_to_split = true, -- long messages will be sent to a split
         lsp_doc_border = true, -- add a border to hover docs and signature help
       },
+      messages = {
+        enabled = false,
+      },
     },
     dependencies = {
       'MunifTanjim/nui.nvim',
-      'rcarriga/nvim-notify',
     },
   },
   {
     -- Better ui elements
     'stevearc/dressing.nvim',
     opts = {
-      input = { default_prompt = '➤ ', mappings = {
-        n = {
-          ['q'] = 'Close',
+      input = {
+        default_prompt = '➤ ',
+        mappings = {
+          n = {
+            ['q'] = 'Close',
+          },
         },
-      } },
+      },
       select = { backend = { 'telescope', 'builtin' } },
     },
   },
