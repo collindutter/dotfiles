@@ -14,9 +14,7 @@ return {
       map('n', '<leader>bc', function()
         require('bufdelete').bufdelete(0, true)
       end, 'Buffer close')
-      map('n', '<leader>bo', function()
-        vim.cmd '%Bdelete | e # | normal `"'
-      end, 'Buffer close others')
+      map('n', '<leader>bo', '<cmd>%Bdelete | e # | normal `"<cr>', 'Buffer close others')
     end,
   },
   {
@@ -64,5 +62,20 @@ return {
     opts = {
       library = { plugins = { 'neotest' }, types = true },
     },
+  },
+  {
+    'folke/persistence.nvim',
+    event = 'BufReadPre',
+    opts = {},
+    init = function()
+      local map = require('helpers.keys').map
+      map('n', '<leader>sd', function()
+        require('persistence').load()
+      end, 'Restore directory session')
+
+      map('n', '<leader>sl', function()
+        require('persistence').load { last = true }
+      end, 'Restore last session')
+    end,
   },
 }

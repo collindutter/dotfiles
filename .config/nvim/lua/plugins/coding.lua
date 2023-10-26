@@ -55,6 +55,7 @@ return {
   {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
+    event = 'InsertEnter',
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
       'L3MON4D3/LuaSnip',
@@ -97,6 +98,11 @@ return {
           ['<C-p>'] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert },
           ['<C-d>'] = cmp.mapping.scroll_docs(-4),
           ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-c>'] = cmp.mapping(function()
+            if copilot_suggestion.is_visible() then
+              copilot_suggestion.dismiss()
+            end
+          end),
           ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
               cmp.confirm { behavior = cmp.ConfirmBehavior.Insert, select = true }
@@ -125,7 +131,9 @@ return {
   },
   {
     -- Copilot
+    -- TODO When copilot loads it makes lualine disappear until you type something. Ideally we'd lazy load it, but cmp does not lazy load.
     'zbirenbaum/copilot.lua',
+    event = 'InsertEnter',
     init = function()
       -- Hide copilot suggestions when cmp menu is open
       -- to prevent odd behavior/garbled up suggestions
