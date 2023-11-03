@@ -14,7 +14,15 @@ return {
       map('n', '<leader>bc', function()
         require('bufdelete').bufdelete(0, true)
       end, 'Buffer close')
-      map('n', '<leader>bo', '<cmd>%Bdelete | e # | normal `"<cr>', 'Buffer close others')
+      map('n', '<leader>bo', function()
+        local bufdelete = require 'bufdelete'
+        local current = vim.api.nvim_get_current_buf()
+        for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
+          if bufnr ~= current then
+            bufdelete.bufdelete(bufnr, true)
+          end
+        end
+      end, 'Buffer close others')
     end,
   },
   {

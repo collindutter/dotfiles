@@ -14,9 +14,6 @@ return {
         end,
       },
       {
-        'nvim-telescope/telescope-frecency.nvim',
-      },
-      {
         'nvim-telescope/telescope-live-grep-args.nvim',
       },
     },
@@ -29,9 +26,6 @@ return {
       map('n', '<leader>fb', function()
         require('telescope.builtin').buffers { sort_mru = true, ignore_current_buffer = true }
       end, 'Find buffers')
-      map('n', '<leader>fO', function()
-        vim.cmd 'Telescope frecency'
-      end, 'Find old files (frecency)')
       map('n', '<leader>fo', function()
         require('telescope.builtin').oldfiles()
       end, 'Find old files')
@@ -91,19 +85,12 @@ return {
             },
             n = {
               ['q'] = actions.close,
-              ['dd'] = actions.delete_buffer,
             },
           },
         },
-        extentions = {
-          frecency = {
-            db_safe_mode = false
-          },
-        }
       }
 
       require('telescope').load_extension 'fzf'
-      require('telescope').load_extension 'frecency'
       require('telescope').load_extension 'live_grep_args'
     end,
   },
@@ -155,9 +142,6 @@ return {
     opts = {
       window = {
         width = 160,
-      },
-      plugins = {
-        tmux = { enabled = true },
       },
     },
   },
