@@ -16,9 +16,10 @@ return {
       end, 'Buffer close')
       map('n', '<leader>bo', function()
         local bufdelete = require 'bufdelete'
-        local current = vim.api.nvim_get_current_buf()
-        for _, bufnr in ipairs(vim.api.nvim_list_bufs()) do
-          if bufnr ~= current then
+        local buflist = vim.api.nvim_list_bufs()
+        local curbufnr = vim.api.nvim_get_current_buf()
+        for _, bufnr in ipairs(buflist) do
+          if vim.bo[bufnr].buflisted and bufnr ~= curbufnr and (vim.fn.getbufvar(bufnr, 'bufpersist') ~= 1) then
             bufdelete.bufdelete(bufnr, true)
           end
         end
