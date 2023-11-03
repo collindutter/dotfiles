@@ -66,6 +66,7 @@ curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fi
 echo "Installing Fisher packages..."
 fisher install bass
 fisher install IlanCosman/tide@v6
+fisher install PatrickF1/fzf.fish
 
 $ echo "Installing fish catpuccin..."
 fisher install catppuccin/fish
