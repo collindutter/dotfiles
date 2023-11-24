@@ -1,6 +1,6 @@
 local map = require('helpers.keys').map
 
-map({ 'n', 'v' }, '<Space>', '<Nop>', "Ensure space is clear for leader")
+map({ 'n', 'v' }, '<Space>', '<Nop>', 'Ensure space is clear for leader')
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
@@ -19,13 +19,30 @@ map('n', '[t', function()
 end, 'Previous tab')
 
 -- Quickfix list movement
-map('n', ']q', function() vim.cmd.cn() end, "Next quickfix item")
-map('n', '[q', function() vim.cmd.cp() end, "Previous quickfix item")
+map('n', ']q', function()
+  vim.cmd.cn()
+end, 'Next quickfix item')
+map('n', '[q', function()
+  vim.cmd.cp()
+end, 'Previous quickfix item')
 
-map('n', '|', function() vim.cmd.vsplit() end, 'Vertical split')
-map('n', '\\', function() vim.cmd.split() end, 'Horizontal split')
+map('n', '|', function()
+  vim.cmd.vsplit()
+end, 'Vertical split')
+map('n', '\\', function()
+  vim.cmd.split()
+end, 'Horizontal split')
 
 map('n', '<leader>q', '<cmd>confirm q<cr>', 'Confirm quit')
 map('n', '<leader>Q', '<cmd>qa!<cr>', 'Quit all')
-map('n', '<leader>fn', function() vim.cmd.enew() end, 'File new')
+map('n', '<leader>n', function()
+  vim.cmd.enew()
+end, 'New file')
 
+map('n', '<leader>cj', function()
+  vim.cmd '%!jq .'
+end, 'Format JSON')
+
+map('n', '<leader>lr', function()
+  vim.cmd 'LspRestart'
+end, 'Restart LSP')

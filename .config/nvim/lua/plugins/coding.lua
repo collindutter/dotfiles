@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 -- Plugins that impact typing code
 return {
   {
@@ -57,13 +58,15 @@ return {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
     dependencies = {
+      -- LSP completion capabilities
+      'hrsh7th/cmp-nvim-lsp',
+      -- Words within buffer
+      'hrsh7th/cmp-buffer',
+      -- File paths
+      'hrsh7th/cmp-path',
       -- Snippet Engine & its associated nvim-cmp source
       'L3MON4D3/LuaSnip',
       'saadparwaiz1/cmp_luasnip',
-
-      -- LSP completion capabilities
-      'hrsh7th/cmp-nvim-lsp',
-
       -- Copilot
       'zbirenbaum/copilot.lua',
     },
@@ -72,6 +75,7 @@ return {
       local copilot_suggestion = require 'copilot.suggestion'
       local luasnip = require 'luasnip'
       require('luasnip.loaders.from_vscode').lazy_load()
+
       luasnip.config.setup {}
 
       local function has_words_before()
@@ -121,6 +125,8 @@ return {
         sources = {
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
+          { name = 'path' },
+          { name = 'buffer' },
         },
         window = {
           completion = cmp.config.window.bordered(border_opts),
@@ -140,10 +146,12 @@ return {
       local cmp_status_ok, cmp = pcall(require, 'cmp')
       if cmp_status_ok then
         cmp.event:on('menu_opened', function()
+          ---@diagnostic disable-next-line: inject-field
           vim.b.copilot_suggestion_hidden = true
         end)
 
         cmp.event:on('menu_closed', function()
+          ---@diagnostic disable-next-line: inject-field
           vim.b.copilot_suggestion_hidden = false
         end)
       end

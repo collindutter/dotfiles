@@ -35,6 +35,9 @@ return {
       map('n', '<leader>fh', function()
         require('telescope.builtin').help_tags()
       end, 'Find help')
+      map('n', '<leader>fk', function()
+        require('telescope.builtin').keymaps()
+      end, 'Find keymaps')
       map('n', '<leader>fc', function()
         require('telescope.builtin').grep_string()
       end, 'Find current word')
@@ -60,7 +63,10 @@ return {
     end,
     config = function()
       local actions = require 'telescope.actions'
-      require('telescope').setup {
+      local trouble = require("trouble.providers.telescope")
+      local telescope = require 'telescope'
+
+      telescope.setup {
         defaults = {
           path_display = { 'truncate' },
           sorting_strategy = 'ascending',
@@ -82,9 +88,11 @@ return {
               ['<C-p>'] = actions.cycle_history_prev,
               ['<C-j>'] = actions.move_selection_next,
               ['<C-k>'] = actions.move_selection_previous,
+              ['<C-t>'] = trouble.open_with_trouble,
             },
             n = {
               ['q'] = actions.close,
+              ['<C-t>'] = trouble.open_with_trouble,
             },
           },
         },
@@ -216,7 +224,7 @@ return {
       end, 'Test stop')
 
       map('n', '<leader>tu', function()
-        require("neotest").output_panel.toggle()
+        require('neotest').output_panel.toggle()
       end, 'Test UI')
     end,
     opts = function()
@@ -228,5 +236,16 @@ return {
         },
       }
     end,
+  },
+  {
+    -- Markdown preview
+    -- TODO move to other plugin file
+    'iamcco/markdown-preview.nvim',
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+    ft = { 'markdown' },
+    build = function()
+      vim.fn['mkdp#util#install']()
+    end,
+    opts = {}
   },
 }
