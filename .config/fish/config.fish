@@ -14,6 +14,7 @@ if status --is-interactive
 	set -g fish_key_bindings fish_vi_key_bindings
 	set -g fish_bind_mode insert
 	set fish_greeting
+	fzf_configure_bindings --directory=\cf
 	
 	fish_config theme choose "Catppuccin Macchiato"
 	
