@@ -67,12 +67,14 @@ return {
     opts = {},
   },
   {
+    -- Neovim lua development tools
     'folke/neodev.nvim',
     opts = {
       library = { plugins = { 'neotest' }, types = true },
     },
   },
   {
+    -- Better session management
     'folke/persistence.nvim',
     event = 'BufReadPre',
     opts = {},
@@ -86,5 +88,10 @@ return {
         require('persistence').load { last = true }
       end, 'Restore last session')
     end,
+  },
+  {
+    -- Big file support, big file support, big file support
+    'LunarVim/bigfile.nvim',
+    opts = {},
   },
 }

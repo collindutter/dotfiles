@@ -4,7 +4,8 @@ return {
     -- Catppuccin theme
     'catppuccin/nvim',
     name = 'catppuccin',
-    config = function()
+    config = function(_, opts)
+      require('catppuccin').setup(opts)
       -- Don't forget to change in lazy.lua install
       vim.cmd.colorscheme 'catppuccin-macchiato'
     end,
@@ -12,24 +13,35 @@ return {
     opts = {
       integrations = {
         cmp = true,
+        dap = {
+          enabled = true,
+          enable_ui = true,
+        },
         flash = true,
         gitsigns = true,
         indent_blankline = { enabled = true },
         lsp_trouble = true,
         mason = true,
-        mini = true,
         native_lsp = {
           enabled = true,
+          virtual_text = {
+            errors = { 'italic' },
+            hints = { 'italic' },
+            warnings = { 'italic' },
+            information = { 'italic' },
+          },
           underlines = {
             errors = { 'undercurl' },
             hints = { 'undercurl' },
             warnings = { 'undercurl' },
             information = { 'undercurl' },
           },
+          inlay_hints = {
+            background = true,
+          },
         },
         neotest = true,
         noice = true,
-        notify = true,
         semantic_tokens = true,
         telescope = true,
         treesitter = true,
@@ -63,9 +75,6 @@ return {
         bottom_search = true, -- use a classic bottom cmdline for search
         long_message_to_split = true, -- long messages will be sent to a split
         lsp_doc_border = true, -- add a border to hover docs and signature help
-      },
-      messages = {
-        enabled = false,
       },
     },
     dependencies = {
@@ -101,7 +110,6 @@ return {
           'Trouble',
           'lazy',
           'mason',
-          'notify',
           'toggleterm',
           'lazyterm',
         },

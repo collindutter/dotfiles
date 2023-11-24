@@ -127,7 +127,7 @@ return {
 
       -- See `:help K` for why this keymap
       lsp_map('K', vim.lsp.buf.hover, bufnr, 'Hover documentation')
-      vim.keymap.set('i', '<c-k>', vim.lsp.buf.signature_help, { silent = true, buffer = bufnr, desc = "Signature help" })
+      vim.keymap.set('i', '<c-k>', vim.lsp.buf.signature_help, { silent = true, buffer = bufnr, desc = 'Signature help' })
     end
 
     -- mason-lspconfig requires that these setup functions are called in this order
