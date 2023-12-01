@@ -63,7 +63,7 @@ return {
     end,
     config = function()
       local actions = require 'telescope.actions'
-      local trouble = require("trouble.providers.telescope")
+      local trouble = require 'trouble.providers.telescope'
       local telescope = require 'telescope'
 
       telescope.setup {
@@ -238,14 +238,25 @@ return {
     end,
   },
   {
-    -- Markdown preview
-    -- TODO move to other plugin file
-    'iamcco/markdown-preview.nvim',
-    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-    ft = { 'markdown' },
-    build = function()
-      vim.fn['mkdp#util#install']()
+    'nvim-pack/nvim-spectre',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+    init = function()
+      local map = require('helpers.keys').map
+
+      map('n', '<leader>F', function()
+        require('spectre').toggle()
+      end, 'Spectre toggle')
     end,
-    opts = {}
+    opts = {
+      mappings = {
+        ['send_to_qf'] = {
+          map = '<C-q>',
+          cmd = "<cmd>lua require('spectre.actions').send_to_qf()<CR>",
+          desc = 'Send all items to quickfix',
+        },
+      },
+    },
   },
 }

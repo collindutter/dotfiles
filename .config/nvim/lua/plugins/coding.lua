@@ -85,6 +85,7 @@ return {
 
       local border_opts = {
         border = 'rounded',
+        winhighlight = 'NormalFloat:NormalFloat,FloatBorder:FloatBorder',
       }
 
       cmp.setup {
@@ -97,9 +98,12 @@ return {
           behavior = cmp.ConfirmBehavior.Replace,
           select = false,
         },
+        completion = {
+          completeopt = 'menu,menuone,noinsert',
+        },
         mapping = cmp.mapping.preset.insert {
-          ['<C-n>'] = cmp.mapping.select_next_item { behavior = cmp.SelectBehavior.Insert },
-          ['<C-p>'] = cmp.mapping.select_prev_item { behavior = cmp.SelectBehavior.Insert },
+          ['<C-n>'] = cmp.mapping.select_next_item(),
+          ['<C-p>'] = cmp.mapping.select_prev_item(),
           ['<C-d>'] = cmp.mapping.scroll_docs(-4),
           ['<C-u>'] = cmp.mapping.scroll_docs(4),
           ['<C-c>'] = cmp.mapping(function()
@@ -142,7 +146,7 @@ return {
     event = 'InsertEnter',
     init = function()
       -- Hide copilot suggestions when cmp menu is open
-      -- to prevent odd behavior/garbled up suggestions
+      -- to prevent odd behavior/garbled up suggestions.
       local cmp_status_ok, cmp = pcall(require, 'cmp')
       if cmp_status_ok then
         cmp.event:on('menu_opened', function()

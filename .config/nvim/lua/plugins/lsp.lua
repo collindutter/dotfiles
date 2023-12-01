@@ -18,10 +18,11 @@ return {
       float = {
         style = 'minimal',
         border = 'rounded',
-        source = 'always',
-        header = '',
-        prefix = '',
       },
+    },
+    float = {
+      style = 'minimal',
+      border = 'rounded',
     },
     mason_ensure_installed = {
       'stylua',
@@ -170,6 +171,11 @@ return {
 
     -- Make diagnostics pretty
     vim.diagnostic.config(opts.diagnostic_config)
+    -- Hover configuration
+    vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, opts.float)
+
+    -- Signature help configuration
+    vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, opts.float)
 
     -- Ensure the servers above are installed
     mason_lspconfig.setup_handlers {
