@@ -18,6 +18,7 @@ brew install tmux
 brew install fish
 brew install yabai
 brew install skhd
+brew install gnu-sed
 
 echo "Switching to fish shell..."
 sudo echo /usr/local/bin/fish >> /etc/shells
