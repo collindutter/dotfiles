@@ -29,7 +29,6 @@ return {
   {
     -- Better window resizing, navigation (integrates with tmux)
     'mrjones2014/smart-splits.nvim',
-    dependencies = { 'kwkarlwang/bufresize.nvim' },
     opts = {},
     init = function()
       local map = require('helpers.keys').map
