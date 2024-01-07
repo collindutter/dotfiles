@@ -10,6 +10,7 @@ echo "Installing Homebrew..."
 brew analytics off
 
 echo "Installing Homebrew packages..."
+brew tap homebrew/cask-fonts
 brew install neovim
 brew install jq
 brew install ripgrep
@@ -19,6 +20,9 @@ brew install fish
 brew install yabai
 brew install skhd
 brew install gnu-sed
+brew install direnv
+brew install font-jetbrains-mono-nerd-font
+
 
 echo "Switching to fish shell..."
 sudo echo /usr/local/bin/fish >> /etc/shells
