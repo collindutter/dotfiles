@@ -24,6 +24,9 @@ require('helpers.keys').set_leader ' '
 -- Load plugins from specifications
 -- (The leader key must be set before this)
 lazy.setup('plugins', {
+  ui = {
+    border = 'rounded',
+  },
   defaults = {
     lazy = false,
   },
@@ -35,3 +38,4 @@ lazy.setup('plugins', {
 -- Might as well set up an easy-access keybinding
 
 require('helpers.keys').map('n', '<leader>L', lazy.show, 'Show Lazy')
+require('helpers.keys').map('n', '<leader>R', '<cmd>Lazy reload griptape.nvim<cr>', 'Lazy reload Griptape')

@@ -11,6 +11,8 @@ return {
     end,
     priority = 1000,
     opts = {
+      flavour = 'macchiato',
+      transparent_background = true,
       styles = {
         comments = {},
         conditionals = {},
@@ -61,6 +63,19 @@ return {
         section_separators = { right = '' },
       },
     },
+    config = function(_, opts)
+      require('lualine').setup(vim.tbl_deep_extend('force', opts, {
+        sections = {
+          lualine_x = {
+            {
+              require('noice').api.statusline.mode.get,
+              cond = require('noice').api.statusline.mode.has,
+              color = { fg = '#ff9e64' },
+            },
+          },
+        },
+      }))
+    end,
   },
   {
     -- Prettier UI
@@ -72,14 +87,11 @@ return {
           ['vim.lsp.util.stylize_markdown'] = true,
           ['cmp.entry.get_documentation'] = true,
         },
-        hover = {
-          enabled = false,
-        },
       },
       presets = {
         bottom_search = true, -- use a classic bottom cmdline for search
         long_message_to_split = true, -- long messages will be sent to a split
-        lsp_doc_border = false, -- add a border to hover docs and signature help
+        lsp_doc_border = true, -- add a border to hover docs and signature help
       },
     },
     dependencies = {
@@ -91,14 +103,12 @@ return {
     'stevearc/dressing.nvim',
     opts = {
       input = {
-        default_prompt = '➤ ',
         mappings = {
           n = {
             ['q'] = 'Close',
           },
         },
       },
-      select = { backend = { 'telescope', 'builtin' } },
     },
   },
   {

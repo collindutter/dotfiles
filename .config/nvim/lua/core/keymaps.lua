@@ -33,6 +33,7 @@ map('n', '\\', function()
   vim.cmd.split()
 end, 'Horizontal split')
 
+map('n', '<leader>w', '<cmd>w<cr>', 'Save file')
 map('n', '<leader>q', '<cmd>confirm q<cr>', 'Confirm quit')
 map('n', '<leader>Q', '<cmd>qa!<cr>', 'Quit all')
 map('n', '<leader>n', function()

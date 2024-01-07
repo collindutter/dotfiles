@@ -1,45 +1,59 @@
-vim.opt.viewoptions:remove 'curdir' -- disable saving current directory with views
-vim.opt.shortmess:append { s = true, I = true } -- disable search count wrap and startup messages
-vim.opt.backspace:append { 'nostop' } -- don't stop backspace at insert
-vim.opt.diffopt:append 'linematch:60' -- enable linematch diff algorithm
+vim.opt.shortmess:append 'I' -- Disable intro message
 local options = {
-  opt = {
-    breakindent = true, -- wrap indent to match  line start
-    clipboard = 'unnamedplus', -- connection to the system clipboard
-    completeopt = { 'menu', 'menuone', 'noselect' }, -- Options for insert mode completion
-    copyindent = true, -- copy the previous indentation on autoindenting
-    cursorline = true, -- highlight the text line of the cursor
-    expandtab = true, -- enable the use of space in tab
-    fillchars = { eob = ' ' }, -- disable `~` on nonexistent lines
-    history = 100, -- number of commands to remember in a history table
-    ignorecase = true, -- case insensitive searching
-    infercase = true, -- infer cases in keyword completion
-    laststatus = 3, -- global statusline
-    linebreak = true, -- wrap lines at 'breakat'
-    mouse = 'a', -- enable mouse support
-    number = true, -- show numberline
-    preserveindent = true, -- preserve indent structure as much as possible
-    pumheight = 10, -- height of the pop up menu
-    relativenumber = true, -- show relative numberline
-    shiftwidth = 2, -- number of space inserted for indentation
-    showmode = false, -- disable showing modes in command line
-    signcolumn = 'yes', -- always show the sign column
-    showcmd = false, -- don't show pending commands in bottom right
-    cmdheight = 1, -- height of the command line
-    smartcase = true, -- case sensitive searching
-    splitbelow = true, -- splitting a new window below the current one
-    splitright = true, -- splitting a new window at the right of the current one
-    tabstop = 2, -- number of space in a tab
-    termguicolors = true, -- enable 24-bit RGB color in the TUI
-    timeoutlen = 500, -- shorten key timeout length a little bit for which-key
-    undofile = true, -- enable persistent undo
-    updatetime = 300, -- length of time to wait before triggering the plugin
-    virtualedit = 'block', -- allow going past end of line in visual block mode
-    wrap = false, -- disable wrapping of lines longer than the width of window
-    writebackup = false, -- disable making a backup before overwriting a file,
-  },
   g = {
     python3_host_prog = '~/.virtualenvs/py3nvim/bin/python', -- set python provider
+  },
+  opt = {
+    -- Basic UI Enhancements
+    number = true, -- Show line numbers
+    relativenumber = true, -- Show relative line numbers
+    showmatch = true, -- Highlight matching brackets
+    foldmethod = 'syntax', -- Enable syntax-based folding
+    colorcolumn = '120', -- Set a text width marker at 120 characters
+
+    -- Editing Improvements
+    expandtab = true, -- Convert tabs to spaces
+    shiftwidth = 4, -- Spaces per step of (auto)indent
+    tabstop = 4, -- Spaces that a tab counts for
+    smartindent = true, -- Smart indenting on new lines
+    autoindent = true, -- Keep indent from previous line
+
+    -- Search & Navigation
+    hlsearch = true, -- Highlight all search results
+    incsearch = true, -- Show partial matches for a search phrase
+    ignorecase = true, -- Ignore case in search patterns
+    smartcase = true, -- Override `ignorecase` for uppercase patterns
+    grepprg = 'rg --vimgrep', -- Use Ripgrep for the :grep commanr
+    grepformat = '%f:%l:%c:%m', -- Format for parsing the grep output
+
+    -- File Handling
+    backup = false, -- Disable making a backup before overwriting a file
+    swapfile = false, -- Disable swap file creation
+    undofile = true, -- Enable persistent undo
+    autowrite = true, -- Auto-write buffer when it's not the current buffer
+    confirm = true, -- Confirm to save changes before exiting modified buffer
+
+    -- Visual Tweaks
+    cursorline = true, -- Highlight the current line
+    wrap = false, -- Disable line wrapping
+    scrolloff = 8, -- Start scrolling when 8 lines away from margins
+    sidescrolloff = 8, -- Same as `scrolloff`, but for horizontal scrolling
+    signcolumn = 'yes', -- Always show the sign column
+    showmode = false, -- Hide the current mode indicator
+    laststatus = 3, -- Always show the status line
+
+    -- Miscellaneous
+    mouse = 'a', -- Enable mouse support
+    clipboard = 'unnamedplus', -- Use the system clipboard
+    timeoutlen = 300, -- Time in milliseconds for a mapped sequence
+    termguicolors = true, -- Enable 24-bit RGB colors
+
+    -- Completion options
+    completeopt = { 'menuone', 'noselect' },
+
+    -- Split behavior
+    splitright = true, -- Open vertical splits to the right
+    splitbelow = true, -- Open horizontal splits below
   },
 }
 
@@ -48,4 +62,3 @@ for scope, table in pairs(options) do
     vim[scope][setting] = value
   end
 end
-

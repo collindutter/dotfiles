@@ -1,6 +1,14 @@
 -- Plugins that provide new editor UI components
 return {
   {
+    'williamboman/mason.nvim',
+    opts = {
+      ui = {
+        border = 'rounded',
+      },
+    },
+  },
+  {
     -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
@@ -15,6 +23,9 @@ return {
       },
       {
         'nvim-telescope/telescope-live-grep-args.nvim',
+      },
+      {
+        'piersolenski/telescope-import.nvim',
       },
     },
     init = function()
@@ -60,6 +71,9 @@ return {
           cwd = '~/.config/nvim',
         }
       end, 'Find a config')
+      map('n', '<leader>fi', function()
+        vim.cmd 'Telescope import'
+      end, 'Find imports')
     end,
     config = function()
       local actions = require 'telescope.actions'
@@ -96,15 +110,31 @@ return {
             },
           },
         },
+        extensions = {
+          import = {
+            -- Add imports to the top of the file keeping the cursor in place
+            insert_at_top = true,
+            -- Support additional languages
+            custom_languages = {
+              {
+                regex = [[(?m)^(?:from[ ]+(\S+)[ ]+)?import[ ]+(\S+)[ ]*\$]],
+                filetypes = { 'python' },
+                extensions = { 'py' },
+              },
+            },
+          },
+        },
       }
 
       require('telescope').load_extension 'fzf'
       require('telescope').load_extension 'live_grep_args'
+      require('telescope').load_extension 'import'
     end,
   },
   {
     -- File explorer as buffer
     'stevearc/oil.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     opts = {
       keymaps = {
         ['<C-l>'] = false,
@@ -116,15 +146,17 @@ return {
     init = function()
       local map = require('helpers.keys').map
 
-      map('n', '-', function()
-        require('oil').open()
-      end, 'Open Oil')
+      map('n', '-', '<cmd>Oil<cr>', 'Open Oil')
     end,
   },
   {
     -- Show pending keybinds
     'folke/which-key.nvim',
-    opts = {},
+    opts = {
+      window = {
+        border = 'rounded',
+      },
+    },
     init = function()
       -- Document existing key chains
       require('which-key').register {
@@ -139,19 +171,15 @@ return {
   },
   {
     -- Center buffer without noise
-    'folke/zen-mode.nvim',
+    'shortcuts/no-neck-pain.nvim',
     init = function()
       local map = require('helpers.keys').map
 
       map('n', '<leader>m', function()
-        require('zen-mode').toggle {}
-      end, 'Toggle Zen Mode')
+        vim.cmd 'NoNeckPain'
+      end, 'Toggle ')
     end,
-    opts = {
-      window = {
-        width = 160,
-      },
-    },
+    opts = {},
   },
   {
     -- Diagnostics signs and list
@@ -250,13 +278,31 @@ return {
       end, 'Spectre toggle')
     end,
     opts = {
-      mappings = {
+      mapping = {
         ['send_to_qf'] = {
           map = '<C-q>',
-          cmd = "<cmd>lua require('spectre.actions').send_to_qf()<CR>",
+          cmd = "<cmd>lua require('spectre.actions').send_to_qf()<cr>",
           desc = 'Send all items to quickfix',
         },
       },
     },
+  },
+  {
+    dir = '~/Documents/griptape/griptape.nvim',
+    opts = {},
+    dependencies = {
+      'MunifTanjim/nui.nvim',
+      'nvim-lua/plenary.nvim',
+    },
+    init = function()
+      local map = require('helpers.keys').map
+
+      map({ 'n', 'x' }, '<leader>cc', function()
+        require('griptape').chat()
+      end, 'Griptape chat')
+      map({ 'n', 'x' }, '<leader>cg', function()
+        require('griptape').diagnose()
+      end, 'Griptape diagnose')
+    end,
   },
 }

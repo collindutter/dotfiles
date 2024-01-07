@@ -16,11 +16,13 @@ return {
       underline = true,
       severity_sort = true,
       float = {
+        focusable = true,
         style = 'minimal',
         border = 'rounded',
       },
     },
     float = {
+      focusable = true,
       style = 'minimal',
       border = 'rounded',
     },
@@ -28,6 +30,18 @@ return {
       'stylua',
       'luacheck',
     },
+    signs = {
+      DiagnosticSignError = '',
+      DiagnosticSignWarn = '',
+      DiagnosticSignHint = '󰌵',
+      DiagnosticInfo = '󰋼',
+      DapBreakpoint = '',
+      DapBreakpointCondition = '',
+      DapBreakpointRejected = '',
+      DapLogPoint = '.>',
+      DapStopped = '󰁕',
+    },
+
     mason_lspconfig_ensure_installed = {
       ruff_lsp = {},
       jsonls = {},
@@ -154,28 +168,12 @@ return {
     end, {})
 
     -- Define pretty signs
-    local signs = {
-      DiagnosticSignError = '',
-      DiagnosticSignWarn = '',
-      DiagnosticSignHint = '󰌵',
-      DiagnosticInfo = '󰋼',
-      DapBreakpoint = '',
-      DapBreakpointCondition = '',
-      DapBreakpointRejected = '',
-      DapLogPoint = '.>',
-      DapStopped = '󰁕',
-    }
-    for type, icon in pairs(signs) do
+    for type, icon in pairs(opts.signs) do
       vim.fn.sign_define(type, { text = icon, texthl = type, numhl = type })
     end
 
     -- Make diagnostics pretty
     vim.diagnostic.config(opts.diagnostic_config)
-    -- Hover configuration
-    vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, opts.float)
-
-    -- Signature help configuration
-    vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, opts.float)
 
     -- Ensure the servers above are installed
     mason_lspconfig.setup_handlers {
