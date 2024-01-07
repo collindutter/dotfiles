@@ -29,6 +29,7 @@ return {
   {
     -- Better window resizing, navigation (integrates with tmux)
     'mrjones2014/smart-splits.nvim',
+    dependencies = { 'kwkarlwang/bufresize.nvim' },
     opts = {},
     init = function()
       local map = require('helpers.keys').map
@@ -93,5 +94,19 @@ return {
     -- Big file support, big file support, big file support
     'LunarVim/bigfile.nvim',
     opts = {},
+  },
+  {
+    -- Preserve window ratios after tmuxing
+    'kwkarlwang/bufresize.nvim',
+    opts = {
+      register = {
+        trigger_events = { 'BufWinEnter', 'WinEnter', 'WinResized' },
+      },
+      resize = {
+        keys = {},
+        trigger_events = { 'VimResized' },
+        increment = false,
+      },
+    },
   },
 }
