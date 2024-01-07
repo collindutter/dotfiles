@@ -19,6 +19,7 @@ if status --is-interactive
 	fish_config theme choose "Catppuccin Macchiato"
 	
 	zoxide init fish | source
+	direnv hook fish | source
 
 	if not set -q TMUX
     set -g TMUX tmux new-session -d -s personal
