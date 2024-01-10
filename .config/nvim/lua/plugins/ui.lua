@@ -65,6 +65,7 @@ return {
     },
     config = function(_, opts)
       require('lualine').setup(vim.tbl_deep_extend('force', opts, {
+        -- Add recording status to lua line
         sections = {
           lualine_x = {
             {
