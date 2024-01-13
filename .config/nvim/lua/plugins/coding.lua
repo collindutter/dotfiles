@@ -1,10 +1,10 @@
 ---@diagnostic disable: missing-fields
+---@diagnostic disable: inject-field
 -- Plugins that impact typing code
 return {
   {
     -- Surround motions
     'kylechui/nvim-surround',
-    version = '*',
     opts = {},
   },
   {
@@ -62,6 +62,7 @@ return {
       'hrsh7th/cmp-nvim-lsp',
       -- File paths
       'hrsh7th/cmp-path',
+      'hrsh7th/cmp-cmdline',
       -- Snippet Engine & its associated nvim-cmp source
       'L3MON4D3/LuaSnip',
       'saadparwaiz1/cmp_luasnip',
@@ -80,6 +81,10 @@ return {
         border = 'rounded',
       }
 
+      cmp.event:on('menu_closed', function()
+        vim.b.copilot_suggestion_hidden = false
+      end)
+
       cmp.setup {
         snippet = {
           expand = function(args)
@@ -87,8 +92,14 @@ return {
           end,
         },
         mapping = cmp.mapping.preset.insert {
-          ['<C-n>'] = cmp.mapping.select_next_item(),
-          ['<C-p>'] = cmp.mapping.select_prev_item(),
+          ['<C-n>'] = cmp.mapping(function()
+            cmp.select_next_item()
+            vim.b.copilot_suggestion_hidden = true
+          end),
+          ['<C-p>'] = cmp.mapping(function()
+            cmp.select_prev_item()
+            vim.b.copilot_suggestion_hidden = true
+          end),
           ['<C-d>'] = cmp.mapping.scroll_docs(-4),
           ['<C-u>'] = cmp.mapping.scroll_docs(4),
           ['<C-e>'] = cmp.mapping.abort(),
@@ -98,10 +109,16 @@ return {
             end
           end),
           ['<Tab>'] = cmp.mapping(function(fallback)
-            if cmp.visible() and cmp.get_selected_entry() ~= nil then
-              cmp.confirm { select = false, behavior = cmp.ConfirmBehavior.Replace }
-            elseif copilot_suggestion.is_visible() then
+            if copilot_suggestion.is_visible() then
               copilot_suggestion.accept()
+            elseif cmp.visible() then
+              local entry = cmp.get_selected_entry()
+
+              if not entry then
+                cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
+              else
+                cmp.confirm()
+              end
             elseif luasnip.expand_or_locally_jumpable() then
               luasnip.expand_or_jump()
             else
@@ -119,6 +136,15 @@ return {
           documentation = cmp.config.window.bordered(border_opts),
         },
       }
+
+      cmp.setup.cmdline(':', {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+          { name = 'path' },
+        }, {
+          { name = 'cmdline' },
+        }),
+      })
     end,
   },
   {

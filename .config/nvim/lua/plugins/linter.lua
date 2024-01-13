@@ -3,9 +3,10 @@ return {
   {
     -- Linter
     'mfussenegger/nvim-lint',
-    config = function()
+    config = function(_)
       local lint = require 'lint'
       local luacheck = require('lint').linters.luacheck
+
       luacheck.args = {
         '--formatter',
         'plain',

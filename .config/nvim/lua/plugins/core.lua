@@ -8,7 +8,6 @@ return {
   {
     -- Better buffer deletion, preserves window layout
     'famiu/bufdelete.nvim',
-    version = '*',
     init = function()
       local map = require('helpers.keys').map
       map('n', '<leader>bc', function()
@@ -18,6 +17,7 @@ return {
         local bufdelete = require 'bufdelete'
         local buflist = vim.api.nvim_list_bufs()
         local curbufnr = vim.api.nvim_get_current_buf()
+
         for _, bufnr in ipairs(buflist) do
           if vim.bo[bufnr].buflisted and bufnr ~= curbufnr and (vim.fn.getbufvar(bufnr, 'bufpersist') ~= 1) then
             bufdelete.bufdelete(bufnr, true)
@@ -62,7 +62,7 @@ return {
     end,
   },
   {
-    -- Detect indentation
+    -- Detect indentation (shiftwidth, tabstop, etc.)
     'nmac427/guess-indent.nvim',
     opts = {},
   },

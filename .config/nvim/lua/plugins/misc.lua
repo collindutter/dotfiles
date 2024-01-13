@@ -1,5 +1,5 @@
+-- Plugins where I didn't have any other place to put them
 return {
-  -- Plugins where I didn't have any other place to put them
   {
     -- Markdown preview
     'iamcco/markdown-preview.nvim',
