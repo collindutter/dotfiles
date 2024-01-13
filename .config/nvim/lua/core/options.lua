@@ -32,6 +32,7 @@ local options = {
     undofile = true, -- Enable persistent undo
     autowrite = true, -- Auto-write buffer when it's not the current buffer
     confirm = true, -- Confirm to save changes before exiting modified buffer
+    wildmenu = false, -- Disable command-line completion menu (we're using cmp)
 
     -- Visual Tweaks
     cursorline = true, -- Highlight the current line
