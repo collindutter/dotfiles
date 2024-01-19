@@ -299,11 +299,11 @@ return {
       local map = require('helpers.keys').map
 
       map({ 'n', 'x' }, '<leader>cc', function()
-        require('griptape').chat()
-      end, 'Griptape chat')
+        require('griptape').chat 'General'
+      end, 'Griptape General')
       map({ 'n', 'x' }, '<leader>cg', function()
-        require('griptape').diagnose()
-      end, 'Griptape diagnose')
+        require('griptape').chat 'Coder'
+      end, 'Griptape Coder')
     end,
   },
 }
