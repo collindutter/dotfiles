@@ -299,10 +299,10 @@ return {
       local map = require('helpers.keys').map
 
       map({ 'n', 'x' }, '<leader>cc', function()
-        require('griptape').chat 'General'
+        require('griptape').run 'General'
       end, 'Griptape General')
       map({ 'n', 'x' }, '<leader>cg', function()
-        require('griptape').chat 'Coder'
+        require('griptape').run 'Coder'
       end, 'Griptape Coder')
     end,
   },
