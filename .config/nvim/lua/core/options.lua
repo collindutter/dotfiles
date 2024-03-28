@@ -9,7 +9,7 @@ local options = {
     relativenumber = true, -- Show relative line numbers
     showmatch = true, -- Highlight matching brackets
     foldmethod = 'syntax', -- Enable syntax-based folding
-    colorcolumn = '120', -- Set a text width marker at 120 characters
+    showcmd = false,
 
     -- Editing Improvements
     expandtab = true, -- Convert tabs to spaces
@@ -21,6 +21,7 @@ local options = {
     -- Search & Navigation
     hlsearch = true, -- Highlight all search results
     incsearch = true, -- Show partial matches for a search phrase
+    inccommand = 'split', -- Show live preview of :s commands
     ignorecase = true, -- Ignore case in search patterns
     smartcase = true, -- Override `ignorecase` for uppercase patterns
     grepprg = 'rg --vimgrep', -- Use Ripgrep for the :grep commanr
@@ -42,6 +43,8 @@ local options = {
     signcolumn = 'yes', -- Always show the sign column
     showmode = false, -- Hide the current mode indicator
     laststatus = 3, -- Always show the status line
+    list = true, -- Sets how neovim will display certain whitespace characters in the editor
+    listchars = { tab = '» ', trail = '·', nbsp = '␣' }, -- Set the characters
 
     -- Miscellaneous
     mouse = 'a', -- Enable mouse support

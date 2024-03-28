@@ -46,11 +46,22 @@ return {
             background = true,
           },
         },
+        fidget = true,
         neotest = true,
-        noice = true,
         semantic_tokens = true,
         treesitter = true,
         which_key = true,
+      },
+    },
+  },
+  {
+    -- Better messages
+    'j-hui/fidget.nvim',
+    opts = {
+      notification = { -- Catppuccin special settings
+        window = {
+          winblend = 0,
+        },
       },
     },
   },
@@ -62,42 +73,6 @@ return {
         component_separators = '|',
         section_separators = { right = '' },
       },
-    },
-    config = function(_, opts)
-      require('lualine').setup(vim.tbl_deep_extend('force', opts, {
-        -- Add recording status to lua line
-        sections = {
-          lualine_x = {
-            {
-              require('noice').api.statusline.mode.get,
-              cond = require('noice').api.statusline.mode.has,
-              color = { fg = '#ff9e64' },
-            },
-          },
-        },
-      }))
-    end,
-  },
-  {
-    -- Prettier UI
-    'folke/noice.nvim',
-    opts = {
-      lsp = {
-        override = {
-          ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
-          ['vim.lsp.util.stylize_markdown'] = true,
-          ['cmp.entry.get_documentation'] = true,
-        },
-      },
-      presets = {
-        bottom_search = true, -- use a classic bottom cmdline for search
-        long_message_to_split = true, -- long messages will be sent to a split
-        lsp_doc_border = true, -- add a border to hover docs and signature help
-      },
-      views = { mini = { win_options = { winblend = 0 } } }, -- Transparent mini view
-    },
-    dependencies = {
-      'MunifTanjim/nui.nvim',
     },
   },
   {

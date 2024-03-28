@@ -33,47 +33,53 @@ return {
 
       map('n', '<leader>fg', function()
         require('telescope.builtin').git_files()
-      end, 'Find files')
+      end, '[f]ind [g]it files')
       map('n', '<leader>fb', function()
         require('telescope.builtin').buffers { sort_mru = true, ignore_current_buffer = true }
-      end, 'Find buffers')
+      end, '[f]ind [b]uffers')
       map('n', '<leader>fo', function()
         require('telescope.builtin').oldfiles()
-      end, 'Find old files')
+      end, '[f]ind [o]ld files')
       map('n', '<leader>ff', function()
         require('telescope.builtin').find_files()
-      end, 'Find files')
+      end, '[f]ind [f]iles')
       map('n', '<leader>fh', function()
         require('telescope.builtin').help_tags()
-      end, 'Find help')
+      end, '[f]ind [h]elp')
       map('n', '<leader>fk', function()
         require('telescope.builtin').keymaps()
-      end, 'Find keymaps')
+      end, '[f]ind [k]eymaps')
       map('n', '<leader>fc', function()
         require('telescope.builtin').grep_string()
-      end, 'Find current word')
+      end, '[f]ind [c]current word')
       map('n', '<leader>fw', function()
         require('telescope.builtin').live_grep()
-      end, 'Find word')
+      end, '[f]ind [w]ord')
       map('n', '<leader>fW', function()
         vim.cmd 'lua require("telescope").extensions.live_grep_args.live_grep_args()'
-      end, 'Find word with args')
+      end, '[f]ind [W]ord with args')
       map('n', '<leader>fd', function()
         require('telescope.builtin').diagnostics()
-      end, 'Find diagnostics')
+      end, '[f]ind [d]iagnostics')
       map('n', '<leader>fr', function()
         require('telescope.builtin').resume()
-      end, 'Find resume')
+      end, '[f]ind [r]esume')
       map('n', '<leader>fa', function()
         require('telescope.builtin').find_files {
           prompt_title = 'Config Files',
           hidden = true,
           cwd = '~/.config/nvim',
         }
-      end, 'Find a config')
+      end, '[f]ind [a]ll config files')
       map('n', '<leader>fi', function()
         vim.cmd 'Telescope import'
-      end, 'Find imports')
+      end, '[f]ind [i]mport')
+      map('n', '<leader>fh', function()
+        require('telescope.builtin').find_files {
+          prompt_title = 'Hidden Files',
+          hidden = true,
+        }
+      end, '[f]ind [h]idden')
     end,
     config = function()
       local actions = require 'telescope.actions'
@@ -177,7 +183,7 @@ return {
 
       map('n', '<leader>m', function()
         vim.cmd 'NoNeckPain'
-      end, 'Toggle ')
+      end, 'No neck pain')
     end,
     opts = {},
   },
@@ -190,27 +196,27 @@ return {
 
       map('n', '<leader>xx', function()
         require('trouble').toggle()
-      end, 'Trouble toggle')
+      end, 'Toggle Trouble')
 
       map('n', '<leader>xw', function()
         require('trouble').toggle 'workspace_diagnostics'
-      end, 'Trouble workspace diagnostics')
+      end, 'Toggle workspace diagnostics')
 
       map('n', '<leader>xd', function()
         require('trouble').toggle 'document_diagnostics'
-      end, 'Trouble document diagnostics')
+      end, 'Toggle document diagnostics')
 
       map('n', '<leader>xq', function()
         require('trouble').toggle 'quickfix'
-      end, 'Trouble quickfix')
+      end, 'Toggle quickfix')
 
       map('n', '<leader>xl', function()
         require('trouble').toggle 'loclist'
-      end, 'Trouble loclist')
+      end, 'Toggle loclist')
 
       map('n', 'gR', function()
         require('trouble').toggle 'lsp_references'
-      end, 'Trouble lsp lsp references')
+      end, 'Toggle lsp references')
     end,
     opts = {},
   },
@@ -227,33 +233,33 @@ return {
 
       map('n', '<leader>tc', function()
         require('neotest').run.run(vim.fn.expand '%')
-      end, 'Test current file')
+      end, '[t]est [c]urrent file')
 
       map('n', '<leader>tn', function()
         require('neotest').run.run()
-      end, 'Test nearest')
+      end, '[t]est [n]earest')
 
       map('n', '<leader>td', function()
         require('neotest').run.run {
           suite = false,
           strategy = 'dap',
         }
-      end, 'Test debug')
+      end, '[t]est [d]ebug')
 
       map('n', '<leader>dt', function()
         require('neotest').run.run {
           suite = false,
           strategy = 'dap',
         }
-      end, 'Debug test')
+      end, '[t]est [d]ebug')
 
       map('n', '<leader>ts', function()
         require('neotest').run.stop()
-      end, 'Test stop')
+      end, '[t]est [s]top')
 
       map('n', '<leader>tu', function()
         require('neotest').output_panel.toggle()
-      end, 'Test UI')
+      end, '[t]est [u]I')
     end,
     opts = function()
       return {
@@ -276,7 +282,7 @@ return {
 
       map('n', '<leader>F', function()
         require('spectre').toggle()
-      end, 'Spectre toggle')
+      end, '[F]ind and replace')
     end,
     opts = {
       mapping = {
@@ -299,11 +305,8 @@ return {
       local map = require('helpers.keys').map
 
       map({ 'n', 'x' }, '<leader>cc', function()
-        require('griptape').run 'General'
-      end, 'Griptape General')
-      map({ 'n', 'x' }, '<leader>cg', function()
         require('griptape').run 'Coder'
-      end, 'Griptape Coder')
+      end, '[c]ode [c]oder')
     end,
   },
 }
