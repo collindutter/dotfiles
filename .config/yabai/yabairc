@@ -1,6 +1,8 @@
 yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 sudo yabai --load-sa
 
+yabai -m config 
+
 # global settings
 yabai -m config                                 \
     mouse_follows_focus          off            \
@@ -34,4 +36,5 @@ yabai -m config                                 \
     mouse_modifier               fn             \
     mouse_action1                move           \
     mouse_action2                resize         \
-    mouse_drop_action            swap
+    mouse_drop_action            swap           \
+    external_bar                 all:32:0
