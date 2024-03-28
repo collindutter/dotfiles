@@ -7,25 +7,24 @@ fish_add_path $HOME/.jenv/bin
 fish_add_path /opt/homebrew/bin
 
 if status --is-interactive
-	set -gx COLORTERM truecolor
-	set -gx EDITOR nvim --clean
-	set -gx HOMEBREW_AUTO_UPDATE_SECS 86400
 	set -gx BAT_THEME "Catppuccin-macchiato"
-	set -g fish_key_bindings fish_vi_key_bindings
-	set -g fish_bind_mode insert
+
+	fish_vi_key_bindings
+	set -g fish_vi_force_cursor 1
+
+	set fish_cursor_default block
+	set fish_cursor_insert line
+	set fish_cursor_replace_one underscore
+
+	bind -M insert -m default jk backward-char force-repaint
+
 	set fish_greeting
-	fzf_configure_bindings --directory=\cf
+	fzf_configure_bindings --directory=\cf --git_log=\cl
 	
 	fish_config theme choose "Catppuccin Macchiato"
 	
 	zoxide init fish | source
 	direnv hook fish | source
-
-	if not set -q TMUX
-    set -g TMUX tmux new-session -d -s personal
-    eval $TMUX
-    tmux attach-session -d -t personal
-	end
 
 	source ~/.asdf/asdf.fish
 end
