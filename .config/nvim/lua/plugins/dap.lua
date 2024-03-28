@@ -26,39 +26,39 @@ return {
       dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     end,
     init = function()
-      local map = require("helpers.keys").map
+      local map = require('helpers.keys').map
 
       map('n', '<leader>dc', function()
         require('dap').continue()
-      end, 'Debugger: Continue')
+      end, '[d]ebugger [c]ontinue')
 
       map('n', '<leader>dl', function()
         require('dap').step_into()
-      end, 'Debugger: Step Into')
+      end, '[d]ebugger step into')
 
       map('n', '<leader>dj', function()
         require('dap').step_over()
-      end, 'Debugger: Step Over')
+      end, '[d]ebugger step over')
 
       map('n', '<leader>dh', function()
         require('dap').step_out()
-      end, 'Debugger: Step Out')
+      end, '[d]ebugger step out')
 
       map('n', '<leader>db', function()
         require('dap').toggle_breakpoint()
-      end, 'Debugger: Toggle Breakpoint')
+      end, '[d]ebugger [b]reakpoint')
 
       map('n', '<leader>dq', function()
         require('dap').close()
-      end, 'Debugger: Close Session')
+      end, '[d]ebugger [q]uit')
 
       map('n', '<leader>dQ', function()
         require('dap').terminate()
-      end, 'Debugger: Terminate Session')
+      end, '[d]ebugger [Q]uit')
 
       map('n', '<leader>du', function()
         require('dapui').toggle()
-      end, 'Debugger: Toggle UI')
+      end, '[d]ebugger [u]I')
     end,
   },
   {
@@ -68,4 +68,5 @@ return {
       require('dap-python').setup '~/.virtualenvs/debugpy/bin/python'
     end,
   },
+  { 'rcarriga/nvim-dap-ui', dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' } },
 }

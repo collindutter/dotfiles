@@ -7,6 +7,8 @@ return {
       formatters_by_ft = {
         python = { 'black' },
         lua = { 'stylua' },
+        sh = { 'shfmt' },
+        typescript = { 'prettier' },
       },
       format_on_save = {
         timeout_ms = 500,
@@ -18,7 +20,7 @@ return {
 
       map('n', '<leader>cf', function()
         require('conform').format { async = true, lsp_fallback = false }
-      end, 'Code format')
+      end, '[c]ode [f]ormat')
     end,
   },
 }

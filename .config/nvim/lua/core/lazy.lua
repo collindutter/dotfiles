@@ -36,6 +36,5 @@ lazy.setup('plugins', {
 })
 
 -- Might as well set up an easy-access keybinding
-
-require('helpers.keys').map('n', '<leader>L', lazy.show, 'Show Lazy')
-require('helpers.keys').map('n', '<leader>R', '<cmd>Lazy reload griptape.nvim<cr>', 'Lazy reload Griptape')
+require('helpers.keys').map('n', '<leader>L', lazy.show, 'Show [L]azy')
+require('helpers.keys').map('n', '<leader>R', '<cmd>Lazy reload griptape.nvim<cr>', '[R]eload Griptape')

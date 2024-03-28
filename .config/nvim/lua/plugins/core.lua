@@ -12,7 +12,7 @@ return {
       local map = require('helpers.keys').map
       map('n', '<leader>bc', function()
         require('bufdelete').bufdelete(0, true)
-      end, 'Buffer close')
+      end, '[b]uffer [c]lose')
       map('n', '<leader>bo', function()
         local bufdelete = require 'bufdelete'
         local buflist = vim.api.nvim_list_bufs()
@@ -23,7 +23,7 @@ return {
             bufdelete.bufdelete(bufnr, true)
           end
         end
-      end, 'Buffer close others')
+      end, '[b]uffer close [o]ther')
     end,
   },
   {
@@ -82,11 +82,11 @@ return {
       local map = require('helpers.keys').map
       map('n', '<leader>sd', function()
         require('persistence').load()
-      end, 'Restore directory session')
+      end, 'Load [s]ession in [d]directory')
 
       map('n', '<leader>sl', function()
         require('persistence').load { last = true }
-      end, 'Restore last session')
+      end, 'Load [s]ession [l]ast')
     end,
   },
   {

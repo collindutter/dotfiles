@@ -1,4 +1,4 @@
--- Plugins that integrate with Treesitter 
+-- Plugins that integrate with Treesitter
 return {
   {
     'nvim-treesitter/nvim-treesitter',
@@ -18,6 +18,13 @@ return {
 
           highlight = { enable = true },
           indent = { enable = true },
+          incremental_selection = {
+            enable = true,
+            keymaps = {
+              node_incremental = 'v',
+              node_decremental = 'V',
+            },
+          },
           textobjects = {
             select = {
               enable = true,
@@ -30,6 +37,10 @@ return {
                 ['if'] = '@function.inner',
                 ['ac'] = '@class.outer',
                 ['ic'] = '@class.inner',
+                ['ol'] = '@loop.outer',
+                ['il'] = '@loop.inner',
+                ['ob'] = '@block.outer',
+                ['ib'] = '@block.inner',
               },
             },
             swap = {
