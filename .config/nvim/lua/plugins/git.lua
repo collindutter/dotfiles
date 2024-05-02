@@ -14,4 +14,10 @@ return {
       },
     },
   },
+  {
+    -- Link to the current line on GitHub
+    'ruifm/gitlinker.nvim',
+    requires = 'nvim-lua/plenary.nvim',
+    opts = {},
+  },
 }

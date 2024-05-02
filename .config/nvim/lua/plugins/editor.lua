@@ -176,18 +176,6 @@ return {
     end,
   },
   {
-    -- Center buffer without noise
-    'shortcuts/no-neck-pain.nvim',
-    init = function()
-      local map = require('helpers.keys').map
-
-      map('n', '<leader>m', function()
-        vim.cmd 'NoNeckPain'
-      end, 'No neck pain')
-    end,
-    opts = {},
-  },
-  {
     -- Diagnostics signs and list
     'folke/trouble.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -224,7 +212,9 @@ return {
     -- Test runner
     'nvim-neotest/neotest',
     dependencies = {
+      'nvim-neotest/nvim-nio',
       'nvim-lua/plenary.nvim',
+      'antoinemadec/FixCursorHold.nvim',
       'nvim-treesitter/nvim-treesitter',
       'nvim-neotest/neotest-python',
     },
