@@ -1,29 +1,62 @@
--- Plugins that provide debugging capabilities
 return {
   {
-    -- DAP
+    -- Debugger
     'mfussenegger/nvim-dap',
     dependencies = {
+      -- Creates a beautiful debugger UI
+      'rcarriga/nvim-dap-ui',
+
+      -- Required dependency for nvim-dap-ui
+      'nvim-neotest/nvim-nio',
+
+      -- Installs the debug adapters for you
       'williamboman/mason.nvim',
       'jay-babu/mason-nvim-dap.nvim',
 
-      'mfussenegger/nvim-dap-python',
-
-      'rcarriga/nvim-dap-ui',
+      -- Adapters
+      {
+        'mfussenegger/nvim-dap-python',
+        config = function()
+          require('dap-python').setup '~/.virtualenvs/debugpy/bin/python'
+        end,
+      },
     },
     config = function()
-      local dap = require 'dap'
-      local dapui = require 'dapui'
+      local dap, dapui = require 'dap', require 'dapui'
 
-      dapui.setup {
-        automatic_setup = true,
+      require('mason-nvim-dap').setup {
+        -- Makes a best effort to setup the various debuggers with
+        -- reasonable debug configurations
+        automatic_installation = true,
+
+        -- You can provide additional configuration to the handlers,
+        -- see mason-nvim-dap README for more information
         handlers = {},
+
+        -- You'll need to check that you have the required things installed
+        -- online, please don't ask me how to install them :)
         ensure_installed = {
+          -- Update this to ensure that you have the debuggers for the langs you want
           'debugpy',
         },
       }
 
       dap.listeners.after.event_initialized['dapui_config'] = dapui.open
+
+      dap.listeners.before.attach.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.launch.dapui_config = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated.dapui_config = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited.dapui_config = function()
+        dapui.close()
+      end
+
+      dapui.setup()
     end,
     init = function()
       local map = require('helpers.keys').map
@@ -61,12 +94,4 @@ return {
       end, '[d]ebugger [u]I')
     end,
   },
-  {
-    -- Python DAP adapter
-    'mfussenegger/nvim-dap-python',
-    config = function()
-      require('dap-python').setup '~/.virtualenvs/debugpy/bin/python'
-    end,
-  },
-  { 'rcarriga/nvim-dap-ui', dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' } },
 }

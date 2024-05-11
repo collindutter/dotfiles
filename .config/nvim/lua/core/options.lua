@@ -51,6 +51,8 @@ local options = {
     clipboard = 'unnamedplus', -- Use the system clipboard
     timeoutlen = 300, -- Time in milliseconds for a mapped sequence
     termguicolors = true, -- Enable 24-bit RGB colors
+    spelllang = 'en_us', -- Set the default spell checking language
+    spell = true, -- Enable spell checking
 
     -- Completion options
     completeopt = { 'menuone', 'noselect' },
