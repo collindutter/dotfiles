@@ -1,4 +1,3 @@
--- Plugins related to Git
 return {
   {
     -- Adds git related signs to the gutter

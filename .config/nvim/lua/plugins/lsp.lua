@@ -1,21 +1,16 @@
--- Plugins that integrate with the LSP
 return {
-  {
-    'pmizio/typescript-tools.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim', 'neovim/nvim-lspconfig' },
-  },
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      -- Install LSPs to stdpath for neovim
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
+  'neovim/nvim-lspconfig',
+  dependencies = {
+    -- Install LSPs to stdpath for neovim
+    'williamboman/mason.nvim',
+    'williamboman/mason-lspconfig.nvim',
+    'WhoIsSethDaniel/mason-tool-installer.nvim',
 
-      -- Additional lua configuration
-      'folke/neodev.nvim',
-      'j-hui/fidget.nvim',
-    },
-    opts = {
+    -- Additional lua configuration
+    { 'folke/neodev.nvim', opts = {} },
+  },
+  opts = {
+    ui = {
       diagnostic_config = {
         virtual_text = true,
         update_in_insert = true,
@@ -32,10 +27,6 @@ return {
         style = 'minimal',
         border = 'rounded',
       },
-      mason_ensure_installed = {
-        'stylua',
-        'luacheck',
-      },
       signs = {
         DiagnosticSignError = '',
         DiagnosticSignWarn = '',
@@ -47,159 +38,154 @@ return {
         DapLogPoint = '.>',
         DapStopped = '󰁕',
       },
-      mason_lspconfig_ensure_installed = {
-        ruff_lsp = {},
-        jsonls = {},
-        pyright = {},
-        tsserver = {},
-        html = {},
-        yamlls = {
-          yaml = {
-            customTags = {
-              '!And scalar',
-              '!And mapping',
-              '!And sequence',
-              '!If scalar',
-              '!If mapping',
-              '!If sequence',
-              '!Not scalar',
-              '!Not mapping',
-              '!Not sequence',
-              '!Equals scalar',
-              '!Equals mapping',
-              '!Equals sequence',
-              '!Or scalar',
-              '!Or mapping',
-              '!Or sequence',
-              '!FindInMap scalar',
-              '!FindInMap mapping',
-              '!FindInMap sequence',
-              '!Base64 scalar',
-              '!Base64 mapping',
-              '!Base64 sequence',
-              '!Cidr scalar',
-              '!Cidr mapping',
-              '!Cidr sequence',
-              '!Ref scalar',
-              '!Ref mapping',
-              '!Ref sequence',
-              '!Sub scalar',
-              '!Sub mapping',
-              '!Sub sequence',
-              '!GetAtt scalar',
-              '!GetAtt mapping',
-              '!GetAtt sequence',
-              '!GetAZs scalar',
-              '!GetAZs mapping',
-              '!GetAZs sequence',
-              '!ImportValue scalar',
-              '!ImportValue mapping',
-              '!ImportValue sequence',
-              '!Select scalar',
-              '!Select mapping',
-              '!Select sequence',
-              '!Split scalar',
-              '!Split mapping',
-              '!Split sequence',
-              '!Join scalar',
-              '!Join mapping',
-              '!Join sequence',
-            },
+    },
+    servers = {
+      ruff_lsp = {},
+      jsonls = {},
+      pyright = {},
+      tsserver = {},
+      html = {},
+      yamlls = {
+        yaml = {
+          customTags = {
+            '!And scalar',
+            '!And mapping',
+            '!And sequence',
+            '!If scalar',
+            '!If mapping',
+            '!If sequence',
+            '!Not scalar',
+            '!Not mapping',
+            '!Not sequence',
+            '!Equals scalar',
+            '!Equals mapping',
+            '!Equals sequence',
+            '!Or scalar',
+            '!Or mapping',
+            '!Or sequence',
+            '!FindInMap scalar',
+            '!FindInMap mapping',
+            '!FindInMap sequence',
+            '!Base64 scalar',
+            '!Base64 mapping',
+            '!Base64 sequence',
+            '!Cidr scalar',
+            '!Cidr mapping',
+            '!Cidr sequence',
+            '!Ref scalar',
+            '!Ref mapping',
+            '!Ref sequence',
+            '!Sub scalar',
+            '!Sub mapping',
+            '!Sub sequence',
+            '!GetAtt scalar',
+            '!GetAtt mapping',
+            '!GetAtt sequence',
+            '!GetAZs scalar',
+            '!GetAZs mapping',
+            '!GetAZs sequence',
+            '!ImportValue scalar',
+            '!ImportValue mapping',
+            '!ImportValue sequence',
+            '!Select scalar',
+            '!Select mapping',
+            '!Select sequence',
+            '!Split scalar',
+            '!Split mapping',
+            '!Split sequence',
+            '!Join scalar',
+            '!Join mapping',
+            '!Join sequence',
           },
         },
-        lua_ls = {
-          Lua = {
-            completion = {
-              callSnippet = 'Replace',
-            },
-            workspace = {
-              checkThirdParty = false,
-              library = {
-                [vim.fn.expand '$VIMRUNTIME/lua'] = true,
-                [vim.fn.stdpath 'config' .. '/lua'] = true,
-              },
+      },
+      lua_ls = {
+        Lua = {
+          completion = {
+            callSnippet = 'Replace',
+          },
+          workspace = {
+            checkThirdParty = false,
+            library = {
+              [vim.fn.expand '$VIMRUNTIME/lua'] = true,
+              [vim.fn.stdpath 'config' .. '/lua'] = true,
             },
           },
         },
       },
     },
-    config = function(_, opts)
-      local on_attach = function(_, bufnr)
-        local lsp_map = require('helpers.keys').lsp_map
+  },
+  config = function(_, opts)
+    vim.api.nvim_create_autocmd('LspAttach', {
+      group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
+      callback = function(event)
+        local function lsp_map(lhs, rhs, desc)
+          vim.keymap.set('n', lhs, rhs, { buffer = event.buf, desc = 'LSP: ' .. desc })
+        end
 
         -- Actions
-        lsp_map('<leader>cr', vim.lsp.buf.rename, bufnr, '[c]ode [r]ename')
-        lsp_map('<leader>ca', vim.lsp.buf.code_action, bufnr, '[c]ode [a]ction')
+        lsp_map('<leader>rn', vim.lsp.buf.rename, '[r]e[n]ame')
+        lsp_map('<leader>ca', vim.lsp.buf.code_action, '[c]ode [a]ction')
 
         -- Diagnostics
-        lsp_map('<leader>cd', vim.diagnostic.open_float, bufnr, '[c]ode [d]iagnostic')
-        lsp_map('[d', vim.diagnostic.goto_prev, bufnr, 'Goto previous [d]iagnostic message')
-        lsp_map(']d', vim.diagnostic.goto_next, bufnr, 'Goto next [d]iagnostic message')
+        lsp_map('<leader>cd', vim.diagnostic.open_float, '[c]ode [d]iagnostic')
+        lsp_map('[d', vim.diagnostic.goto_prev, 'Goto previous [d]iagnostic message')
+        lsp_map(']d', vim.diagnostic.goto_next, 'Goto next [d]iagnostic message')
 
-        lsp_map('gd', vim.lsp.buf.definition, bufnr, '[g]oto [d]efinition')
-        lsp_map('gD', vim.lsp.buf.declaration, bufnr, '[g]oto [D]eclartion')
-        lsp_map('gr', require('telescope.builtin').lsp_references, bufnr, '[g]oto [r]eferences')
-        lsp_map('gI', require('telescope.builtin').lsp_implementations, bufnr, '[g]oto [i]mplementation')
+        lsp_map('gd', vim.lsp.buf.definition, '[g]oto [d]efinition')
+        lsp_map('gD', vim.lsp.buf.declaration, '[g]oto [D]eclartion')
+        lsp_map('gr', require('fzf-lua').lsp_references, '[g]oto [r]eferences')
+        lsp_map('gI', require('fzf-lua').lsp_implementations, '[g]oto [i]mplementation')
+
+        lsp_map('<leader>lr', function()
+          vim.cmd 'LspRestart'
+        end, '[l]sp [r]estart')
 
         -- See `:help K` for why this keymap
-        lsp_map('K', vim.lsp.buf.hover, bufnr, 'Hover documentation')
-        vim.keymap.set('i', '<c-k>', vim.lsp.buf.signature_help, { silent = true, buffer = bufnr, desc = 'Signature help' })
-      end
+        lsp_map('K', vim.lsp.buf.hover, 'Hover documentation')
+      end,
+    })
 
-      -- mason-lspconfig requires that these setup functions are called in this order
-      -- before setting up the servers.
-      require('mason').setup()
-      local mason_lspconfig = require 'mason-lspconfig'
+    -- LSP servers and clients are able to communicate to each other what features they support.
+    --  By default, Neovim doesn't support everything that is in the LSP specification.
+    --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
+    --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
-      local lsp_servers = opts.mason_lspconfig_ensure_installed
-      mason_lspconfig.setup {
-        ensure_installed = vim.tbl_keys(lsp_servers),
-      }
+    -- Define pretty signs
+    for type, icon in pairs(opts.ui.signs) do
+      vim.fn.sign_define(type, { text = icon, texthl = type, numhl = type })
+    end
 
-      -- Setup neovim lua configuration
-      require('neodev').setup()
+    -- Make diagnostics pretty
+    vim.diagnostic.config(opts.ui.diagnostic_config)
+    -- Hover configuration
+    vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, opts.ui.float)
 
-      -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+    -- Signature help configuration
+    vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, opts.ui.float)
 
-      -- Create a user command for installing all the servers
-      vim.api.nvim_create_user_command('MasonInstallAll', function()
-        vim.cmd('MasonInstall ' .. table.concat(opts.mason_ensure_installed, ' '))
-      end, {})
+    -- Add border to :LspInfo
+    require('lspconfig.ui.windows').default_options.border = 'rounded'
 
-      -- Define pretty signs
-      for type, icon in pairs(opts.signs) do
-        vim.fn.sign_define(type, { text = icon, texthl = type, numhl = type })
-      end
+    -- Ensure the servers and tools above are installed
+    require('mason').setup()
 
-      -- Make diagnostics pretty
-      vim.diagnostic.config(opts.diagnostic_config)
-      -- Hover configuration
-      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, opts.float)
+    local ensure_installed = vim.tbl_keys(opts.servers or {})
+    require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
-      -- Signature help configuration
-      vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, opts.float)
-
-      -- Add border to :LspInfo
-      require('lspconfig.ui.windows').default_options.border = 'rounded'
-
-      -- Ensure the servers above are installed
-      mason_lspconfig.setup_handlers {
+    require('mason-lspconfig').setup {
+      handlers = {
         function(server_name)
-          require('lspconfig')[server_name].setup {
-            capabilities = capabilities,
-            on_attach = on_attach,
-            settings = lsp_servers[server_name],
-          }
+          local server = opts.servers[server_name] or {}
+          -- This handles overriding only values explicitly passed
+          -- by the server configuration above. Useful when disabling
+          -- certain features of an LSP (for example, turning off formatting for tsserver)
+          server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
+          require('lspconfig')[server_name].setup(server)
         end,
-        ['tsserver'] = function()
-          require('typescript-tools').setup {
-            on_attach = on_attach,
-            settings = lsp_servers['tsserver'],
-          }
-        end,
-      }
-    end,
-  },
+      },
+    }
+  end,
 }
