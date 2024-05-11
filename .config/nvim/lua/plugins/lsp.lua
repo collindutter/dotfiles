@@ -134,8 +134,8 @@ return {
 
         lsp_map('gd', vim.lsp.buf.definition, '[g]oto [d]efinition')
         lsp_map('gD', vim.lsp.buf.declaration, '[g]oto [D]eclartion')
-        lsp_map('gr', require('fzf-lua').lsp_references, '[g]oto [r]eferences')
-        lsp_map('gI', require('fzf-lua').lsp_implementations, '[g]oto [i]mplementation')
+        lsp_map('gr', require('telescope.builtin').lsp_references, '[g]oto [r]eferences')
+        lsp_map('gI', require('telescope.builtin').lsp_implementations, '[g]oto [i]mplementation')
 
         lsp_map('<leader>lr', function()
           vim.cmd 'LspRestart'
