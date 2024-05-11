@@ -63,9 +63,4 @@ return {
     'echasnovski/mini.bracketed',
     opts = {},
   },
-  {
-    -- Highlight patterns in text
-    'echasnovski/mini.hipatterns',
-    opts = {},
-  },
 }
