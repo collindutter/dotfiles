@@ -124,7 +124,7 @@ return {
         end
 
         -- Actions
-        lsp_map('<leader>rn', vim.lsp.buf.rename, '[r]e[n]ame')
+        lsp_map('<leader>cr', vim.lsp.buf.rename, '[c]ode [r]ename')
         lsp_map('<leader>ca', vim.lsp.buf.code_action, '[c]ode [a]ction')
 
         -- Diagnostics

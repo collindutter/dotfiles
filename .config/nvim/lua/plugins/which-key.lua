@@ -16,6 +16,8 @@ return {
       ['<leader>b'] = { name = 'Buffers', _ = 'which_key_ignore' },
       ['<leader>f'] = { name = 'Find', _ = 'which_key_ignore' },
       ['<leader>t'] = { name = 'Test', _ = 'which_key_ignore' },
+      ['<leader>s'] = { name = 'Session', _ = 'which_key_ignore' },
+      ['<leader>l'] = { name = 'Lsp', _ = 'which_key_ignore' },
     }
   end,
 }

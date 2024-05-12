@@ -1,70 +1,70 @@
-vim.opt.shortmess:append 'I' -- Disable intro message
-local options = {
-  g = {
-    python3_host_prog = '~/.virtualenvs/py3nvim/bin/python', -- set python provider
-  },
-  opt = {
-    -- Basic UI Enhancements
-    number = true, -- Show line numbers
-    relativenumber = true, -- Show relative line numbers
-    showmatch = true, -- Highlight matching brackets
-    foldmethod = 'syntax', -- Enable syntax-based folding
-    showcmd = false,
+-- Many of these were copied from mini.basics https://github.com/echasnovski/mini.nvim/blob/main/lua/mini/basics.lua#L437
 
-    -- Editing Improvements
-    expandtab = true, -- Convert tabs to spaces
-    shiftwidth = 4, -- Spaces per step of (auto)indent
-    tabstop = 4, -- Spaces that a tab counts for
-    smartindent = true, -- Smart indenting on new lines
-    autoindent = true, -- Keep indent from previous line
+local o, opt = vim.o, vim.opt
+local g = vim.g
 
-    -- Search & Navigation
-    hlsearch = true, -- Highlight all search results
-    incsearch = true, -- Show partial matches for a search phrase
-    inccommand = 'split', -- Show live preview of :s commands
-    ignorecase = true, -- Ignore case in search patterns
-    smartcase = true, -- Override `ignorecase` for uppercase patterns
-    grepprg = 'rg --vimgrep', -- Use Ripgrep for the :grep commanr
-    grepformat = '%f:%l:%c:%m', -- Format for parsing the grep output
+g.python3_host_prog = '~/.virtualenvs/py3nvim/bin/python' -- set python provider
 
-    -- File Handling
-    backup = false, -- Disable making a backup before overwriting a file
-    swapfile = false, -- Disable swap file creation
-    undofile = true, -- Enable persistent undo
-    autowrite = true, -- Auto-write buffer when it's not the current buffer
-    confirm = true, -- Confirm to save changes before exiting modified buffer
-    wildmenu = false, -- Disable command-line completion menu (we're using cmp)
+opt.shortmess:append 'IWcC' -- Disable intro message, reduce command line messages
 
-    -- Visual Tweaks
-    cursorline = true, -- Highlight the current line
-    wrap = false, -- Disable line wrapping
-    scrolloff = 8, -- Start scrolling when 8 lines away from margins
-    sidescrolloff = 8, -- Same as `scrolloff`, but for horizontal scrolling
-    signcolumn = 'yes', -- Always show the sign column
-    showmode = false, -- Hide the current mode indicator
-    laststatus = 3, -- Always show the status line
-    list = true, -- Sets how neovim will display certain whitespace characters in the editor
-    listchars = { tab = '» ', trail = '·', nbsp = '␣' }, -- Set the characters
+-- Basic UI Enhancements
+o.number = true -- Show line numbers
+o.relativenumber = true -- Show relative line numbers
+o.showmatch = true -- Highlight matching brackets
+o.foldmethod = 'syntax' -- Enable syntax-based folding
+o.showcmd = false -- Don't show partial commands in the last line of the screen
+o.pumheight = 10 -- Make popup menu smaller
 
-    -- Miscellaneous
-    mouse = 'a', -- Enable mouse support
-    clipboard = 'unnamedplus', -- Use the system clipboard
-    timeoutlen = 300, -- Time in milliseconds for a mapped sequence
-    termguicolors = true, -- Enable 24-bit RGB colors
-    spelllang = 'en_us', -- Set the default spell checking language
-    spell = true, -- Enable spell checking
+-- Editing Improvements
+o.expandtab = true -- Convert tabs to spaces
+o.shiftwidth = 4 -- Spaces per step of (auto)indent
+o.tabstop = 4 -- Spaces that a tab counts for
+o.smartindent = true -- Smart indenting on new lines
+o.autoindent = true -- Keep indent from previous line
 
-    -- Completion options
-    completeopt = { 'menuone', 'noselect' },
+-- Search & Navigation
+o.hlsearch = true -- Highlight all search results
+o.incsearch = true -- Show partial matches for a search phrase
+o.inccommand = 'split' -- Show live preview of :s commands
+o.ignorecase = true -- Ignore case in search patterns
+o.smartcase = true -- Override `ignorecase` for uppercase patterns
+o.infercase = true -- Infer letter cases for a richer built-in keyword completion
+o.grepprg = 'rg --vimgrep' -- Use Ripgrep for the :grep commanr
+o.grepformat = '%f:%l:%c:%m' -- Format for parsing the grep output
 
-    -- Split behavior
-    splitright = true, -- Open vertical splits to the right
-    splitbelow = true, -- Open horizontal splits below
-  },
-}
+-- File Handling
+o.backup = false -- Disable making a backup before overwriting a file
+o.swapfile = false -- Disable swap file creation
+o.undofile = true -- Enable persistent undo
+o.autowrite = true -- Auto-write buffer when it's not the current buffer
+o.confirm = true -- Confirm to save changes before exiting modified buffer
+o.wildmenu = false -- Disable command-line completion menu (we're using cmp)
 
-for scope, table in pairs(options) do
-  for setting, value in pairs(table) do
-    vim[scope][setting] = value
-  end
-end
+-- Visual Tweaks
+o.cursorline = true -- Highlight the current line
+o.wrap = false -- Disable line wrapping
+o.ruler = false -- Don't show cursor position in command line
+o.scrolloff = 8 -- Start scrolling when 8 lines away from margins
+o.sidescrolloff = 8 -- Same as `scrolloff`, but for horizontal scrolling
+o.signcolumn = 'yes' -- Always show the sign column
+o.showmode = false -- Hide the current mode indicator
+o.laststatus = 3 -- Always show the status line
+
+o.listchars = 'tab:> ,extends:…,precedes:…,nbsp:␣' -- Define which helper symbols to show
+o.list = true -- Show some helper symbols
+
+-- Miscellaneous
+o.mouse = 'a' -- Enable mouse support
+o.clipboard = 'unnamedplus' -- Use the system clipboard
+o.timeoutlen = 300 -- Time in milliseconds for a mapped sequence
+o.termguicolors = true -- Enable 24-bit RGB colors
+o.spelllang = 'en_us' -- Set the default spell checking language
+o.spell = true -- Enable spell checking
+
+-- Completion options
+o.completeopt = 'menuone,noinsert,noselect'
+
+-- Split behavior
+o.splitright = true -- Open vertical splits to the right
+o.splitbelow = true -- Open horizontal splits below
+o.splitkeep = 'screen' -- Reduce scroll during window split

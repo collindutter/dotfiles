@@ -63,4 +63,13 @@ return {
     'echasnovski/mini.bracketed',
     opts = {},
   },
+  {
+    'echasnovski/mini.indentscope',
+    opts = {},
+  },
+  {
+    -- Jump to next/previous single character
+    'echasnovski/mini.jump',
+    opts = {},
+  },
 }

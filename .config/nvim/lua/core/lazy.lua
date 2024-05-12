@@ -1,6 +1,6 @@
 -- Install lazy.nvim if not already installed
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-if not vim.loop.fs_stat(lazypath) then
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
   vim.fn.system {
     'git',
     'clone',
@@ -41,6 +41,4 @@ lazy.setup('plugins', {
   },
 })
 
--- Might as well set up an easy-access keybinding
 require('helpers.keys').map('n', '<leader>L', lazy.show, 'Show [L]azy')
-require('helpers.keys').map('n', '<leader>R', '<cmd>Lazy reload griptape.nvim<cr>', '[R]eload Griptape')
