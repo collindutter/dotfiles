@@ -39,22 +39,6 @@ return {
     map('n', '<leader>fr', function()
       require('telescope.builtin').resume()
     end, '[f]ind [r]esume')
-    map('n', '<leader>fa', function()
-      require('telescope.builtin').find_files {
-        prompt_title = 'Config Files',
-        hidden = true,
-        cwd = '~/.config/nvim',
-      }
-    end, '[f]ind [a]ll config files')
-    map('n', '<leader>fi', function()
-      vim.cmd 'Telescope import'
-    end, '[f]ind [i]mport')
-    map('n', '<leader>fh', function()
-      require('telescope.builtin').find_files {
-        prompt_title = 'Hidden Files',
-        hidden = true,
-      }
-    end, '[f]ind [h]idden')
   end,
   config = function()
     local actions = require 'telescope.actions'
@@ -80,16 +64,8 @@ return {
           preview_cutoff = 120,
         },
         mappings = {
-          i = {
-            ['<C-n>'] = actions.cycle_history_next,
-            ['<C-p>'] = actions.cycle_history_prev,
-            ['<C-j>'] = actions.move_selection_next,
-            ['<C-k>'] = actions.move_selection_previous,
-          },
           n = {
             ['q'] = actions.close,
-            ['<C-u>'] = actions.preview_scrolling_up,
-            ['<C-d>'] = actions.preview_scrolling_down,
           },
         },
       },

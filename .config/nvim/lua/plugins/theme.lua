@@ -15,15 +15,17 @@ return {
     },
     integrations = {
       cmp = true,
-      dap = {
-        enabled = true,
-        enable_ui = true,
-      },
+      dap = true,
+      dap_ui = true,
       flash = true,
       gitsigns = true,
       indent_blankline = { enabled = true },
       lsp_trouble = true,
       mason = true,
+      mini = {
+        enabled = true,
+        indentscope_color = 'lavender',
+      },
       native_lsp = {
         enabled = true,
         virtual_text = {
