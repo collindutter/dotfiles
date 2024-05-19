@@ -18,14 +18,6 @@ if not ok then
   return
 end
 
--- Set leader
-local leader_key = ' '
-vim.g.mapleader = leader_key
-vim.g.maplocalleader = leader_key
-vim.keymap.set({ 'n', 'v' }, leader_key, '<nop>', { silent = true })
-
--- Load plugins from specifications
--- (The leader key must be set before this)
 lazy.setup('plugins', {
   ui = {
     border = 'rounded',

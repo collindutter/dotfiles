@@ -49,6 +49,7 @@ return {
         file_ignore_patterns = {
           '%bundle.js', -- Ignore big bundle.js files
         },
+        prompt_prefix = "  ",
         path_display = { 'truncate' },
         sorting_strategy = 'ascending',
         layout_config = {

@@ -5,18 +5,20 @@ return {
   init = function()
     local map = require('helpers.keys').map
 
-    map('n', '<C-h>', function()
+    -- resizing splits
+    map('n', '<C-Left>', function()
       require('smart-splits').resize_left()
     end, 'Resize left')
-    map('n', '<C-j>', function()
+    map('n', '<C-Down>', function()
       require('smart-splits').resize_down()
     end, 'Resize down')
-    map('n', '<C-k>', function()
+    map('n', '<C-Up>', function()
       require('smart-splits').resize_up()
     end, 'Resize up')
-    map('n', '<C-l>', function()
+    map('n', '<C-Right>', function()
       require('smart-splits').resize_right()
     end, 'Resize right')
+    -- moving between splits
     map('n', '<C-h>', function()
       require('smart-splits').move_cursor_left()
     end, 'Move cursor left')

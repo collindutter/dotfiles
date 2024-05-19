@@ -1,7 +1,6 @@
 return {
   -- Show pending keybinds
   'folke/which-key.nvim',
-  event = 'VimEnter',
   opts = {
     window = {
       border = 'rounded',

@@ -1,4 +1,3 @@
--- Highlight on yank
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
   group = vim.api.nvim_create_augroup('highlight-yank', { clear = true }),
@@ -7,8 +6,18 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
--- Restore cursor position
+vim.api.nvim_create_autocmd('CursorMoved', {
+  desc = 'Remove highlight after moving cursor',
+  group = vim.api.nvim_create_augroup('auto-hlsearch', { clear = true }),
+  callback = function()
+    if vim.v.hlsearch == 1 and vim.fn.searchcount().exact_match == 0 then
+      vim.schedule(function() vim.cmd.nohlsearch() end)
+    end
+  end
+})
+
 vim.api.nvim_create_autocmd('BufRead', {
+  desc = 'Restore cursor position',
   callback = function(opts)
     vim.api.nvim_create_autocmd('BufWinEnter', {
       once = true,
