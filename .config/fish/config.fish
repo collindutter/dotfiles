@@ -3,8 +3,10 @@ fish_add_path /usr/local/opt/yq@3/bin
 fish_add_path /usr/local/opt/openjdk@11/bin
 fish_add_path /usr/local/opt/openjdk/bin
 fish_add_path ~/.local/bin
+fish_add_path ~/.local/share/bob/nvim-bin
 fish_add_path $HOME/.jenv/bin 
 fish_add_path /opt/homebrew/bin
+fish_add_path ~/.local/share/
 
 if status --is-interactive
 	set -gx BAT_THEME "Catppuccin-macchiato"
