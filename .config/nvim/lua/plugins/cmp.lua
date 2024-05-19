@@ -7,12 +7,18 @@ return {
     'hrsh7th/cmp-nvim-lsp',
     -- File paths
     'hrsh7th/cmp-path',
-    'hrsh7th/cmp-cmdline',
     -- Snippet Engine & its associated nvim-cmp source
     'L3MON4D3/LuaSnip',
     'saadparwaiz1/cmp_luasnip',
     -- Copilot
     'zbirenbaum/copilot.lua',
+    {
+      'kristijanhusak/vim-dadbod-completion',
+      dependencies = {
+        'tpope/vim-dadbod',
+      },
+      ft = 'sql',
+    },
   },
   config = function()
     local cmp = require 'cmp'
@@ -70,19 +76,20 @@ return {
         { name = 'nvim_lsp' },
         { name = 'luasnip' },
         { name = 'path' },
+        {
+          { name = 'buffer' },
+        },
       },
       window = {
         completion = cmp.config.window.bordered(border_opts),
         documentation = cmp.config.window.bordered(border_opts),
       },
     }
-
-    cmp.setup.cmdline(':', {
-      mapping = cmp.mapping.preset.cmdline(),
+    cmp.setup.filetype('sql', {
       sources = cmp.config.sources({
-        { name = 'path' },
+        { name = 'vim-dadbod-completion' },
       }, {
-        { name = 'cmdline' },
+        { name = 'buffer' },
       }),
     })
   end,

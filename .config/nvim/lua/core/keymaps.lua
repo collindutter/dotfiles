@@ -1,5 +1,11 @@
 local map = require('helpers.keys').map
 
+-- Set leader
+local leader_key = ' '
+vim.g.mapleader = leader_key
+vim.g.maplocalleader = leader_key
+vim.keymap.set({ 'n', 'v' }, leader_key, '<nop>', { silent = true })
+
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
 vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
@@ -26,5 +32,5 @@ map('n', '<leader>n', function()
 end, '[n]ew file')
 
 map('n', '<leader>w', function()
-  vim.cmd.w()
+  pcall(vim.cmd.w)
 end, 'Save file')
