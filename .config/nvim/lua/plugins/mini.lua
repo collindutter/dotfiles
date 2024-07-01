@@ -73,4 +73,21 @@ return {
     'echasnovski/mini.indentscope',
     opts = {},
   },
+  {
+    -- Notifications
+    'echasnovski/mini.notify',
+    opts = {
+      window = {
+        config = {
+          border = 'rounded',
+        },
+        winblend = 0,
+      },
+    },
+  },
+  {
+    -- Work with diff hunks
+    'echasnovski/mini.diff',
+    opts = {}
+  }
 }

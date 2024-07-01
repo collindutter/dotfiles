@@ -3,6 +3,17 @@ return {
   'mfussenegger/nvim-lint',
   config = function(_)
     local lint = require 'lint'
+    local luacheck = require('lint').linters.luacheck
+
+    luacheck.args = {
+      '--formatter',
+      'plain',
+      '--codes',
+      '--ranges',
+      '--globals',
+      'vim',
+      '-',
+    }
 
     lint.linters_by_ft = {
       python = { 'ruff' },

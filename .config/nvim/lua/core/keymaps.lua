@@ -32,5 +32,5 @@ map('n', '<leader>n', function()
 end, '[n]ew file')
 
 map('n', '<leader>w', function()
-  pcall(vim.cmd.w)
+  vim.cmd.w()
 end, 'Save file')
