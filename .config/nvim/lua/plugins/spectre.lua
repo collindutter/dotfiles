@@ -7,9 +7,9 @@ return {
   init = function()
     local map = require('helpers.keys').map
 
-    map('n', '<leader>cW', function()
+    map('n', '<leader>cw', function()
       require('spectre').toggle()
-    end, '[c]hange and [W]ords')
+    end, '[c]hange and [w]ords')
   end,
   opts = {
     mapping = {

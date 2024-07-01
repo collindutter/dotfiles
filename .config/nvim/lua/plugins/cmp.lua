@@ -32,7 +32,6 @@ return {
     }
 
     cmp.event:on('menu_closed', function()
-      ---@diagnostic disable-next-line: inject-field
       vim.b.copilot_suggestion_hidden = false
     end)
 
