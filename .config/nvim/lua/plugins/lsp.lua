@@ -77,6 +77,7 @@ return {
       ruff = {},
       tsserver = {},
       html = {},
+      typos_lsp = {},
       yamlls = {
         settings = {
           yaml = {
