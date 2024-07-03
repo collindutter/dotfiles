@@ -89,5 +89,17 @@ return {
     -- Work with diff hunks
     'echasnovski/mini.diff',
     opts = {}
+  },
+  {
+    -- Statusline
+    'echasnovski/mini.statusline',
+    opts = {
+      set_vim_settings = false,
+    }
+  },
+  {
+    -- Icon provider
+    'echasnovski/mini.icons',
+    opts = {}
   }
 }
