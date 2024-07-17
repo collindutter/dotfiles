@@ -12,13 +12,6 @@ return {
     'saadparwaiz1/cmp_luasnip',
     -- Copilot
     'zbirenbaum/copilot.lua',
-    {
-      'kristijanhusak/vim-dadbod-completion',
-      dependencies = {
-        'tpope/vim-dadbod',
-      },
-      ft = 'sql',
-    },
   },
   config = function()
     local cmp = require 'cmp'
@@ -84,12 +77,5 @@ return {
         documentation = cmp.config.window.bordered(border_opts),
       },
     }
-    cmp.setup.filetype('sql', {
-      sources = cmp.config.sources({
-        { name = 'vim-dadbod-completion' },
-      }, {
-        { name = 'buffer' },
-      }),
-    })
   end,
 }

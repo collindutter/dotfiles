@@ -2,21 +2,22 @@ return {
   -- Show pending keybinds
   'folke/which-key.nvim',
   opts = {
-    window = {
+    preset="helix",
+    win = {
       border = 'rounded',
     },
   },
   init = function()
     -- Document existing key chains
-    require('which-key').register {
-      ['<leader>c'] = { name = 'Code', _ = 'which_key_ignore' },
-      ['<leader>d'] = { name = 'Debugger', _ = 'which_key_ignore' },
-      ['<leader>g'] = { name = 'Git', _ = 'which_key_ignore' },
-      ['<leader>b'] = { name = 'Buffers', _ = 'which_key_ignore' },
-      ['<leader>f'] = { name = 'Find', _ = 'which_key_ignore' },
-      ['<leader>t'] = { name = 'Test', _ = 'which_key_ignore' },
-      ['<leader>s'] = { name = 'Session', _ = 'which_key_ignore' },
-      ['<leader>l'] = { name = 'Lsp', _ = 'which_key_ignore' },
+    require('which-key').add {
+      {'<leader>c', group = 'Code', },
+      {'<leader>d', group = 'Debugger',},
+      {'<leader>g',  group = 'Git', },
+      {'<leader>b',  group = 'Buffers',},
+      {'<leader>f',  group = 'Find', },
+      {'<leader>t',  group = 'Test', },
+      {'<leader>s',  group = 'Session',},
+      {'<leader>l',  group = 'Lsp', },
     }
   end,
 }

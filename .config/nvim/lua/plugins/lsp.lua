@@ -16,31 +16,21 @@ return {
   opts = {
     ui = {
       diagnostic_config = {
-        virtual_text = true,
-        update_in_insert = true,
-        underline = true,
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = '',
+            [vim.diagnostic.severity.WARN] = '',
+            [vim.diagnostic.severity.HINT] = '󰌵',
+            [vim.diagnostic.severity.INFO] = '󰋼',
+          },
+        },
         severity_sort = true,
         float = {
-          focusable = true,
-          style = 'minimal',
           border = 'rounded',
         },
       },
       float = {
-        focusable = true,
-        style = 'minimal',
         border = 'rounded',
-      },
-      signs = {
-        DiagnosticSignError = '',
-        DiagnosticSignWarn = '',
-        DiagnosticSignHint = '󰌵',
-        DiagnosticInfo = '󰋼',
-        DapBreakpoint = '',
-        DapBreakpointCondition = '',
-        DapBreakpointRejected = '',
-        DapLogPoint = '.>',
-        DapStopped = '󰁕',
       },
     },
     --  Available keys are:
@@ -196,11 +186,6 @@ return {
     -- Context: https://www.reddit.com/r/neovim/comments/135fqp9/why_is_pyright_constantly_analyzing_files_it/
     capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
 
-    -- Define pretty signs
-    for type, icon in pairs(opts.ui.signs) do
-      vim.fn.sign_define(type, { text = icon, texthl = type, numhl = type })
-    end
-
     -- Make diagnostics pretty
     vim.diagnostic.config(opts.ui.diagnostic_config)
     -- Hover configuration
@@ -218,6 +203,19 @@ return {
 
     -- Add border to :LspInfo
     require('lspconfig.ui.windows').default_options.border = 'rounded'
+
+    local lspconfig = require('lspconfig')
+    require('lspconfig.configs').griptape_ls = {
+      default_config = {
+        cmd = {"poetry", "run", "--directory", "/Users/collindutter/Documents/griptape/griptape-ls/", "server"},
+        filetypes = {'lua', 'python'},
+        single_file_support = true,
+        root_dir = lspconfig.util.root_pattern('.git'),
+        settings = {},
+      };
+      capabilities = capabilities,
+    }
+    -- require('lspconfig').griptape_ls.setup {}
 
     -- Ensure the servers and tools above are installed
     require('mason').setup()

@@ -9,11 +9,6 @@ return {
       sh = { 'shfmt' },
       typescript = { 'prettier' },
     },
-    -- These get passed to the formatter command
-    format_on_save = {
-      timeout_ms = 500,
-      lsp_fallback = true,
-    },
   },
   init = function()
     local map = require('helpers.keys').map

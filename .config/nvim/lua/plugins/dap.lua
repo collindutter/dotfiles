@@ -40,6 +40,18 @@ return {
       },
     }
 
+    local signs = {
+      ['DapBreakpoint'] = '',
+      ['DapBreakpointCondition'] = '',
+      ['DapBreakpointRejected'] = '',
+      ['DapLogPoint'] = '.>',
+      ['DapStopped'] = '󰁕',
+    }
+
+    for type, icon in pairs(signs) do
+      vim.fn.sign_define(type, { text = icon, texthl = type, numhl = type })
+    end
+
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
 
     dap.listeners.before.attach.dapui_config = function()
