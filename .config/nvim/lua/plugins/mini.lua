@@ -53,13 +53,8 @@ return {
     'echasnovski/mini.surround',
     opts = {
       mappings = {
-        add = "gsa",            -- Add surrounding in Normal and Visual modes
-        delete = "gsd",         -- Delete surrounding
-        find = "gsf",           -- Find surrounding (to the right)
-        find_left = "gsF",      -- Find surrounding (to the left)
-        highlight = "gsh",      -- Highlight surrounding
-        replace = "gsr",        -- Replace surrounding
-        update_n_lines = "gsn", -- Update `n_lines`
+        add = "gsa",    -- Add surrounding in Normal and Visual modes
+        delete = "gsd", -- Delete surrounding
       }
     },
   },
@@ -99,7 +94,15 @@ return {
   },
   {
     -- Icon provider
-    'echasnovski/mini.icons',
-    opts = {}
-  }
+    "echasnovski/mini.icons",
+    opts = {},
+    specs = { { "nvim-tree/nvim-web-devicons", enabled = false, optional = true } },
+    init = function()                                   -- https://old.reddit.com/r/neovim/comments/1duf3w7/miniicons_general_icon_provider_several/lbgbc6a/
+      package.preload["nvim-web-devicons"] = function() -- needed since it will be false when loading and mini will fail
+        package.loaded["nvim-web-devicons"] = {}
+        require("mini.icons").mock_nvim_web_devicons()
+        return package.loaded["nvim-web-devicons"]
+      end
+    end,
+  },
 }
