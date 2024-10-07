@@ -8,6 +8,11 @@ return {
       lua = { 'stylua' },
       sh = { 'shfmt' },
       typescript = { 'prettier' },
+      json = { 'jq' },
+    },
+    format_on_save = {
+      timeout_ms = 500,
+      lsp_format = 'fallback',
     },
   },
   init = function()

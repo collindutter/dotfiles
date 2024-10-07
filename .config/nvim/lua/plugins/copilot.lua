@@ -7,9 +7,12 @@ return {
     suggestion = {
       auto_trigger = true,
       accept = false,
-      keymap = false
+      keymap = {
+        accept = '<C-l>',
+      },
     },
     filetypes = {
+      yaml = true,
       markdown = true,
       help = false,
       gitcommit = false,
@@ -17,7 +20,10 @@ return {
       hgcommit = false,
       svn = false,
       cvs = false,
-      ["."] = false,
+      ['grug-far'] = false,
+      ['grug-far-history'] = false,
+      ['grug-far-help'] = false,
+      ['.'] = false,
     },
   },
 }

@@ -4,14 +4,13 @@ return {
   name = 'catppuccin',
   priority = 1000,
   init = function()
-    vim.cmd.colorscheme 'catppuccin-macchiato'
+    vim.cmd.colorscheme 'catppuccin'
   end,
   opts = {
-    flavour = 'macchiato',
     transparent_background = true,
     styles = {
-      comments = {},
-      conditionals = {},
+      comments = {}, -- by default it's italic
+      conditionals = {}, -- by default it's italic
     },
     integrations = {
       cmp = true,
@@ -24,7 +23,6 @@ return {
       mason = true,
       mini = {
         enabled = true,
-        indentscope_color = 'lavender',
       },
       native_lsp = {
         enabled = true,

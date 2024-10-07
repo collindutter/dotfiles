@@ -5,39 +5,38 @@ local g = vim.g
 
 g.python3_host_prog = '~/.virtualenvs/py3nvim/bin/python' -- set python provider
 
-opt.shortmess:append 'IWcC'                               -- Disable intro message, reduce command line messages
+opt.shortmess:append 'IWcC' -- Disable intro message, reduce command line messages
 
 -- Basic UI Enhancements
-o.number = true         -- Show line numbers
+o.number = true -- Show line numbers
 o.relativenumber = true -- Show relative line numbers
-o.showmatch = true      -- Highlight matching brackets
+o.showmatch = true -- Highlight matching brackets
 o.foldmethod = 'syntax' -- Enable syntax-based folding
-o.showcmd = false       -- Don't show partial commands in the last line of the screen
-o.pumheight = 10        -- Make popup menu smaller
+o.showcmd = false -- Don't show partial commands in the last line of the screen
+o.pumheight = 10 -- Make popup menu smaller
 
 -- Editing Improvements
-o.expandtab = true   -- Convert tabs to spaces
-o.shiftwidth = 4     -- Spaces per step of (auto)indent
-o.tabstop = 4        -- Spaces that a tab counts for
+o.expandtab = true -- Convert tabs to spaces
+o.shiftwidth = 4 -- Spaces per step of (auto)indent
+o.tabstop = 4 -- Spaces that a tab counts for
 o.smartindent = true -- Smart indenting on new lines
-o.autoindent = true  -- Keep indent from previous line
+o.autoindent = true -- Keep indent from previous line
 
 -- Search & Navigation
-o.hlsearch = true            -- Highlight all search results
-o.incsearch = true           -- Show partial matches for a search phrase
-o.inccommand = 'split'       -- Show live preview of :s commands
-o.ignorecase = true          -- Ignore case in search patterns
-o.smartcase = true           -- Override `ignorecase` for uppercase patterns
-o.infercase = true           -- Infer letter cases for a richer built-in keyword completion
-o.grepprg = 'rg --vimgrep'   -- Use Ripgrep for the :grep commanr
+o.incsearch = true -- Show partial matches for a search phrase
+o.inccommand = 'split' -- Show live preview of :s commands
+o.ignorecase = true -- Ignore case in search patterns
+o.smartcase = true -- Override `ignorecase` for uppercase patterns
+o.infercase = true -- Infer letter cases for a richer built-in keyword completion
+o.grepprg = 'rg --vimgrep' -- Use Ripgrep for the :grep commanr
 o.grepformat = '%f:%l:%c:%m' -- Format for parsing the grep output
 
 -- File Handling
-o.backup = false   -- Disable making a backup before overwriting a file
+o.backup = false -- Disable making a backup before overwriting a file
 o.swapfile = false -- Disable swap file creation
-o.undofile = true  -- Enable persistent undo
+o.undofile = true -- Enable persistent undo
 o.autowrite = true -- Auto-write buffer when it's not the current buffer
-o.confirm = true   -- Confirm to save changes before exiting modified buffer
+o.confirm = true -- Confirm to save changes before exiting modified buffer
 o.wildmenu = false -- Disable command-line completion menu (we're using cmp)
 
 -- Visual Tweaks
@@ -54,15 +53,18 @@ o.listchars = 'tab:> ,extends:…,precedes:…,nbsp:␣' -- Define which helper 
 o.list = true -- Show some helper symbols
 
 -- Miscellaneous
-o.mouse = 'a'               -- Enable mouse support
-o.clipboard = 'unnamedplus' -- Use the system clipboard
-o.timeoutlen = 300          -- Time in milliseconds for a mapped sequence
-o.termguicolors = true      -- Enable 24-bit RGB colors
+o.mouse = 'a' -- Enable mouse support
+-- https://github.com/nvim-lua/kickstart.nvim/pull/1049
+vim.schedule(function()
+  o.clipboard = 'unnamedplus' -- Use the system clipboard
+end)
+o.timeoutlen = 300 -- Time in milliseconds for a mapped sequence
+o.termguicolors = true -- Enable 24-bit RGB colors
 
 -- Completion options
 o.completeopt = 'menuone,noinsert,noselect'
 
 -- Split behavior
-o.splitright = true    -- Open vertical splits to the right
-o.splitbelow = true    -- Open horizontal splits below
+o.splitright = true -- Open vertical splits to the right
+o.splitbelow = true -- Open horizontal splits below
 o.splitkeep = 'screen' -- Reduce scroll during window split
