@@ -5,7 +5,7 @@ local g = vim.g
 
 g.python3_host_prog = '~/.virtualenvs/py3nvim/bin/python' -- set python provider
 
-opt.shortmess:append 'IWcC' -- Disable intro message, reduce command line messages
+opt.shortmess:append 'WcC' -- Reduce command line messages
 
 -- Basic UI Enhancements
 o.number = true -- Show line numbers
@@ -37,7 +37,6 @@ o.swapfile = false -- Disable swap file creation
 o.undofile = true -- Enable persistent undo
 o.autowrite = true -- Auto-write buffer when it's not the current buffer
 o.confirm = true -- Confirm to save changes before exiting modified buffer
-o.wildmenu = false -- Disable command-line completion menu (we're using cmp)
 
 -- Visual Tweaks
 o.cursorline = true -- Highlight the current line
@@ -49,8 +48,9 @@ o.signcolumn = 'yes' -- Always show the sign column
 o.showmode = false -- Hide the current mode indicator
 o.laststatus = 3 -- Always show the status line
 
-o.listchars = 'tab:> ,extends:…,precedes:…,nbsp:␣' -- Define which helper symbols to show
-o.list = true -- Show some helper symbols
+-- Sets how neovim will display certain whitespace characters in the editor.
+vim.opt.list = true
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 -- Miscellaneous
 o.mouse = 'a' -- Enable mouse support
