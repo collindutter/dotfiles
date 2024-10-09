@@ -1,0 +1,5 @@
+/*/
+!/.config/
+.dotfiles
+/.config/tmux/plugins/
+/.config/fish/functions/*fzf*
