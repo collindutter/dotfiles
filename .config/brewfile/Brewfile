@@ -16,5 +16,7 @@ brew "pipx"
 brew "starship"
 brew "tmux"
 brew "zoxide"
+brew "ripgrep"
+brew "luarocks"
 
 cask "font-jetbrains-mono-nerd-font"
