@@ -14,12 +14,6 @@ return {
   { 'Bilal2453/luvit-meta', lazy = true },
   {
     'neovim/nvim-lspconfig',
-    dependencies = {
-      -- Install LSPs to stdpath for neovim
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
-      'WhoIsSethDaniel/mason-tool-installer.nvim',
-    },
     opts = {
       diagnostic_config = {
         signs = {
@@ -40,6 +34,58 @@ return {
           border = 'rounded',
         },
       },
+    },
+    config = function(_, opts)
+      vim.api.nvim_create_autocmd('LspAttach', {
+        group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
+        callback = function(event)
+          local function lsp_map(lhs, rhs, desc, mode)
+            mode = mode or 'n'
+            vim.keymap.set(mode, lhs, rhs, { buffer = event.buf, desc = desc })
+          end
+
+          -- Actions
+          lsp_map('<leader>cr', vim.lsp.buf.rename, '[c]ode [r]ename')
+          lsp_map('<leader>ca', vim.lsp.buf.code_action, '[c]ode [a]ction', { 'n', 'x' })
+
+          -- Diagnostics
+          lsp_map('<leader>cd', vim.diagnostic.open_float, '[c]ode [d]iagnostic')
+
+          lsp_map('gd', vim.lsp.buf.definition, '[g]oto [d]efinition')
+          lsp_map('gD', vim.lsp.buf.declaration, '[g]oto [D]eclartion')
+          lsp_map('gr', require('telescope.builtin').lsp_references, '[g]oto [r]eferences')
+          lsp_map('gI', require('telescope.builtin').lsp_implementations, '[g]oto [i]mplementation')
+
+          lsp_map('<leader>lr', function()
+            vim.cmd 'LspRestart'
+          end, '[l]sp [r]estart')
+
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+          if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
+            lsp_map('<leader>lh', function()
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
+            end, '[l]sp toggle inlay [h]ints')
+          end
+        end,
+      })
+
+      -- Make diagnostics pretty
+      vim.diagnostic.config(opts.diagnostic_config)
+      -- Hover configuration
+      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, opts.ui.float)
+      -- Signature help configuration
+      vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, opts.ui.float)
+
+      -- Add border to :LspInfo
+      require('lspconfig.ui.windows').default_options.border = 'rounded'
+    end,
+  },
+  {
+    'williamboman/mason-lspconfig.nvim',
+    dependencies = {
+      'neovim/nvim-lspconfig',
+    },
+    opts = {
       --  Available keys are:
       --  - cmd (table): Override the default command used to start the server
       --  - filetypes (table): Override the default list of associated filetypes for the server
@@ -65,23 +111,6 @@ return {
             },
           },
         },
-        -- basedpyright = {
-        --   settings = {
-        --     basedpyright = {
-        --       -- Using Ruff's import organizer
-        --       disableOrganizeImports = true,
-        --       analysis = {
-        --         useLibraryCodeForTypes = true,
-        --         typeCheckingMode = 'basic',
-        --         autoSearchPaths = true,
-        --         diagnosticMode = 'openFilesOnly',
-        --       },
-        --     },
-        --     python = {
-        --       pythonPath = '.venv/bin/python',
-        --     },
-        --   },
-        -- },
         ruff = {},
         ts_ls = {},
         html = {},
@@ -172,85 +201,7 @@ return {
       },
     },
     config = function(_, opts)
-      vim.api.nvim_create_autocmd('LspAttach', {
-        group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
-        callback = function(event)
-          local function lsp_map(lhs, rhs, desc, mode)
-            mode = mode or 'n'
-            vim.keymap.set(mode, lhs, rhs, { buffer = event.buf, desc = desc })
-          end
-
-          -- Actions
-          lsp_map('<leader>cr', vim.lsp.buf.rename, '[c]ode [r]ename')
-          lsp_map('<leader>ca', vim.lsp.buf.code_action, '[c]ode [a]ction', { 'n', 'x' })
-
-          -- Diagnostics
-          lsp_map('<leader>cd', vim.diagnostic.open_float, '[c]ode [d]iagnostic')
-
-          lsp_map('gd', vim.lsp.buf.definition, '[g]oto [d]efinition')
-          lsp_map('gD', vim.lsp.buf.declaration, '[g]oto [D]eclartion')
-          lsp_map('gr', require('telescope.builtin').lsp_references, '[g]oto [r]eferences')
-          lsp_map('gI', require('telescope.builtin').lsp_implementations, '[g]oto [i]mplementation')
-
-          lsp_map('<leader>lr', function()
-            vim.cmd 'LspRestart'
-          end, '[l]sp [r]estart')
-
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-            lsp_map('<leader>lh', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
-            end, '[l]sp toggle inlay [h]ints')
-          end
-        end,
-      })
-
-      -- LSP servers and clients are able to communicate to each other what features they support.
-      --  By default, Neovim doesn't support everything that is in the LSP specification.
-      --  When you add nvim-cmp, luasnip, etc. Neovim now has *more* capabilities.
-      --  So, we create new capabilities with nvim cmp, and then broadcast that to the servers.
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-      -- TODO: remove when fixed: https://github.com/neovim/neovim/issues/23291
-      -- Context: https://www.reddit.com/r/neovim/comments/135fqp9/why_is_pyright_constantly_analyzing_files_it/
-      capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
-
-      -- Make diagnostics pretty
-      vim.diagnostic.config(opts.diagnostic_config)
-      -- Hover configuration
-      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, opts.ui.float)
-      -- Signature help configuration
-      vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, opts.ui.float)
-
-      -- Bless folke https://github.com/neovim/neovim/issues/23725#issuecomment-1561364086
-      -- local ok, wf = pcall(require, "vim.lsp._watchfiles")
-      -- if ok then
-      --   wf._watchfunc = function()
-      --     return function() end
-      --   end
-      -- end
-
-      -- Add border to :LspInfo
-      require('lspconfig.ui.windows').default_options.border = 'rounded'
-
-      -- local lspconfig = require 'lspconfig'
-      -- require('lspconfig.configs').griptape_ls = {
-      --   default_config = {
-      --     cmd = { 'poetry', 'run', '--directory', '/Users/collindutter/Documents/griptape/griptape-ls/', 'server' },
-      --     filetypes = { 'lua', 'python' },
-      --     single_file_support = true,
-      --     root_dir = lspconfig.util.root_pattern '.git',
-      --     settings = {},
-      --   },
-      --   capabilities = capabilities,
-      -- }
-      -- require('lspconfig').griptape_ls.setup {}
-
-      -- Ensure the servers and tools above are installed
-      require('mason').setup()
-
-      local ensure_installed = vim.tbl_keys(opts.servers or {})
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed, auto_update = true }
 
       require('mason-lspconfig').setup {
         handlers = {
