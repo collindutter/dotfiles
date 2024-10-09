@@ -1,0 +1,41 @@
+#!/bin/sh
+
+source "$CONFIG_DIR/colors.sh" # Loads all defined colors
+
+PLUGIN_DIR="$CONFIG_DIR/plugins"
+ITEM_DIR="$CONFIG_DIR/items"
+
+# Bar Appearance
+sketchybar --bar height=32 \
+	blur_radius=30 \
+	position=top \
+	sticky=off \
+	padding_left=10 \
+	padding_right=10 \
+	color=0x15ffffff
+
+# Defaults
+sketchybar --default icon.font="JetBrainsMono Nerd Font:Bold:17.0" \
+	icon.color=0xffffffff \
+	label.font="JetBrainsMono Nerd Font:Bold:14.0" \
+	label.color=0xffffffff \
+	padding_left=5 \
+	padding_right=5 \
+	label.padding_left=4 \
+	label.padding_right=4 \
+	icon.padding_left=4 \
+	icon.padding_right=4
+
+# Left
+source $ITEM_DIR/space.sh
+source $ITEM_DIR/front_app.sh
+
+# Center
+source $ITEM_DIR/media.sh
+
+# Right
+source $ITEM_DIR/clock.sh
+source $ITEM_DIR/volume.sh
+source $ITEM_DIR/battery.sh
+
+sketchybar --update
