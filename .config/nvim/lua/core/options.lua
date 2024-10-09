@@ -3,7 +3,7 @@
 local o, opt = vim.o, vim.opt
 local g = vim.g
 
-g.python3_host_prog = '~/.virtualenvs/py3nvim/bin/python' -- set python provider
+g.python3_host_prog = vim.fn.expand '~/.virtualenvs/py3nvim/bin/python' -- set python provider
 
 opt.shortmess:append 'WcC' -- Reduce command line messages
 
