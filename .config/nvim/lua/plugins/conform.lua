@@ -6,7 +6,6 @@ return {
     formatters_by_ft = {
       python = { 'ruff_fix', 'ruff_format' },
       lua = { 'stylua' },
-      sh = { 'shfmt' },
       typescript = { 'prettier' },
       json = { 'jq' },
     },
