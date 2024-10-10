@@ -14,6 +14,7 @@ o.showmatch = true -- Highlight matching brackets
 o.foldmethod = 'syntax' -- Enable syntax-based folding
 o.showcmd = false -- Don't show partial commands in the last line of the screen
 o.pumheight = 10 -- Make popup menu smaller
+o.cmdheight = 0 -- Don't show command line
 
 -- Editing Improvements
 o.expandtab = true -- Convert tabs to spaces
