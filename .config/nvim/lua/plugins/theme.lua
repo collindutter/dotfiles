@@ -13,13 +13,9 @@ return {
       conditionals = {}, -- by default it's italic
     },
     integrations = {
-      cmp = true,
       dap = true,
       dap_ui = true,
       flash = true,
-      gitsigns = true,
-      indent_blankline = { enabled = true },
-      lsp_trouble = true,
       mason = true,
       mini = {
         enabled = true,
@@ -42,7 +38,6 @@ return {
           background = true,
         },
       },
-      fidget = true,
       neotest = true,
       semantic_tokens = true,
       treesitter = true,
