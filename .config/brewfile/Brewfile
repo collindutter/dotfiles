@@ -18,5 +18,6 @@ brew "tmux"
 brew "zoxide"
 brew "ripgrep"
 brew "luarocks"
+brew "wget"
 
 cask "font-jetbrains-mono-nerd-font"
