@@ -4,6 +4,7 @@
 /.config/tmux/plugins/
 /.config/fish/functions/*fzf*
 /.config/fish/conf.d/
+/.config/fish/completions/
 /.config/stripe/
 /.config/github-copilot/
 /.config/gh/
