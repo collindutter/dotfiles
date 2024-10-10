@@ -3,6 +3,7 @@
 .dotfiles
 /.config/tmux/plugins/
 /.config/fish/functions/*fzf*
+/.config/fish/conf.d/
 /.config/stripe/
 /.config/github-copilot/
 /.config/gh/
