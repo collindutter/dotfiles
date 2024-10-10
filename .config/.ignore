@@ -1,0 +1,4 @@
+tmux/plugins/
+fish/functions/*fzf*
+fish/themes/
+fish/completions/
