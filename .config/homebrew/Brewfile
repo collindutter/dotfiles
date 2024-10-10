@@ -17,6 +17,7 @@ brew "starship"
 brew "tmux"
 brew "zoxide"
 brew "ripgrep"
+brew "ast-grep"
 brew "luarocks"
 brew "wget"
 
