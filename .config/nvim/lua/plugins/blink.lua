@@ -1,6 +1,7 @@
 return {
   'saghen/blink.cmp',
-  version = 'v0.*',
+  enabled = true,
+  build = 'cargo build --release',
   opts = {
     highlight = {
       use_nvim_cmp_as_default = true,
