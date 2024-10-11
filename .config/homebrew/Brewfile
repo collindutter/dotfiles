@@ -22,3 +22,4 @@ brew "luarocks"
 brew "wget"
 
 cask "font-jetbrains-mono-nerd-font"
+cask "ngrok"
