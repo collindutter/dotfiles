@@ -34,3 +34,14 @@ end, '[n]ew file')
 map('n', '<leader>w', function()
   vim.cmd.w()
 end, 'Save file')
+
+map('x', 'p', '"_dP', 'Paste without yanking')
+
+-- Adds numbered jk (10j, 15k) movement to jumplist
+vim.keymap.set({ 'n', 'x' }, 'j', function()
+  return vim.v.count > 1 and "m'" .. vim.v.count .. 'j' or 'j'
+end, { noremap = true, expr = true })
+
+vim.keymap.set({ 'n', 'x' }, 'k', function()
+  return vim.v.count > 1 and "m'" .. vim.v.count .. 'k' or 'k'
+end, { noremap = true, expr = true })
