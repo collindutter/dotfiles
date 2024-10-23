@@ -1,5 +1,6 @@
 tap "koekeishiya/formulae"
 tap "felixkratz/formulae"
+tap "charmbracelet/tap"
 
 brew "asdf"
 brew "bat"
@@ -20,6 +21,7 @@ brew "ripgrep"
 brew "ast-grep"
 brew "luarocks"
 brew "wget"
+brew "mods"
 
 cask "font-jetbrains-mono-nerd-font"
 cask "ngrok"
