@@ -1,6 +1,5 @@
 return {
   'saghen/blink.cmp',
-  enabled = true,
   -- build = 'cargo build --release',
   version = 'v0.*',
   opts = {
@@ -30,6 +29,7 @@ return {
       },
       documentation = {
         border = 'rounded',
+        auto_show = true,
       },
     },
   },
