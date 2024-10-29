@@ -202,6 +202,9 @@ return {
     },
     config = function(_, opts)
       local capabilities = vim.lsp.protocol.make_client_capabilities()
+      -- TODO: remove when fixed: https://github.com/neovim/neovim/issues/23291
+      -- Context: https://www.reddit.com/r/neovim/comments/135fqp9/why_is_pyright_constantly_analyzing_files_it/
+      capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
 
       require('mason-lspconfig').setup {
         handlers = {
