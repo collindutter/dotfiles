@@ -32,7 +32,7 @@ map('n', '<leader>n', function()
 end, '[n]ew file')
 
 map('n', '<leader>w', function()
-  vim.cmd.w()
+  pcall(vim.cmd.w)
 end, 'Save file')
 
 map('x', 'p', '"_dP', 'Paste without yanking')
