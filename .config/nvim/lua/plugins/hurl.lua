@@ -7,7 +7,7 @@ return {
   },
   ft = 'hurl',
   opts = {
-    mode = 'popup',
+    mode = 'split',
   },
   init = function()
     local map = require('helpers.keys').map
