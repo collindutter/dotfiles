@@ -23,6 +23,7 @@ brew "luarocks"
 brew "wget"
 brew "mods"
 brew "hurl"
+brew "postgresql@14"
 
 cask "font-jetbrains-mono-nerd-font"
 cask "ngrok"
