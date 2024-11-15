@@ -36,7 +36,6 @@ o.backup = false -- Disable making a backup before overwriting a file
 o.swapfile = false -- Disable swap file creation
 o.undofile = true -- Enable persistent undo
 o.autowrite = true -- Auto-write buffer when it's not the current buffer
-o.autoread = true -- Auto-read file when changed outside of neovim
 o.confirm = true -- Confirm to save changes before exiting modified buffer
 
 -- Visual Tweaks
