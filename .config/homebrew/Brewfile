@@ -24,6 +24,7 @@ brew "wget"
 brew "mods"
 brew "hurl"
 brew "postgresql@14"
+brew "tree"
 
 cask "font-jetbrains-mono-nerd-font"
 cask "ngrok"
