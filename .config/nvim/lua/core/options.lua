@@ -37,6 +37,7 @@ o.swapfile = false -- Disable swap file creation
 o.undofile = true -- Enable persistent undo
 o.autowrite = true -- Auto-write buffer when it's not the current buffer
 o.confirm = true -- Confirm to save changes before exiting modified buffer
+o.fileformats = 'unix,dos,mac' -- Support all three line endings
 
 -- Visual Tweaks
 o.cursorline = true -- Highlight the current line
