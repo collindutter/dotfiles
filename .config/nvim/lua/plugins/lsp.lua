@@ -112,7 +112,14 @@ return {
             },
           },
         },
-        ruff = {},
+        ruff = {
+          capabilities = {
+            -- These are provided by pyright
+            -- This removes a redundant "No information found" message
+            hoverProvider = false,
+            documentFormattingProvider = false,
+          },
+        },
         ts_ls = {},
         html = {},
         typos_lsp = {},
@@ -212,7 +219,10 @@ return {
       require('mason-lspconfig').setup {
         handlers = {
           function(server_name)
-            local server = opts.servers[server_name] or {}
+            local server = opts.servers[server_name]
+            if not server then
+              return
+            end
 
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
