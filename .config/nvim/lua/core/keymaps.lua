@@ -36,6 +36,11 @@ map('n', '<leader>w', function()
 end, 'Save file')
 
 map('x', 'p', '"_dP', 'Paste without yanking')
+--
+-- use `gp` to visually select the last paste
+vim.keymap.set('n', 'gp', function()
+  return '`[' .. string.sub(vim.fn.getregtype(), 1, 1) .. '`]'
+end, { noremap = true, expr = true })
 
 -- Adds numbered jk (10j, 15k) movement to jumplist
 vim.keymap.set({ 'n', 'x' }, 'j', function()
