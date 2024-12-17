@@ -69,3 +69,7 @@ o.completeopt = 'menuone,noinsert,noselect'
 o.splitright = true -- Open vertical splits to the right
 o.splitbelow = true -- Open horizontal splits below
 o.splitkeep = 'screen' -- Reduce scroll during window split
+
+opt.foldmethod = 'expr' -- Enable treesitter folding
+opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()' -- Treesitter folding expression
+opt.foldlevel = 99 -- Don't autoclose folds
