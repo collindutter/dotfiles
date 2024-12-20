@@ -3,12 +3,14 @@ return {
   -- build = 'cargo build --release',
   version = 'v0.*',
   enabled = true,
-  opts_extend = { 'sources.completion.enabled_providers' },
+  opts_extend = {
+    'sources.default',
+  },
+  ---@module 'blink.cmp'
+  ---@type blink.cmp.Config
   opts = {
     sources = {
-      completion = {
-        enabled_providers = { 'lsp', 'path', 'snippets', 'buffer', 'codecompanion' },
-      },
+      default = { 'lsp', 'path', 'snippets', 'buffer', 'codecompanion' },
       providers = {
         codecompanion = {
           name = 'CodeCompanion',
@@ -17,25 +19,25 @@ return {
         },
       },
     },
-    highlight = {
+    appearance = {
       use_nvim_cmp_as_default = true,
+      nerd_font_variant = 'mono',
     },
-    nerd_font_variant = 'normal',
     keymap = { preset = 'default' },
     completion = {
       menu = {
         border = 'rounded',
-      },
-      signature = {
-        window = {
-          border = 'rounded',
-        },
       },
       documentation = {
         window = {
           border = 'rounded',
         },
         auto_show = true,
+      },
+    },
+    signature = {
+      window = {
+        border = 'rounded',
       },
     },
   },
