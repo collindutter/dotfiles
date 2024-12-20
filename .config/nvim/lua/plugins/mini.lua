@@ -74,28 +74,9 @@ return {
     opts = {},
   },
   {
-    -- Notifications
-    'echasnovski/mini.notify',
-    opts = {
-      window = {
-        config = {
-          border = 'rounded',
-        },
-        winblend = 0,
-      },
-    },
-  },
-  {
     -- Work with diff hunks
     'echasnovski/mini.diff',
     opts = {},
-  },
-  {
-    -- Statusline
-    'echasnovski/mini.statusline',
-    opts = {
-      set_vim_settings = false,
-    },
   },
   {
     -- Icon provider
