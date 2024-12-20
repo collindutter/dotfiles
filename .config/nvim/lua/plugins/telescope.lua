@@ -7,9 +7,22 @@ return {
     {
       'nvim-telescope/telescope-fzf-native.nvim',
       build = 'make',
+      config = function()
+        require('telescope').load_extension 'fzf'
+      end,
       cond = function()
         return vim.fn.executable 'make' == 1
       end,
+    },
+    {
+      'danielfalk/smart-open.nvim',
+      branch = '0.2.x',
+      config = function()
+        require('telescope').load_extension 'smart_open'
+      end,
+      dependencies = {
+        'kkharji/sqlite.lua',
+      },
     },
   },
   init = function()
@@ -25,7 +38,9 @@ return {
       require('telescope.builtin').oldfiles()
     end, '[f]ind [o]ld files')
     map('n', '<leader>ff', function()
-      require('telescope.builtin').find_files()
+      require('telescope').extensions.smart_open.smart_open {
+        cwd_only = true,
+      }
     end, '[f]ind [f]iles')
     map('n', '<leader>fh', function()
       require('telescope.builtin').help_tags()
@@ -40,11 +55,10 @@ return {
       require('telescope.builtin').resume()
     end, '[f]ind [r]esume')
   end,
-  config = function()
+  opts = function()
     local actions = require 'telescope.actions'
-    local telescope = require 'telescope'
 
-    telescope.setup {
+    return {
       defaults = {
         prompt_prefix = '  ',
         path_display = { 'truncate' },
@@ -68,7 +82,5 @@ return {
         },
       },
     }
-
-    require('telescope').load_extension 'fzf'
   end,
 }
