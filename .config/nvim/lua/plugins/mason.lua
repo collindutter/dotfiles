@@ -11,6 +11,7 @@ return {
         'typos_lsp',
         'yamlls',
         'lua_ls',
+        'angularls',
         -- Formatters
         'prettier',
         'stylua',
