@@ -205,6 +205,7 @@ return {
             Lua = {},
           },
         },
+        angularls = {},
       },
     },
     config = function(_, opts)
