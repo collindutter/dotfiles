@@ -1,10 +1,8 @@
 #!/bin/bash
 
-# Install xCode cli tools
 echo "Installing commandline tools..."
 xcode-select --install
 
-# Install Homebrew
 echo "Installing Homebrew..."
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew analytics off
@@ -18,7 +16,6 @@ echo "Switching to fish shell..."
 sudo echo /usr/local/bin/fish >>/etc/shells
 chsh -s /usr/local/bin/fish
 
-# Update macOS Settings
 echo "Changing macOS defaults..."
 defaults write com.apple.dock autohide -bool true
 defaults write com.apple.spaces spans-displays -bool false
