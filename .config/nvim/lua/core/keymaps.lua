@@ -50,3 +50,6 @@ end, { noremap = true, expr = true })
 vim.keymap.set({ 'n', 'x' }, 'k', function()
   return vim.v.count > 1 and "m'" .. vim.v.count .. 'k' or 'k'
 end, { noremap = true, expr = true })
+
+-- Exit terminal mode
+map('t', '<Esc><Esc>', '<C-\\><C-n>', 'Exit terminal mode')
