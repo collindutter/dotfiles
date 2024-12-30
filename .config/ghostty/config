@@ -8,6 +8,7 @@ font-size = 17
 font-thicken
 
 bold-is-bright
+window-colorspace = display-p3
 
 background-opacity = 0.9
 background-blur-radius = 20
