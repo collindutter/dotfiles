@@ -1,0 +1,29 @@
+theme = catppuccin-macchiato
+
+font-family = "JetBrainsMono Nerd Font Mono"
+
+macos-titlebar-style = hidden
+
+font-size = 17
+font-thicken
+
+bold-is-bright
+
+background-opacity = 0.9
+background-blur-radius = 20
+
+mouse-hide-while-typing
+
+keybind = clear
+
+keybind = super+c=copy_to_clipboard
+keybind = super+v=paste_from_clipboard
+
+keybind = super+q=quit
+
+keybind = super+plus=increase_font_size:1
+keybind = super+equal=increase_font_size:1
+keybind = super+zero=reset_font_size
+keybind = super+minus=decrease_font_size:1
+
+keybind = super+r=reload_config
