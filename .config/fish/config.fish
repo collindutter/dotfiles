@@ -26,8 +26,7 @@ if status --is-interactive
 	fish_config theme choose "Catppuccin Macchiato"
 	
 	zoxide init fish | source
-	direnv hook fish | source
 	starship init fish | source
-
-	source ~/.asdf/asdf.fish
+	
+	mise activate fish | source
 end
