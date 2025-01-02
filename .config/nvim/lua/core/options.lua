@@ -73,3 +73,52 @@ o.splitkeep = 'screen' -- Reduce scroll during window split
 opt.foldmethod = 'expr' -- Enable treesitter folding
 opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()' -- Treesitter folding expression
 opt.foldlevel = 99 -- Don't autoclose folds
+
+-- Number of padding lines to simulate scrolling above the top
+local top_padding_lines = 10
+local padding_added = false
+
+local function add_top_padding()
+  local current_line = vim.fn.line '.'
+  if current_line == 1 and not padding_added then
+    -- Add blank lines at the top
+    vim.api.nvim_buf_set_lines(0, 0, 0, false, vim.fn['repeat']({ '' }, top_padding_lines))
+    padding_added = true
+    -- Move the cursor to a position below the padding
+    vim.cmd('normal! ' .. (top_padding_lines + 1) .. 'G')
+  end
+end
+
+local function remove_top_padding()
+  local current_line = vim.fn.line '.'
+  if padding_added and current_line > top_padding_lines then
+    -- Remove the blank lines when moving away from the top
+    vim.api.nvim_buf_set_lines(0, 0, top_padding_lines, false, {})
+    padding_added = false
+    -- Reset the cursor to the top of the document
+    vim.cmd 'normal! gg'
+  end
+end
+
+-- Adjust padding dynamically
+local function adjust_padding()
+  local current_line = vim.fn.line '.'
+  local total_lines = vim.fn.line '$'
+
+  -- Add or remove padding based on the current position
+  if current_line == 1 then
+    add_top_padding()
+  elseif padding_added and current_line > top_padding_lines then
+    remove_top_padding()
+  end
+
+  -- Prevent overscrolling beyond the bottom
+  if current_line > total_lines then
+    vim.cmd 'normal! G'
+  end
+end
+
+-- Set up an autocmd to trigger on cursor movement
+vim.api.nvim_create_autocmd('CursorMoved', {
+  callback = adjust_padding,
+})
