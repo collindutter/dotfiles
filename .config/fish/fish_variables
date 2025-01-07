@@ -1,6 +1,7 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
-SETUVAR --export MISE_ENV_FILE:\x2eenv # Dotenv support
+# Dotenv support
+SETUVAR --export MISE_ENV_FILE:\x2eenv
 SETUVAR --export STARSHIP_CONFIG:/Users/collindutter/\x2econfig/starship/starship\x2etoml
 SETUVAR --export XDG_CONFIG_HOME:/Users/collindutter/\x2econfig
 SETUVAR __fish_initialized:3400
