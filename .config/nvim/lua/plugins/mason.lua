@@ -68,12 +68,13 @@ return {
           },
         },
         ruff = {
-          capabilities = {
-            -- These are provided by pyright
-            -- This removes a redundant "No information found" message
-            hoverProvider = false,
-            documentFormattingProvider = false,
-          },
+          -- These are provided by pyright
+          -- This removes a redundant "No information found" message
+          -- https://github.com/astral-sh/ruff-lsp/issues/78#issuecomment-2395880563
+          on_attach = function(client, _)
+            client.server_capabilities.documentFormattingProvider = false
+            client.server_capabilities.hoverProvider = false
+          end,
         },
         ts_ls = {},
         html = {},
