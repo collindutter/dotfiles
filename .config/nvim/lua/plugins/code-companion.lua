@@ -9,7 +9,7 @@ return {
       chat = {
         window = {
           layout = 'vertical',
-          width = 0,
+          -- width = 0,
         },
       },
       diff = {
