@@ -17,10 +17,9 @@ return {
       },
     },
   },
-  init = function()
-    local map = require('helpers.keys').map
-    map('n', '<leader>au', '<cmd>CodeCompanionChat Toggle<cr>', '[a]I [u]I')
-    map('v', '<leader>au', '<cmd>CodeCompanionChat Toggle<cr>', '[a]I [u]I')
-    map('v', 'ga', '<cmd>CodeCompanionChat Add<cr>', '[g]lobal [a]dd to UI')
-  end,
+  keys = {
+    { '<leader>au', '<cmd>CodeCompanionChat Toggle<cr>', desc = '[a]I [u]I' },
+    { '<leader>au', '<cmd>CodeCompanionChat Toggle<cr>', mode = 'v', desc = '[a]I [u]I' },
+    { 'ga', '<cmd>CodeCompanionChat Add<cr>', mode = 'v', desc = '[g]lobal [a]dd to UI' },
+  },
 }

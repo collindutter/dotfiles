@@ -31,12 +31,9 @@ lazy.setup {
   change_detection = {
     notify = false,
   },
-  defaults = {
-    lazy = false,
-  },
   install = {
     colorscheme = { 'catppuccin' },
   },
 }
 
-require('helpers.keys').map('n', '<leader>L', lazy.show, 'Show [L]azy')
+vim.keymap.set('n', '<leader>L', lazy.show, { desc = 'Show [L]azy' })

@@ -9,9 +9,11 @@ return {
       ['H'] = 'actions.toggle_hidden',
     },
   },
-  init = function()
-    local map = require('helpers.keys').map
-
-    map('n', '-', '<cmd>Oil<cr>', 'Open Oil')
-  end,
+  keys = {
+    {
+      '-',
+      '<cmd>Oil<cr>',
+      desc = 'Open Oil',
+    },
+  },
 }

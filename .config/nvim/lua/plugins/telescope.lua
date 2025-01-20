@@ -1,7 +1,6 @@
 return {
   -- Fuzzy Finder (files, lsp, etc)
   'nvim-telescope/telescope.nvim',
-  branch = '0.1.x',
   dependencies = {
     'nvim-lua/plenary.nvim',
     {
@@ -25,36 +24,63 @@ return {
       },
     },
   },
-  init = function()
-    local map = require('helpers.keys').map
-
-    map('n', '<leader>fg', function()
-      require('telescope.builtin').git_files()
-    end, '[f]ind [g]it files')
-    map('n', '<leader>fb', function()
-      require('telescope.builtin').buffers { sort_mru = true, ignore_current_buffer = true }
-    end, '[f]ind [b]uffers')
-    map('n', '<leader>fo', function()
-      require('telescope.builtin').oldfiles()
-    end, '[f]ind [o]ld files')
-    map('n', '<leader>ff', function()
-      require('telescope').extensions.smart_open.smart_open {
-        cwd_only = true,
-      }
-    end, '[f]ind [f]iles')
-    map('n', '<leader>fh', function()
-      require('telescope.builtin').help_tags()
-    end, '[f]ind [h]elp')
-    map('n', '<leader>fc', function()
-      require('telescope.builtin').grep_string()
-    end, '[f]ind [c]current word')
-    map('n', '<leader>fw', function()
-      require('telescope.builtin').live_grep()
-    end, '[f]ind [w]ord')
-    map('n', '<leader>fr', function()
-      require('telescope.builtin').resume()
-    end, '[f]ind [r]esume')
-  end,
+  keys = {
+    -- Find
+    {
+      '<leader>ff',
+      function()
+        require('telescope').extensions.smart_open.smart_open {
+          cwd_only = true,
+        }
+      end,
+      desc = '[f]ind [f]iles',
+    },
+    -- Grep
+    {
+      '<leader>sg',
+      function()
+        require('telescope.builtin').live_grep()
+      end,
+      desc = '[s]earch [g]rep',
+    },
+    {
+      '<leader>sw',
+      function()
+        require('telescope.builtin').grep_string()
+      end,
+      mode = { 'n', 'x' },
+      desc = '[s]earch [w]ord',
+    },
+    -- Search
+    {
+      '<leader>sh',
+      function()
+        require('telescope.builtin').help_tags()
+      end,
+      desc = '[s]earch [h]elp',
+    },
+    {
+      '<leader>sr',
+      function()
+        require('telescope.builtin').resume()
+      end,
+      desc = '[s]earch [r]esume',
+    },
+    {
+      '<leader>gr',
+      function()
+        require('telescope.builtin').lsp_references()
+      end,
+      desc = '[g]oto [r]eferences',
+    },
+    {
+      '<leader>gi',
+      function()
+        require('telescope.builtin').lsp_implementations()
+      end,
+      desc = '[g]oto [i]mplementations',
+    },
+  },
   opts = function()
     local actions = require 'telescope.actions'
 

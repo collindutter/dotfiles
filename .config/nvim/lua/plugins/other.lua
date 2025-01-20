@@ -9,9 +9,11 @@ return {
       border = 'rounded',
     },
   },
-  init = function()
-    local map = require('helpers.keys').map
-
-    map('n', '<leader>o', '<cmd>Other<cr>', '[o]ther')
-  end,
+  keys = {
+    {
+      '<leader>o',
+      '<cmd>Other<cr>',
+      desc = '[o]ther file',
+    },
+  },
 }

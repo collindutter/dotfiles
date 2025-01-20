@@ -50,21 +50,13 @@ return {
           -- Diagnostics
           lsp_map('<leader>cd', vim.diagnostic.open_float, '[c]ode [d]iagnostic')
 
+          -- Go-Tos
           lsp_map('gd', vim.lsp.buf.definition, '[g]oto [d]efinition')
           lsp_map('gD', vim.lsp.buf.declaration, '[g]oto [D]eclartion')
-          lsp_map('gr', require('telescope.builtin').lsp_references, '[g]oto [r]eferences')
-          lsp_map('gI', require('telescope.builtin').lsp_implementations, '[g]oto [i]mplementation')
 
           lsp_map('<leader>lr', function()
             vim.cmd 'LspRestart'
           end, '[l]sp [r]estart')
-
-          local client = vim.lsp.get_client_by_id(event.data.client_id)
-          if client and client.server_capabilities.inlayHintProvider and vim.lsp.inlay_hint then
-            lsp_map('<leader>lh', function()
-              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled {})
-            end, '[l]sp toggle inlay [h]ints')
-          end
         end,
       })
 

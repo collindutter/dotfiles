@@ -20,30 +20,6 @@ return {
     end,
   },
   {
-    -- Remove buffers
-    'echasnovski/mini.bufremove',
-    opts = {},
-    init = function()
-      local map = require('helpers.keys').map
-
-      map('n', '<leader>bc', function()
-        require('mini.bufremove').delete(0, true)
-      end, '[b]uffer [c]lose')
-
-      map('n', '<leader>bo', function()
-        local bufremove = require 'mini.bufremove'
-        local buflist = vim.api.nvim_list_bufs()
-        local curbufnr = vim.api.nvim_get_current_buf()
-
-        for _, bufnr in ipairs(buflist) do
-          if vim.bo[bufnr].buflisted and bufnr ~= curbufnr and (vim.fn.getbufvar(bufnr, 'bufpersist') ~= 1) then
-            bufremove.delete(bufnr, true)
-          end
-        end
-      end, '[b]uffer close [o]thers')
-    end,
-  },
-  {
     -- Autopairs
     'echasnovski/mini.pairs',
     opts = {},
@@ -71,6 +47,7 @@ return {
   {
     -- Show indent scope, also adds Treesitter object `i` (i.e. `yai` `dii`).
     'echasnovski/mini.indentscope',
+    enabled = false,
     opts = {},
   },
   {
@@ -82,13 +59,8 @@ return {
     -- Icon provider
     'echasnovski/mini.icons',
     opts = {},
-    specs = { { 'nvim-tree/nvim-web-devicons', enabled = false, optional = true } },
-    init = function() -- https://old.reddit.com/r/neovim/comments/1duf3w7/miniicons_general_icon_provider_several/lbgbc6a/
-      package.preload['nvim-web-devicons'] = function() -- needed since it will be false when loading and mini will fail
-        package.loaded['nvim-web-devicons'] = {}
-        require('mini.icons').mock_nvim_web_devicons()
-        return package.loaded['nvim-web-devicons']
-      end
+    init = function()
+      require('mini.icons').mock_nvim_web_devicons()
     end,
   },
 }
