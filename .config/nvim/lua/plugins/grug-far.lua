@@ -1,12 +1,14 @@
 return {
   'MagicDuck/grug-far.nvim',
-  init = function()
-    local map = require('helpers.keys').map
-
-    map('n', '<leader>cw', function()
-      require('grug-far').grug_far()
-    end, '[c]hange [w]ords')
-  end,
+  keys = {
+    {
+      '<leader>sr',
+      function()
+        require('grug-far').open()
+      end,
+      desc = '[s]hange [r]eplace',
+    },
+  },
   opts = {
     keymaps = {
       qflist = { n = '<ctrl>q' },

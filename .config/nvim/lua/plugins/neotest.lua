@@ -9,39 +9,56 @@ return {
     -- Adapters
     'nvim-neotest/neotest-python',
   },
-  init = function()
-    local map = require('helpers.keys').map
-
-    map('n', '<leader>tc', function()
-      require('neotest').run.run(vim.fn.expand '%')
-    end, '[t]est [c]urrent file')
-
-    map('n', '<leader>tn', function()
-      require('neotest').run.run()
-    end, '[t]est [n]earest')
-
-    map('n', '<leader>td', function()
-      require('neotest').run.run {
-        suite = false,
-        strategy = 'dap',
-      }
-    end, '[t]est [d]ebug')
-
-    map('n', '<leader>dt', function()
-      require('neotest').run.run {
-        suite = false,
-        strategy = 'dap',
-      }
-    end, '[t]est [d]ebug')
-
-    map('n', '<leader>ts', function()
-      require('neotest').run.stop()
-    end, '[t]est [s]top')
-
-    map('n', '<leader>tu', function()
-      require('neotest').output_panel.toggle()
-    end, '[t]est [u]I')
-  end,
+  keys = {
+    {
+      '<leader>tc',
+      function()
+        require('neotest').run.run(vim.fn.expand '%')
+      end,
+      desc = '[t]est [c]urrent file',
+    },
+    {
+      '<leader>tn',
+      function()
+        require('neotest').run.run()
+      end,
+      desc = '[t]est [n]earest',
+    },
+    {
+      '<leader>td',
+      function()
+        require('neotest').run.run {
+          suite = false,
+          strategy = 'dap',
+        }
+      end,
+      desc = '[t]est [d]ebug',
+    },
+    {
+      '<leader>dt',
+      function()
+        require('neotest').run.run {
+          suite = false,
+          strategy = 'dap',
+        }
+      end,
+      desc = '[t]est [d]ebug',
+    },
+    {
+      '<leader>ts',
+      function()
+        require('neotest').run.stop()
+      end,
+      desc = '[t]est [s]top',
+    },
+    {
+      '<leader>tu',
+      function()
+        require('neotest').output_panel.toggle()
+      end,
+      desc = '[t]est [u]I',
+    },
+  },
   opts = function()
     return {
       adapters = {

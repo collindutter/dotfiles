@@ -1,10 +1,20 @@
 return {
   -- Show pending keybinds
   'folke/which-key.nvim',
+  event = 'VeryLazy',
   opts = {
     preset = 'helix',
     win = {
       border = 'rounded',
+    },
+  },
+  keys = {
+    {
+      '<leader>?',
+      function()
+        require('which-key').show { global = false }
+      end,
+      desc = 'Buffer Local Keymaps (which-key)',
     },
   },
   init = function()
@@ -18,6 +28,7 @@ return {
       { '<leader>t', group = 'Test' },
       { '<leader>s', group = 'Session' },
       { '<leader>l', group = 'Lsp' },
+      { '<leader>w', group = 'Windows' },
     }
   end,
 }

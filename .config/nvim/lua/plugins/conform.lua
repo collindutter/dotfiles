@@ -1,6 +1,7 @@
 return {
   -- Formatter
   'stevearc/conform.nvim',
+  event = { 'BufWritePre' },
   opts = {
     notify_on_error = false,
     formatters_by_ft = {
@@ -14,11 +15,13 @@ return {
       lsp_format = 'fallback',
     },
   },
-  init = function()
-    local map = require('helpers.keys').map
-
-    map('n', '<leader>cf', function()
-      require('conform').format()
-    end, '[c]ode [f]ormat')
-  end,
+  keys = {
+    {
+      '<leader>cf',
+      function()
+        require('conform').format()
+      end,
+      desc = '[c]ode [f]ormat',
+    },
+  },
 }

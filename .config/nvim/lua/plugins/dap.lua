@@ -2,37 +2,58 @@ return {
   {
     -- Debugger
     'mfussenegger/nvim-dap',
+    keys = {
+      {
+        '<leader>dc',
+        function()
+          require('dap').continue()
+        end,
+        desc = '[d]ebugger [c]ontinue',
+      },
+      {
+        '<leader>dl',
+        function()
+          require('dap').step_into()
+        end,
+        desc = '[d]ebugger step into',
+      },
+      {
+        '<leader>dj',
+        function()
+          require('dap').step_over()
+        end,
+        desc = '[d]ebugger step over',
+      },
+      {
+        '<leader>dh',
+        function()
+          require('dap').step_out()
+        end,
+        desc = '[d]ebugger step out',
+      },
+      {
+        '<leader>db',
+        function()
+          require('dap').toggle_breakpoint()
+        end,
+        desc = '[d]ebugger [b]reakpoint',
+      },
+      {
+        '<leader>dq',
+        function()
+          require('dap').close()
+        end,
+        desc = '[d]ebugger [q]uit',
+      },
+      {
+        '<leader>dQ',
+        function()
+          require('dap').terminate()
+        end,
+        desc = '[d]ebugger [Q]uit',
+      },
+    },
     init = function()
-      local map = require('helpers.keys').map
-
-      map('n', '<leader>dc', function()
-        require('dap').continue()
-      end, '[d]ebugger [c]ontinue')
-
-      map('n', '<leader>dl', function()
-        require('dap').step_into()
-      end, '[d]ebugger step into')
-
-      map('n', '<leader>dj', function()
-        require('dap').step_over()
-      end, '[d]ebugger step over')
-
-      map('n', '<leader>dh', function()
-        require('dap').step_out()
-      end, '[d]ebugger step out')
-
-      map('n', '<leader>db', function()
-        require('dap').toggle_breakpoint()
-      end, '[d]ebugger [b]reakpoint')
-
-      map('n', '<leader>dq', function()
-        require('dap').close()
-      end, '[d]ebugger [q]uit')
-
-      map('n', '<leader>dQ', function()
-        require('dap').terminate()
-      end, '[d]ebugger [Q]uit')
-
       -- Make UI pretty
       local signs = {
         ['DapBreakpoint'] = '',
@@ -51,13 +72,15 @@ return {
     {
       'igorlfs/nvim-dap-view',
       opts = {},
-      init = function()
-        local map = require('helpers.keys').map
-
-        map('n', '<leader>du', function()
-          require('dap-view').toggle()
-        end, '[d]ebugger [u]I')
-      end,
+      keys = {
+        {
+          '<leader>du',
+          function()
+            require('dap-view').toggle()
+          end,
+          desc = '[d]ebugger [u]I',
+        },
+      },
     },
   },
   {
