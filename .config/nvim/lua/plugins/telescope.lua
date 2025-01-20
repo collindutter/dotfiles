@@ -68,7 +68,7 @@ return {
             prompt_position = 'top',
           },
           vertical = {
-            mirror = false,
+            mirror = true,
           },
         },
         mappings = {
