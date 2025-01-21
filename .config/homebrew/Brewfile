@@ -2,6 +2,7 @@
 tap "koekeishiya/formulae"
 tap "felixkratz/formulae"
 tap "charmbracelet/tap"
+tap "fish-shell/fish-beta-4"
 
 brew "bat"
 brew "eza"
