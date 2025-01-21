@@ -1,7 +1,8 @@
 [tools]
 python = "latest"
 node = "latest"
-neovim = "latest"
+neovim = ["nightly", "latest"]
 
 [alias]
 neovim = "https://github.com/richin13/asdf-neovim"
+
