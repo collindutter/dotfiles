@@ -60,11 +60,11 @@ return {
       desc = '[s]earch [h]elp',
     },
     {
-      '<leader>sr',
+      '<leader>sR',
       function()
         require('telescope.builtin').resume()
       end,
-      desc = '[s]earch [r]esume',
+      desc = '[s]earch [R]esume',
     },
     {
       '<leader>gr',
