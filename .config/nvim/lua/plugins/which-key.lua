@@ -28,7 +28,6 @@ return {
       { '<leader>t', group = 'Test' },
       { '<leader>s', group = 'Session' },
       { '<leader>l', group = 'Lsp' },
-      { '<leader>w', group = 'Windows' },
     }
   end,
 }

@@ -11,7 +11,7 @@ return {
   },
   opts = {
     keymaps = {
-      qflist = { n = '<ctrl>q' },
+      qflist = { n = '<C-q>' },
       close = false,
     },
   },
