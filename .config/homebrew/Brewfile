@@ -29,6 +29,7 @@ brew "gh"
 brew "mise"
 brew "ollama"
 brew "presenterm"
+brew "portaudio"
 
 cask "font-jetbrains-mono-nerd-font"
 cask "ngrok"
