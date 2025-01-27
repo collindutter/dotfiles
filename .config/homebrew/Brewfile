@@ -28,7 +28,7 @@ brew "delta"
 brew "gh"
 brew "mise"
 brew "ollama"
-brew "presenterm"
+brew "presenterm", args: ["build-from-source"] # Required for ghostty image support
 brew "portaudio"
 
 cask "font-jetbrains-mono-nerd-font"
