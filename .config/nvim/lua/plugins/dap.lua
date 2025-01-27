@@ -4,6 +4,14 @@ return {
     'mfussenegger/nvim-dap',
     keys = {
       {
+        '<leader>ds',
+        function()
+          local widgets = require 'dap.ui.widgets'
+          widgets.centered_float(widgets.scopes, { border = 'rounded' })
+        end,
+        desc = '[d]ebugger [s]copes',
+      },
+      {
         '<leader>dc',
         function()
           require('dap').continue()
