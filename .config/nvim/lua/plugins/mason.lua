@@ -162,7 +162,7 @@ return {
             Lua = {},
           },
         },
-        angularls = {},
+        -- angularls = {}, https://github.com/neovim/nvim-lspconfig/issues/3593
       },
     },
     config = function(_, opts)
