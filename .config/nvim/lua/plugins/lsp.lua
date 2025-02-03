@@ -6,8 +6,9 @@ return {
     ft = 'lua',
     opts = {
       library = {
-        -- Load luvit types when the `vim.uv` word is found
         { path = '${3rd}/luv/library', words = { 'vim%.uv' } },
+        { path = 'snacks.nvim', words = { 'Snacks' } },
+        { path = 'lazy.nvim', words = { 'LazyVim' } },
       },
     },
   },
@@ -49,10 +50,6 @@ return {
 
           -- Diagnostics
           lsp_map('<leader>cd', vim.diagnostic.open_float, '[c]ode [d]iagnostic')
-
-          -- Go-Tos
-          lsp_map('gd', vim.lsp.buf.definition, '[g]oto [d]efinition')
-          lsp_map('gD', vim.lsp.buf.declaration, '[g]oto [D]eclartion')
 
           lsp_map('<leader>lr', function()
             vim.cmd 'LspRestart'
