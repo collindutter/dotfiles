@@ -11,7 +11,13 @@ return {
     {
       '<leader>ff',
       function()
-        Snacks.picker.smart()
+        Snacks.picker.smart {
+          filter = {
+            paths = {
+              cwd = true,
+            },
+          },
+        }
       end,
       desc = '[f]ind [f]iles',
     },
