@@ -45,12 +45,6 @@ return {
     opts = {},
   },
   {
-    -- Show indent scope, also adds Treesitter object `i` (i.e. `yai` `dii`).
-    'echasnovski/mini.indentscope',
-    enabled = false,
-    opts = {},
-  },
-  {
     -- Work with diff hunks
     'echasnovski/mini.diff',
     opts = {},
