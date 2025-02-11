@@ -102,4 +102,15 @@ return {
       handlers = {},
     },
   },
+  {
+    -- Debug adapter setup
+    'jay-babu/mason-nvim-dap.nvim',
+    dependencies = {
+      'williamboman/mason.nvim',
+      'mfussenegger/nvim-dap',
+    },
+    opts = {
+      handlers = {},
+    },
+  },
 }
