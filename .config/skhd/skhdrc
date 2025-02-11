@@ -6,4 +6,3 @@ ctrl + shift - down  : yabai -m window --grid 2:1:0:1:1:1
 ctrl + shift - up  : yabai -m window --grid 2:1:0:0:1:1
 ctrl + shift - left : yabai -m window --grid 1:2:0:0:1:1
 ctrl + shift - right : yabai -m window --grid 1:2:1:1:1:1
-
