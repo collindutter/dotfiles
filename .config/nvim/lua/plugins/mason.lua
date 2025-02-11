@@ -18,6 +18,7 @@ return {
         -- LSPs
         'jsonls',
         'pyright',
+        'basedpyright',
         'ts_ls',
         'typos_lsp',
         'yamlls',
