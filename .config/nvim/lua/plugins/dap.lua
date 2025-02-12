@@ -2,6 +2,20 @@ return {
   {
     -- Debugger
     'mfussenegger/nvim-dap',
+    dependencies = {
+      {
+        'igorlfs/nvim-dap-view',
+        keys = {
+          {
+            '<leader>du',
+            function()
+              require('dap-view').toggle()
+            end,
+            desc = '[d]ebugger [u]I',
+          },
+        },
+      },
+    },
     keys = {
       {
         '<leader>ds',
@@ -75,21 +89,6 @@ return {
         vim.fn.sign_define(type, { text = icon, texthl = type, numhl = type })
       end
     end,
-  },
-  {
-    {
-      'igorlfs/nvim-dap-view',
-      opts = {},
-      keys = {
-        {
-          '<leader>du',
-          function()
-            require('dap-view').toggle()
-          end,
-          desc = '[d]ebugger [u]I',
-        },
-      },
-    },
   },
   {
     -- Debug adapter setup
