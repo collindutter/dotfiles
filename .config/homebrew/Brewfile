@@ -3,6 +3,7 @@ tap "koekeishiya/formulae"
 tap "felixkratz/formulae"
 tap "charmbracelet/tap"
 tap "fish-shell/fish-beta-4"
+tap "smithy-lang/tap"
 
 brew "bat"
 brew "eza"
@@ -29,8 +30,9 @@ brew "delta"
 brew "gh"
 brew "mise"
 brew "ollama"
-brew "presenterm", args: ["build-from-source"] # Required for ghostty image support
+brew "presenterm"
 brew "portaudio"
+brew "smithy-cli"
 
 cask "font-jetbrains-mono-nerd-font"
 cask "ngrok"
