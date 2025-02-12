@@ -25,6 +25,7 @@ return {
         'lua_ls',
         'angularls',
         'marksman',
+        'html',
         -- Formatters
         'prettier',
         'stylua',
