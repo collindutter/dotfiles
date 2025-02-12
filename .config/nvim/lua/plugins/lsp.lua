@@ -82,26 +82,23 @@ return {
       --  For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       servers = {
         jsonls = {},
-        basedpyright = {
-          settings = {},
+        pyright = {
+          settings = {
+            pyright = {
+              -- Using Ruff's import organizer
+              disableOrganizeImports = true,
+            },
+            python = {
+              pythonPath = '.venv/bin/python',
+              analysis = {
+                useLibraryCodeForTypes = true,
+                typeCheckingMode = 'basic',
+                autoSearchPaths = true,
+                diagnosticMode = 'openFilesOnly',
+              },
+            },
+          },
         },
-        -- pyright = {
-        --   settings = {
-        --     pyright = {
-        --       -- Using Ruff's import organizer
-        --       disableOrganizeImports = true,
-        --     },
-        --     python = {
-        --       pythonPath = '.venv/bin/python',
-        --       analysis = {
-        --         useLibraryCodeForTypes = true,
-        --         typeCheckingMode = 'basic',
-        --         autoSearchPaths = true,
-        --         diagnosticMode = 'openFilesOnly',
-        --       },
-        --     },
-        --   },
-        -- },
         ruff = {
           -- These are provided by pyright
           -- This removes a redundant "No information found" message
