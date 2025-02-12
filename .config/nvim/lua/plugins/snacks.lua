@@ -5,7 +5,11 @@ return {
   ---@type snacks.Config
   opts = {
     indent = {}, -- Indent scope
-    picker = {}, -- Fuzzy picker
+    picker = {
+      layout = {
+        preset = 'ivy',
+      },
+    }, -- Fuzzy picker
   },
   keys = {
     {
