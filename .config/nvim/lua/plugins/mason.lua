@@ -26,6 +26,7 @@ return {
         'angularls',
         'marksman',
         'html',
+        'jinja_lsp',
         -- Formatters
         'prettier',
         'stylua',
@@ -33,9 +34,19 @@ return {
         -- Linters
         'luacheck',
         'eslint',
+        'djlint',
         -- Debuggers
         'debugpy',
       },
     },
+    init = function()
+      vim.filetype.add {
+        extension = {
+          jinja = 'jinja',
+          jinja2 = 'jinja',
+          j2 = 'jinja',
+        },
+      }
+    end,
   },
 }

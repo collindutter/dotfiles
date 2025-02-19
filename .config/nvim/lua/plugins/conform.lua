@@ -9,6 +9,7 @@ return {
       lua = { 'stylua' },
       typescript = { 'prettier' },
       json = { 'jq' },
+      htmldjango = { 'djlint' },
     },
     format_on_save = {
       timeout_ms = 500,

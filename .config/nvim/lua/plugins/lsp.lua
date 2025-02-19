@@ -108,9 +108,13 @@ return {
             client.server_capabilities.hoverProvider = false
           end,
         },
+        marksman = {},
         ts_ls = {},
         html = {},
         typos_lsp = {},
+        jinja_lsp = {
+          filetypes = { 'jinja', 'jinja2', 'j2', 'htmldjango' },
+        },
         yamlls = {
           settings = {
             yaml = {
