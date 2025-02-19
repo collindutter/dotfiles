@@ -5,11 +5,21 @@ return {
   ---@type snacks.Config
   opts = {
     indent = {}, -- Indent scope
+    ---@param opts? snacks.input.Opts
+    --- Better input (replaces dressing.nvim)
+    input = {
+      win = {
+        relative = 'cursor',
+        row = -3,
+        col = 0,
+      },
+    },
+    -- Fuzzy picker (replaces telescope.nvim)
     picker = {
       layout = {
         preset = 'ivy',
       },
-    }, -- Fuzzy picker
+    },
   },
   keys = {
     {
