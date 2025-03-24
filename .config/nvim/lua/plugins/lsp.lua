@@ -25,14 +25,6 @@ return {
           },
         },
         severity_sort = true,
-        float = {
-          border = 'rounded',
-        },
-      },
-      ui = {
-        float = {
-          border = 'rounded',
-        },
       },
     },
     config = function(_, opts)
@@ -59,13 +51,7 @@ return {
 
       -- Make diagnostics pretty
       vim.diagnostic.config(opts.diagnostic_config)
-      -- Hover configuration
-      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, opts.ui.float)
-      -- Signature help configuration
-      vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, opts.ui.float)
 
-      -- Add border to :LspInfo
-      require('lspconfig.ui.windows').default_options.border = 'rounded'
     end,
   },
   {
