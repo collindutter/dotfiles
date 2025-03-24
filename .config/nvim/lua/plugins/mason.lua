@@ -31,6 +31,7 @@ return {
         'prettier',
         'stylua',
         'ruff',
+        'taplo',
         -- Linters
         'luacheck',
         'eslint',
