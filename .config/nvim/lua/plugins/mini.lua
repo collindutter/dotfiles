@@ -20,11 +20,6 @@ return {
     end,
   },
   {
-    -- Autopairs
-    'echasnovski/mini.pairs',
-    opts = {},
-  },
-  {
     -- Surround actions
     'echasnovski/mini.surround',
     opts = {
