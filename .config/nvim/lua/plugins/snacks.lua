@@ -20,6 +20,8 @@ return {
         preset = 'ivy',
       },
     },
+    -- Image support
+    image = {},
   },
   keys = {
     {
