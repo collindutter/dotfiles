@@ -18,8 +18,7 @@ return {
     },
   },
   keys = {
-    { '<leader>au', '<cmd>CodeCompanionChat Toggle<cr>', desc = '[a]I [u]I' },
-    { '<leader>au', '<cmd>CodeCompanionChat Toggle<cr>', mode = 'v', desc = '[a]I [u]I' },
+    { '<leader>ua', '<cmd>CodeCompanionChat Toggle<cr>', mode = { 'n', 'v' }, desc = '[u]I [a]I' },
     { 'ga', '<cmd>CodeCompanionChat Add<cr>', mode = 'v', desc = '[g]lobal [a]dd to UI' },
   },
 }
