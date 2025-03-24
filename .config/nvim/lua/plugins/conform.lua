@@ -9,7 +9,8 @@ return {
       lua = { 'stylua' },
       typescript = { 'prettier' },
       json = { 'jq' },
-      htmldjango = { 'djlint' },
+      htmldjango = { 'prettier' },
+      toml = { 'taplo' },
     },
     format_on_save = {
       timeout_ms = 500,
