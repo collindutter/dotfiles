@@ -1,7 +1,7 @@
 return {
   'saghen/blink.cmp',
   -- build = 'cargo build --release',
-  version = 'v0.*',
+  version = '1.*',
   enabled = true,
   opts_extend = {
     'sources.default',
