@@ -120,7 +120,7 @@ return {
       desc = '[g]oto [D]eclaration',
     },
     {
-      'gr',
+      'grr',
       function()
         Snacks.picker.lsp_references()
       end,
@@ -128,7 +128,7 @@ return {
       desc = '[g]oto [r]eferences',
     },
     {
-      'gI',
+      'gri',
       function()
         Snacks.picker.lsp_implementations()
       end,
