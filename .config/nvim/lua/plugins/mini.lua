@@ -35,11 +35,6 @@ return {
     },
   },
   {
-    -- Go forward/backward with square brackets
-    'echasnovski/mini.bracketed',
-    opts = {},
-  },
-  {
     -- Work with diff hunks
     'echasnovski/mini.diff',
     opts = {},
