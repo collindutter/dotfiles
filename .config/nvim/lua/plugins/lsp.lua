@@ -31,21 +31,12 @@ return {
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
         callback = function(event)
-          local function lsp_map(lhs, rhs, desc, mode)
-            mode = mode or 'n'
-            vim.keymap.set(mode, lhs, rhs, { buffer = event.buf, desc = desc })
-          end
-
-          -- Actions
-          lsp_map('<leader>cr', vim.lsp.buf.rename, '[c]ode [r]ename')
-          lsp_map('<leader>ca', vim.lsp.buf.code_action, '[c]ode [a]ction', { 'n', 'x' })
-
           -- Diagnostics
-          lsp_map('<leader>cd', vim.diagnostic.open_float, '[c]ode [d]iagnostic')
+          vim.keymap.set({ 'n' }, '<leader>cd', vim.diagnostic.open_float, { buffer = event.buf, desc = '[c]ode [d]iagnostic' })
 
-          lsp_map('<leader>lr', function()
+          vim.keymap.set({ 'n' }, '<leader>lr', function()
             vim.cmd 'LspRestart'
-          end, '[l]sp [r]estart')
+          end, { buffer = event.buf, desc = '[l]sp [r]estart' })
         end,
       })
 
