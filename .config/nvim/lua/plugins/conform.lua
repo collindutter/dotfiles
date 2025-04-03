@@ -11,6 +11,8 @@ return {
       json = { 'jq' },
       htmldjango = { 'prettier' },
       toml = { 'taplo' },
+      bash = { 'shfmt' },
+      sh = { 'shfmt' },
     },
     format_on_save = {
       timeout_ms = 500,

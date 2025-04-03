@@ -32,6 +32,7 @@ return {
         'stylua',
         'ruff',
         'taplo',
+        'shfmt',
         -- Linters
         'luacheck',
         'eslint',
