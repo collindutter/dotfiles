@@ -132,7 +132,7 @@ return {
       function()
         Snacks.picker.lsp_implementations()
       end,
-      desc = '[g]oto [I]mplementations',
+      desc = '[g]oto [i]mplementations',
     },
     -- Buffer delete
     {
