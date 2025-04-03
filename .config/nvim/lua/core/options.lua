@@ -72,6 +72,6 @@ o.splitkeep = 'screen' -- Reduce scroll during window split
 
 o.winborder = 'rounded' -- Use rounded borders
 
-opt.foldmethod = 'expr' -- Enable treesitter folding
-opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()' -- Treesitter folding expression
+opt.foldmethod = 'expr' -- Enable expression folding
+opt.foldexpr = 'v:vim.lsp.foldexpr()' -- LSP folding expression
 opt.foldlevel = 99 -- Don't autoclose folds
