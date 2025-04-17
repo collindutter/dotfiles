@@ -10,6 +10,7 @@ return {
       typescript = { 'prettier' },
       json = { 'jq' },
       htmldjango = { 'prettier' },
+      html = { 'prettier' },
       toml = { 'taplo' },
       bash = { 'shfmt' },
       sh = { 'shfmt' },
