@@ -26,6 +26,22 @@ return {
         desc = '[d]ebugger [s]copes',
       },
       {
+        '<leader>dK',
+        function()
+          local widgets = require 'dap.ui.widgets'
+          widgets.hover()
+        end,
+        desc = '[d]ebugger hover',
+      },
+      {
+        '<leader>df',
+        function()
+          local widgets = require 'dap.ui.widgets'
+          widgets.centered_float(widgets.frames, { border = 'rounded' })
+        end,
+        desc = '[d]ebugger hover',
+      },
+      {
         '<leader>dc',
         function()
           require('dap').continue()
@@ -89,17 +105,6 @@ return {
         vim.fn.sign_define(type, { text = icon, texthl = type, numhl = type })
       end
     end,
-  },
-  {
-    -- Debug adapter setup
-    'jay-babu/mason-nvim-dap.nvim',
-    dependencies = {
-      'williamboman/mason.nvim',
-      'mfussenegger/nvim-dap',
-    },
-    opts = {
-      handlers = {},
-    },
   },
   {
     -- Debug adapter setup
