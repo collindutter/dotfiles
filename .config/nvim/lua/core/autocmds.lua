@@ -66,3 +66,15 @@ vim.api.nvim_create_autocmd('FileType', {
     end)
   end,
 })
+
+-- Set up LSP-specific keymaps
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('lsp_attach', { clear = true }),
+  callback = function(event)
+    vim.keymap.set({ 'n' }, '<leader>cd', vim.diagnostic.open_float, { buffer = event.buf, desc = '[c]ode [d]iagnostic' })
+
+    vim.keymap.set({ 'n' }, '<leader>lr', function()
+      vim.cmd 'LspRestart'
+    end, { buffer = event.buf, desc = '[l]sp [r]estart' })
+  end,
+})
