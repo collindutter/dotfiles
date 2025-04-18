@@ -1,5 +1,3 @@
-local M = {}
-
 -- Hack for high CPU https://github.com/neovim/neovim/issues/23291#issuecomment-1712422887
 local watch_type = require('vim._watch').FileChangeType
 
@@ -21,7 +19,7 @@ local function handler(res, callback)
   end
 end
 
-function M.watchfunc(path, _, callback)
+local function watchfunc(path, _, callback)
   vim.system({ 'watchman', 'watch', path }):wait()
 
   local buf = {}
@@ -61,4 +59,7 @@ function M.watchfunc(path, _, callback)
   end
 end
 
-return M
+-- Set up file watcher that uses watchman
+if vim.fn.executable 'watchman' == 1 then
+  require('vim.lsp._watchfiles')._watchfunc = watchfunc
+end
