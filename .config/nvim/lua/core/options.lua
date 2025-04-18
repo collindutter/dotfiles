@@ -75,3 +75,16 @@ o.winborder = 'rounded' -- Use rounded borders
 opt.foldmethod = 'expr' -- Enable expression folding
 opt.foldexpr = 'v:vim.lsp.foldexpr()' -- LSP folding expression
 opt.foldlevel = 99 -- Don't autoclose folds
+
+-- Make diagnostics pretty
+vim.diagnostic.config {
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '',
+      [vim.diagnostic.severity.WARN] = '',
+      [vim.diagnostic.severity.HINT] = '󰌵',
+      [vim.diagnostic.severity.INFO] = '󰋼',
+    },
+  },
+  severity_sort = true,
+}
