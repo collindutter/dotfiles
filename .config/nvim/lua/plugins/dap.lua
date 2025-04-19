@@ -15,6 +15,10 @@ return {
           },
         },
       },
+      {
+        'theHamsta/nvim-dap-virtual-text',
+        opts = {},
+      },
     },
     keys = {
       {
@@ -104,17 +108,21 @@ return {
       for type, icon in pairs(signs) do
         vim.fn.sign_define(type, { text = icon, texthl = type, numhl = type })
       end
+
+      local dap = require 'dap'
+      dap.adapters.debugpy = dap.adapters.python
     end,
   },
   {
-    -- Debug adapter setup
-    'jay-babu/mason-nvim-dap.nvim',
+    -- mason-nvim-dap doesn't register debugpy as an adapter which is required for v*code's launch.json
+    --- https://github.com/mfussenegger/nvim-dap-python/issues/129
+    'mfussenegger/nvim-dap-python',
     dependencies = {
-      'williamboman/mason.nvim',
       'mfussenegger/nvim-dap',
     },
-    opts = {
-      handlers = {},
-    },
+    config = function()
+      local mason_dir = vim.fs.joinpath(vim.fn.stdpath 'data', 'mason', 'packages')
+      require('dap-python').setup(vim.fs.joinpath(mason_dir, 'debugpy', 'venv', 'bin', 'python'))
+    end,
   },
 }
