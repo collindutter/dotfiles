@@ -8,6 +8,7 @@ return {
       python = { 'ruff_fix', 'ruff_format' },
       lua = { 'stylua' },
       typescript = { 'prettier' },
+      typescriptreact = { 'prettier' },
       json = { 'jq' },
       htmldjango = { 'prettier' },
       html = { 'prettier' },
