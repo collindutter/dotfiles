@@ -10,19 +10,11 @@ return {
     },
   },
   {
-    -- Bridges the gap between Mason and LSP
+    -- Automatically enables LSPs for installed servers
     'mason-org/mason-lspconfig.nvim',
     dependencies = {
       'neovim/nvim-lspconfig',
     },
-    opts = {
-      ensure_installed = {},
-      automatic_installation = false,
-      handlers = {
-        function(name)
-          vim.lsp.enable(name)
-        end,
-      },
-    },
+    opts = {},
   },
 }
