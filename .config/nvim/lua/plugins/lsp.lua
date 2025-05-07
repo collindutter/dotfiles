@@ -11,7 +11,7 @@ return {
   },
   {
     -- Bridges the gap between Mason and LSP
-    'williamboman/mason-lspconfig.nvim',
+    'mason-org/mason-lspconfig.nvim',
     dependencies = {
       'neovim/nvim-lspconfig',
     },
