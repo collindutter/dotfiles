@@ -14,5 +14,6 @@
 	enabled = true
 [core]
 	autocrlf = input
+	editor = nvim
 [init]
 	defaultBranch = main
