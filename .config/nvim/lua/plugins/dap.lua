@@ -43,7 +43,7 @@ return {
           local widgets = require 'dap.ui.widgets'
           widgets.centered_float(widgets.frames, { border = 'rounded' })
         end,
-        desc = '[d]ebugger hover',
+        desc = '[d]ebugger [f]rames',
       },
       {
         '<leader>dc',
