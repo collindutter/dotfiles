@@ -34,6 +34,10 @@ end, { desc = 'Save file' })
 -- Paste without yanking
 vim.keymap.set('x', 'p', '"_dP', { desc = 'Paste without yanking' })
 
+-- Paste in insert mode with sane formatting
+-- https://www.reddit.com/r/neovim/comments/ywn367/til_pasting_with_crco_instead_of_cr_in_insert/
+vim.keymap.set('i', '<C-r>', '<C-r><C-o>', { noremap = true, desc = "Insert contents of register literally and don't auto-indent" })
+
 -- Ese `gp` to visually select the last paste
 vim.keymap.set('n', 'gp', function()
   return '`[' .. string.sub(vim.fn.getregtype(), 1, 1) .. '`]'
