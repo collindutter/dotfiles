@@ -28,3 +28,4 @@ keybind = super+zero=reset_font_size
 keybind = super+minus=decrease_font_size:1
 
 keybind = super+r=reload_config
+keybind = shift+enter=text:\n
