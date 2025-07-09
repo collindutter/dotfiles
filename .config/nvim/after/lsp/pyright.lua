@@ -10,7 +10,6 @@ return {
         useLibraryCodeForTypes = true,
         typeCheckingMode = 'basic',
         autoSearchPaths = true,
-        diagnosticMode = 'openFilesOnly',
       },
     },
   },
