@@ -7,12 +7,16 @@ return {
     vim.cmd.colorscheme 'catppuccin'
   end,
   opts = {
-    transparent_background = true,
+    transparent_background = true, -- disables setting the background color.
+    float = {
+      transparent = true, -- enable transparent floating windows
+    },
     styles = {
       comments = {}, -- by default it's italic
       conditionals = {}, -- by default it's italic
     },
     integrations = {
+
       dap = true,
       dap_ui = true,
       flash = true,
