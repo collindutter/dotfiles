@@ -2,11 +2,7 @@ return {
   {
     -- Package manager
     'mason-org/mason.nvim',
-    opts = {
-      ui = {
-        border = 'rounded',
-      },
-    },
+    opts = {},
   },
   {
     -- Automatically install LSPs, formatters, linters, and debuggers
