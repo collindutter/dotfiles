@@ -1,3 +1,5 @@
+https://www.atlassian.com/git/tutorials/dotfiles
+
 Don't actually run this unless you're Collin.
 
 ```bash
