@@ -45,10 +45,3 @@ echo ".dotfiles" >>.gitignore
 git clone --bare https://github.com/collindutter $HOME/.dotfiles
 dotfiles checkout
 dotfiles config --local status.showUntrackedFiles no
-
-echo "Configuring neovim virtualenvs..."
-mkdir .virtualenvs
-python -m venv .virtualenvs/py3nvim
-./virtualenvs/bin/pip install pynvim
-python -m venv .virtualenvs/debugpy
-./virtualenvs/bin/pip install debugpy
