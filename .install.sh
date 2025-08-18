@@ -29,9 +29,6 @@ defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
 defaults write com.apple.Finder AppleShowAllFiles -bool true
 
-echo "Installing poetry..."
-pipx install poetry
-
 echo "Installing tpm..."
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
@@ -41,10 +38,6 @@ curl -sL https://raw.githubusercontent.com/jorgebucaran/fisher/main/functions/fi
 echo "Installing Fisher packages..."
 fisher install PatrickF1/fzf.fish
 fisher install catppuccin/fish
-
-echo "Configuring poetry..."
-poetry config virtualenvs.in-project true
-poetry config virtualenvs.prefer-active-python true
 
 echo "Configuring dotfiles..."
 alias --save dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
