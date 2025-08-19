@@ -1,6 +1,7 @@
 [tools]
 python = "latest"
 node = "latest"
+rust = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["python"]
