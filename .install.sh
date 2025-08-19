@@ -21,6 +21,7 @@ defaults write com.apple.dock autohide -bool true
 defaults write com.apple.spaces spans-displays -bool false
 
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+defaults write NSGlobalDomain InitialKeyRepeat -int 10
 defaults write NSGlobalDomain KeyRepeat -int 1
 
 defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
