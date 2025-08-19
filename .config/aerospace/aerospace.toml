@@ -1,0 +1,39 @@
+# AeroSpace Configuration
+# Equivalent to your existing skhd and yabai setup
+
+# Global Settings (equivalent to yabai config)
+accordion-padding = 0
+default-root-container-layout = 'tiles'
+default-root-container-orientation = 'auto'
+
+# Window appearance settings (from yabai config)
+[gaps]
+inner.horizontal = 0
+inner.vertical = 0
+outer.left = 0
+outer.right = 0
+outer.top = 0
+outer.bottom = 0
+
+# Key bindings (equivalent to skhd config)
+[mode.main.binding]
+
+# Space/workspace navigation (equivalent to ctrl + shift - h/l)
+ctrl-shift-h = 'workspace prev'
+ctrl-shift-l = 'workspace next'
+
+# Window positioning (equivalent to yabai grid commands)
+# Fullscreen window (equivalent to yabai -m window --grid 1:1:0:0:1:1)
+ctrl-shift-k = 'fullscreen'
+
+# Bottom half (equivalent to yabai -m window --grid 2:1:0:1:1:1)
+ctrl-shift-down = 'resize smart -50'
+
+# Top half (equivalent to yabai -m window --grid 2:1:0:0:1:1)  
+ctrl-shift-up = 'resize smart +50'
+
+# Left half (equivalent to yabai -m window --grid 1:2:0:0:1:1)
+ctrl-shift-left = 'move left'
+
+# Right half (equivalent to yabai -m window --grid 1:2:1:1:1:1)
+ctrl-shift-right = 'move right'
