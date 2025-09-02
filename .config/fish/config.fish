@@ -30,7 +30,7 @@ if status --is-interactive
 	set fish_greeting
 	
 	# Improve fzf key bindings
-	fzf_configure_bindings --directory=\cf --git_log=\cl
+	fzf_configure_bindings --directory=\cf
 	
 	fish_config theme choose "Catppuccin Macchiato"
 	
