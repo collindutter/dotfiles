@@ -16,7 +16,6 @@ return {
       conditionals = {}, -- by default it's italic
     },
     integrations = {
-
       dap = true,
       dap_ui = true,
       flash = true,
