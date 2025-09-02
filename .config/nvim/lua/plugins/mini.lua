@@ -1,15 +1,14 @@
 return {
   {
     -- Extend and create a/i textobjects
-    'echasnovski/mini.ai',
+    'nvim-mini/mini.ai',
     dependencies = {
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     config = function()
       local spec_treesitter = require('mini.ai').gen_spec.treesitter
+
       require('mini.ai').setup {
-        -- Number of lines within which textobject is searched
-        n_lines = 200,
         custom_textobjects = {
           f = spec_treesitter { a = '@function.outer', i = '@function.inner' },
           c = spec_treesitter { a = '@class.outer', i = '@class.inner' },
@@ -23,7 +22,7 @@ return {
   },
   {
     -- Surround actions
-    'echasnovski/mini.surround',
+    'nvim-mini/mini.surround',
     opts = {
       mappings = {
         add = 'gsa', -- Add surrounding in Normal and Visual modes
@@ -38,12 +37,12 @@ return {
   },
   {
     -- Work with diff hunks
-    'echasnovski/mini.diff',
+    'nvim-mini/mini.diff',
     opts = {},
   },
   {
     -- Icon provider
-    'echasnovski/mini.icons',
+    'nvim-mini/mini.icons',
     opts = {},
     init = function()
       require('mini.icons').mock_nvim_web_devicons()
