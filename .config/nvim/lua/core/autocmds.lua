@@ -10,10 +10,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 vim.api.nvim_create_autocmd('CursorMoved', {
   group = vim.api.nvim_create_augroup('auto_hlsearch', { clear = true }),
   callback = function()
-    if vim.v.hlsearch == 1 and vim.fn.searchcount().exact_match == 0 then
-      vim.schedule(function()
-        vim.cmd.nohlsearch()
-      end)
+    if vim.v.hlsearch == 1 then
+      local ok, search_count = pcall(vim.fn.searchcount)
+      if ok and search_count.exact_match == 0 then
+        vim.schedule(function()
+          vim.cmd.nohlsearch()
+        end)
+      end
     end
   end,
 })
