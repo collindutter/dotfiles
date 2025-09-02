@@ -21,7 +21,7 @@ defaults write com.apple.dock autohide -bool true
 defaults write com.apple.spaces spans-displays -bool false
 
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-defaults write NSGlobalDomain InitialKeyRepeat -int 10
+defaults write NSGlobalDomain InitialKeyRepeat -int 15
 defaults write NSGlobalDomain KeyRepeat -int 1
 
 defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool false
@@ -29,6 +29,8 @@ defaults write com.apple.finder ShowHardDrivesOnDesktop -bool false
 defaults write com.apple.finder ShowMountedServersOnDesktop -bool false
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool false
 defaults write com.apple.Finder AppleShowAllFiles -bool true
+# https://apple.stackexchange.com/questions/284467/how-to-set-finder-to-always-use-list-view
+defaults write com.apple.finder FXPreferredViewStyle -string "Nlsv"
 
 echo "Installing tpm..."
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
