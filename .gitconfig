@@ -1,3 +1,5 @@
+[include]
+	path = ~/.config/delta/themes/catppuccin.gitconfig
 [user]
 	name = Collin Dutter
 	email = collin@griptape.ai
@@ -5,11 +7,6 @@
 	ui = true
 [pull]
 	rebase = true
-[filter "lfs"]
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
 [rerere]
 	enabled = true
 [core]
@@ -17,3 +14,5 @@
 	editor = nvim
 [init]
 	defaultBranch = main
+[delta]
+	features = catppuccin-macchiato
