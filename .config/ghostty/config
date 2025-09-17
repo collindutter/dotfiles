@@ -1,4 +1,4 @@
-theme = catppuccin-macchiato
+theme = catppuccin-macchiato.conf
 
 font-family = "JetBrainsMono Nerd Font Mono"
 
@@ -28,4 +28,4 @@ keybind = super+zero=reset_font_size
 keybind = super+minus=decrease_font_size:1
 
 keybind = super+r=reload_config
-keybind = shift+enter=text:\n
+keybind = shift+enter=text:\x1b\r
