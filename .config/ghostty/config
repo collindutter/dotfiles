@@ -23,7 +23,7 @@ keybind = super+v=paste_from_clipboard
 keybind = super+q=quit
 
 keybind = super+shift+plus=increase_font_size:1
-keybind = super+equal=increase_font_size:1
+keybind = super+shift+equal=increase_font_size:1
 keybind = super+zero=reset_font_size
 keybind = super+minus=decrease_font_size:1
 
