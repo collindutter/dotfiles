@@ -19,9 +19,15 @@ return {
       layout = {
         preset = 'ivy',
       },
+      sources = {
+        gh_issue = {},
+        gh_pr = {},
+      },
     },
     -- Image support
     image = {},
+    -- Github integration
+    gh = {},
   },
   keys = {
     {
@@ -148,6 +154,34 @@ return {
         require('snacks').bufdelete.other()
       end,
       desc = '[b]uffer delete [o]thers',
+    },
+    {
+      '<leader>gi',
+      function()
+        Snacks.picker.gh_issue()
+      end,
+      desc = '[g]itHub [i]ssues (open)',
+    },
+    {
+      '<leader>gI',
+      function()
+        Snacks.picker.gh_issue { state = 'all' }
+      end,
+      desc = '[g]itHub [I]ssues (all)',
+    },
+    {
+      '<leader>gp',
+      function()
+        Snacks.picker.gh_pr()
+      end,
+      desc = '[g]itHub [p]ull requests (open)',
+    },
+    {
+      '<leader>gP',
+      function()
+        Snacks.picker.gh_pr { state = 'all' }
+      end,
+      desc = '[g]itHub [P]ull requests (all)',
     },
   },
 }
