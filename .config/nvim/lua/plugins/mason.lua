@@ -28,6 +28,7 @@ return {
         'ruff',
         'taplo',
         'shfmt',
+        'djlint',
         -- Linters
         'luacheck',
         'eslint',
