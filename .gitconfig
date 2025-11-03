@@ -3,6 +3,7 @@
 [user]
 	name = Collin Dutter
 	email = collin@griptape.ai
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINtxwls/cuG+4W4RaNrpa4eDbb4wGMQzDUD1BSIuSYIW
 [color]
 	ui = true
 [pull]
@@ -16,3 +17,9 @@
 	defaultBranch = main
 [delta]
 	features = catppuccin-macchiato
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[commit]
+	gpgsign = true
