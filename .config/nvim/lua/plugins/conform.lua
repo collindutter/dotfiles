@@ -10,7 +10,7 @@ return {
       typescript = { 'prettier' },
       typescriptreact = { 'prettier' },
       json = { 'jq' },
-      htmldjango = { 'prettier' },
+      htmldjango = { 'djlint' },
       html = { 'prettier' },
       toml = { 'taplo' },
       bash = { 'shfmt' },
