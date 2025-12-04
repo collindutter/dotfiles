@@ -18,7 +18,6 @@ return {
         'typos_lsp',
         'yamlls',
         'lua_ls',
-        'angularls',
         'marksman',
         'html',
         'jinja_lsp',
