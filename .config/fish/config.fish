@@ -3,20 +3,12 @@ fish_add_path /opt/homebrew/bin
 fish_add_path ~/.local/share/
 
 if status --is-interactive
-
 	# https://fishshell.com/docs/current/interactive.html#vi-mode-commands
-	# Enable vim mode
+	# Enable vi key bindings
 	fish_vi_key_bindings
+
 	# Have the cursor change shape in different modes
 	fish_vi_cursor
-	# All required to make this work in tmux
-	set -g fish_vi_force_cursor 1
-	set fish_cursor_default block
-	set fish_cursor_insert line
-	set fish_cursor_replace_one underscore
-	set fish_cursor_replace underscore
-	set fish_cursor_external line
-	set fish_cursor_visual block
 
 	# Leave insert mode when pressing jk
 	bind -M insert -m default jk backward-char force-repaint
