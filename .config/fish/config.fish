@@ -1,5 +1,6 @@
 fish_add_path ~/.local/bin
 fish_add_path /opt/homebrew/bin
+fish_add_path /opt/homebrew/sbin
 fish_add_path ~/.local/share/
 
 if status --is-interactive
