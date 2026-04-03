@@ -19,7 +19,7 @@ if status --is-interactive
 	# Improve fzf key bindings
 	fzf_configure_bindings --directory=\cf
 	
-	fish_config theme choose "Catppuccin Macchiato"
+	fish_config theme choose "catppuccin-macchiato"
 	
 	zoxide init fish | source
 	starship init fish | source
