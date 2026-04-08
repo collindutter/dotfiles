@@ -1,9 +1,6 @@
 [include]
 	path = ~/.config/delta/themes/catppuccin.gitconfig
-[user]
-	name = Collin Dutter
-	email = collin@griptape.ai
-	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAjfLNNONxsPdK1tIJ/82W/oPJhN9+OqAS5ZLZTvCV+A
+	path = ~/.gitconfig.local
 [color]
 	ui = true
 [pull]
@@ -17,16 +14,3 @@
 	defaultBranch = main
 [delta]
 	features = catppuccin-macchiato
-[gpg]
-	format = ssh
-[gpg "ssh"]
-	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
-	allowedSignersFile = /Users/collindutter/.ssh/allowed_signers
-[commit]
-	gpgsign = true
-[credential "https://github.com"]
-	helper = 
-	helper = !/opt/homebrew/bin/gh auth git-credential
-[credential "https://gist.github.com"]
-	helper = 
-	helper = !/opt/homebrew/bin/gh auth git-credential
