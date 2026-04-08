@@ -1,0 +1,11 @@
+nerdfont: true
+
+panes:
+  - command: nvim
+    focus: true
+  - command: lazygit
+    split: vertical
+    percentage: 40
+  - command: claude --dangerously-skip-permissions
+    split: horizontal
+    percentage: 50
