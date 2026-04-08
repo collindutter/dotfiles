@@ -2,7 +2,7 @@
 	path = ~/.config/delta/themes/catppuccin.gitconfig
 [user]
 	name = Collin Dutter
-	email = collindutter@gmail.com
+	email = collin@griptape.ai
 	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAjfLNNONxsPdK1tIJ/82W/oPJhN9+OqAS5ZLZTvCV+A
 [color]
 	ui = true
