@@ -19,6 +19,10 @@ return {
       layout = {
         preset = 'ivy',
       },
+      sources = {
+        files = { exclude = { 'node_modules', 'dist' } },
+        smart = { exclude = { 'node_modules', 'dist' } },
+      },
     },
     -- Image support
     image = {},
