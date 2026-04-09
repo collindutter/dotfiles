@@ -1,7 +1,10 @@
 ---
-allowed-tools: Bash(git diff:*), Bash(git status:*), Bash(git log:*), Bash(git branch:*), Bash(git stash:*), Bash(git checkout:*), Bash(git push:*), Bash(gh issue list:*), Bash(gh issue create:*), Bash(gh pr create:*)
+name: issue-pr
 description: Create a GitHub issue describing the root problem behind current changes, then open a PR that references it
+allowed-tools: Bash(git diff:*) Bash(git status:*) Bash(git log:*) Bash(git branch:*) Bash(git stash:*) Bash(git checkout:*) Bash(git push:*) Bash(gh issue list:*) Bash(gh issue create:*) Bash(gh pr create:*)
 ---
+
+# Create Issue and PR from Current Changes
 
 ## Context
 
@@ -12,7 +15,7 @@ description: Create a GitHub issue describing the root problem behind current ch
 
 ## Your task
 
-1. **Analyze the changes** to identify the root problem that motivated them. Focus on what was broken or missing — not what was done to fix it.
+1. **Analyze the changes** to identify the root problem that motivated them. Focus on what was broken or missing, not what was done to fix it.
 
 2. **Find or create a GitHub issue**:
    - First, search existing open issues with `gh issue list --search "<keywords>"` using a few relevant keywords from the root problem

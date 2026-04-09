@@ -1,4 +1,11 @@
-Rebase the current branch.
+---
+name: rebase
+description: Rebase the current branch.
+argument-hint: [origin] [origin/branch] [branch]
+allowed-tools: Bash(git *)
+---
+
+# Rebase the Current Branch
 
 Arguments: $ARGUMENTS
 
@@ -9,7 +16,7 @@ Behavior:
 - "origin/branch": fetch origin, rebase on origin/branch
 - "branch": rebase on local branch
 
-Steps:
+## Steps
 
 1. Check for uncommitted changes:
    - Run `git status --porcelain`
@@ -27,7 +34,7 @@ Steps:
 6. Continue until rebase is complete
 7. If changes were stashed in step 1, run `git stash pop`
 
-Handling conflicts:
+## Handling conflicts
 
 - BEFORE resolving any conflict, understand what changes were made to each
   conflicting file in the target branch
