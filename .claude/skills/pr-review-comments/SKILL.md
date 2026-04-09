@@ -1,3 +1,11 @@
+---
+name: pr-review-comments
+description: Get all unresolved PR review comments for the current branch.
+allowed-tools: Bash(gh *)
+---
+
+# Get Unresolved PR Review Comments
+
 Get all unresolved PR review comments for the current branch.
 
 ```bash
