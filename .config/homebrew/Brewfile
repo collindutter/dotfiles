@@ -60,6 +60,7 @@ brew "terraform"
 brew "sesh"
 brew "smithy-cli"
 brew "agent-browser"
+brew "ffmpeg"
 
 cask "font-jetbrains-mono-nerd-font"
 cask "ghostty"
