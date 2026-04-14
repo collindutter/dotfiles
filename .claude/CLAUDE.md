@@ -21,6 +21,10 @@
 - ALWAYS ask for clarification rather than making assumptions.
 - If you're having trouble with something, it's ok to stop and ask for help. Especially if it's something your human might be better at.
 
+# Knowledge Base
+
+A personal knowledge base exists at `~/knowledge-base/`. It contains a wiki of markdown articles managed by Claude, with source material in `raw/` and compiled articles in `wiki/`. Use `/kb-ingest` to process raw sources and `/kb-lint` to run health checks.
+
 # Alerts
 
 - When you finish a task or need the user's attention, show a macOS dialog: `osascript -e 'tell application "System Events" to display dialog "MESSAGE"'` where MESSAGE describes what you finished or what you need.
