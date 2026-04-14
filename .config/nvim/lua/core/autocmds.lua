@@ -77,7 +77,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set({ 'n' }, '<leader>cd', vim.diagnostic.open_float, { buffer = event.buf, desc = '[c]ode [d]iagnostic' })
 
     vim.keymap.set({ 'n' }, '<leader>lr', function()
-      vim.cmd 'LspRestart'
+      vim.cmd 'lsp restart'
     end, { buffer = event.buf, desc = '[l]sp [r]estart' })
   end,
 })
