@@ -65,6 +65,7 @@ brew "agent-browser"
 brew "ffmpeg"
 brew "remindctl"
 brew "antoniorodr/memo/memo"
+brew "pi-coding-agent"
 
 cask "font-jetbrains-mono-nerd-font"
 cask "ghostty"
