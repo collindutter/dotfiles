@@ -1,7 +1,4 @@
-fish_add_path ~/.local/bin
-fish_add_path /opt/homebrew/bin
-fish_add_path /opt/homebrew/sbin
-fish_add_path ~/.local/share/
+fish_add_path -gP ~/.local/bin /opt/homebrew/bin /opt/homebrew/sbin ~/.local/share
 
 if status --is-interactive
 	# https://fishshell.com/docs/current/interactive.html#vi-mode-commands
