@@ -6,6 +6,6 @@ panes:
   - command: lazygit
     split: horizontal
     percentage: 40
-  - command: claude --dangerously-skip-permissions
+  - command: pi
     split: vertical
     percentage: 50
