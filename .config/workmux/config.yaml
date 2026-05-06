@@ -4,8 +4,8 @@ panes:
   - command: nvim
     focus: true
   - command: lazygit
-    split: vertical
+    split: horizontal
     percentage: 40
   - command: claude --dangerously-skip-permissions
-    split: horizontal
+    split: vertical
     percentage: 50
