@@ -1,0 +1,36 @@
+{
+  "version": 3,
+  "skills": {
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "3013fdeb8a11b10b1eb795ec3ae8bfca38f7c26d",
+      "installedAt": "2026-04-06T20:53:46.706Z",
+      "updatedAt": "2026-04-06T20:53:46.706Z"
+    },
+    "agent-browser": {
+      "source": "vercel-labs/agent-browser",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-browser.git",
+      "skillPath": "skills/agent-browser/SKILL.md",
+      "skillFolderHash": "b6f762bf402cdfaf6a06514e9ce4142ce3e4fb4c",
+      "installedAt": "2026-04-09T19:33:01.388Z",
+      "updatedAt": "2026-04-09T19:33:01.388Z"
+    },
+    "capture-screen": {
+      "source": "daymade/claude-code-skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/daymade/claude-code-skills.git",
+      "skillPath": "capture-screen/SKILL.md",
+      "skillFolderHash": "9ea5e19be7a1d26b4f4953fe12a94bab77fa1061",
+      "pluginName": "capture-screen",
+      "installedAt": "2026-04-13T22:52:06.667Z",
+      "updatedAt": "2026-04-13T22:52:06.667Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  }
+}
