@@ -1,0 +1,14 @@
+{
+	"name": "pi-extensions",
+	"private": true,
+	"type": "module",
+	"description": "Global pi extensions. Deps exist solely to give the editor type resolution; extensions are loaded by pi via jiti at runtime.",
+	"devDependencies": {
+		"@mariozechner/pi-coding-agent": "^0.70.6",
+		"@mariozechner/pi-ai": "^0.70.6",
+		"@mariozechner/pi-tui": "^0.70.6",
+		"typebox": "^1.1.34",
+		"@types/node": "^22",
+		"typescript": "^5.6"
+	}
+}
