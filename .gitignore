@@ -1,12 +1,8 @@
 /*/
-!/.config/
-!/.pi/
 .dotfiles
-/.pi/agent/auth.json
-/.pi/agent/sessions/
-/.pi/agent/mcp-cache.json
-/.pi/agent/mcp-onboarding.json
-/.pi/agent/extensions/node_modules/
+
+# .config: allow parent, deny specific noise
+!/.config/
 /.config/tmux/plugins/
 /.config/fish/functions/*fzf*
 /.config/fish/conf.d/*
@@ -15,27 +11,28 @@
 /.config/stripe/
 /.config/github-copilot/
 /.config/gh/
+
+# .pi: deny by default, allow specific user-authored config
+!/.pi/
+/.pi/*
+!/.pi/agent/
+!/.pi/web-search.json
+/.pi/agent/*
+!/.pi/agent/AGENTS.md
+!/.pi/agent/settings.json
+!/.pi/agent/themes/
+!/.pi/agent/extensions/
+/.pi/agent/extensions/node_modules/
+
+# .claude: deny by default, allow specific user-authored config
 !/.claude/
-/.claude/.credentials.json
-/.claude/settings.local.json
-/.claude/backups/
-/.claude/cache/
-/.claude/chrome/
-/.claude/commands/
-/.claude/debug/
-/.claude/downloads/
-/.claude/file-history/
-/.claude/history.jsonl
-/.claude/paste-cache/
-/.claude/plans/
-/.claude/plugins/
-/.claude/projects/
-/.claude/session-env/
-/.claude/sessions/
-/.claude/shell-snapshots/
-/.claude/stats-cache.json
-/.claude/statsig/
-/.claude/tasks/
-/.claude/telemetry/
-/.claude/todos/
-/.claude/usage-data/
+/.claude/*
+!/.claude/CLAUDE.md
+!/.claude/settings.json
+!/.claude/skills/
+
+# .agents: deny by default, allow specific user-authored skills (vercel skills cli)
+!/.agents/
+/.agents/*
+!/.agents/.skill-lock.json
+!/.agents/skills/
