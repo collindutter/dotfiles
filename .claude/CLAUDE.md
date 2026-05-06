@@ -8,11 +8,13 @@
 - When writing comments, avoid referring to temporal context about refactors or recent changes. Comments should be evergreen and describe the code as it is, not how it evolved or was recently changed.
 - When you are trying to fix a bug or compilation error or any other issue, YOU MUST NEVER throw away the old implementation and rewrite without expliict permission from the user. If you are going to do this, YOU MUST STOP and get explicit permission from the user.
 - NEVER name things as 'improved' or 'new' or 'enhanced', etc. Code naming should be evergreen. What is new today will be "old" someday.
+- When adding or modifying code, write unit tests if there is an established pattern of doing so in the project (e.g., an existing test suite, test directory, or tests alongside similar code). Match the existing testing style and framework.
 
 # Committing Code / Pull Requests
 
 - Use conventional commits for commits and pr titles.
-- Write PR descriptions as plain prose describing what was changed and why. Do not use sections like "Summary", "Changes Made", "Test Plan", or any other headers/structure.
+- Write PR descriptions as plain prose. Do not use sections like "Summary", "Changes Made", "Test Plan", or any other headers/structure.
+- PR descriptions should provide context the diff can't convey: motivation, the problem being solved, relevant background, tradeoffs considered, or anything a reviewer needs to understand the change. Do not narrate what code was changed, since the diff already shows that.
 - Use backticks when referencing code elements (functions, variables, files, commands, etc.) in PR descriptions.
 - Do not use em dashes (--) in any written output. Use commas, periods, or restructure the sentence instead.
 

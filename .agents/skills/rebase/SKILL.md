@@ -1,7 +1,7 @@
 ---
 name: rebase
 description: Rebase the current branch.
-argument-hint: [origin] [origin/branch] [branch]
+argument-hint: "[origin] [origin/branch] [branch]"
 allowed-tools: Bash(git *)
 ---
 
