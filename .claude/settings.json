@@ -63,8 +63,9 @@
   },
   "alwaysThinkingEnabled": true,
   "skipDangerousModePermissionPrompt": true,
+  "editorMode": "vim",
   "feedbackSurveyState": {
     "lastShownTime": 1754413195459
   },
-  "editorMode": "vim"
+  "agentPushNotifEnabled": true
 }
