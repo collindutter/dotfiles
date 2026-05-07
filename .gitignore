@@ -19,7 +19,6 @@
 !/.pi/web-search.json
 /.pi/agent/*
 !/.pi/agent/AGENTS.md
-!/.pi/agent/settings.json
 !/.pi/agent/themes/
 !/.pi/agent/extensions/
 /.pi/agent/extensions/node_modules/
