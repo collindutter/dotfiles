@@ -14,3 +14,15 @@
 	defaultBranch = main
 [delta]
 	features = catppuccin-macchiato
+[user]
+	name = Collin Dutter
+	email = collindutter@gmail.com
+	signingkey = /Users/collin/.ssh/id_ed25519.pub
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
+[tag]
+	gpgsign = true
+[gpg "ssh"]
+	allowedSignersFile = /Users/collin/.ssh/allowed_signers
