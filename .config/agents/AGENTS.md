@@ -30,4 +30,5 @@ A personal knowledge base exists at `~/knowledge-base/`. It contains a wiki of m
 
 # Alerts
 
-- When you finish a task or need the user's attention, show a macOS dialog: `osascript -e 'tell application "System Events" to display dialog "MESSAGE"'` where MESSAGE describes what you finished or what you need.
+- When you finish a task or need the user's attention without needing a response, show a non-blocking macOS alert: `alerter --title "Pi" --message "MESSAGE" --timeout 30 >/dev/null 2>&1 &` where MESSAGE describes what you finished or what you need.
+- When you need a response, it is okay for the alert to block. Use `alerter --title "Pi" --message "QUESTION" --actions "Yes,No" --json` or `alerter --title "Pi" --message "QUESTION" --reply "Type here..." --json`.
