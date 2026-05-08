@@ -6,6 +6,7 @@ neovim = "latest"
 rust = "latest"
 "npm:@tobilu/qmd" = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"
+"npm:pi-web-access" = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["python"]
