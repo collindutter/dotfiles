@@ -4,6 +4,7 @@ node = "latest"
 lua = "5.1"
 neovim = "latest"
 rust = "latest"
+"npm:@tobilu/qmd" = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["python"]
