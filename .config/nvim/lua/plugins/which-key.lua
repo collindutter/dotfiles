@@ -23,7 +23,7 @@ return {
       { '<leader>b', group = 'Buffers' },
       { '<leader>f', group = 'Find' },
       { '<leader>t', group = 'Test' },
-      { '<leader>s', group = 'Session' },
+      { '<leader>s', group = 'Search' },
       { '<leader>l', group = 'Lsp' },
     }
   end,
