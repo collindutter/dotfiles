@@ -5,6 +5,8 @@
 - NEVER name things as 'improved' or 'new' or 'enhanced', etc. Code naming should be evergreen. What is new today will be "old" someday.
 - When adding or modifying code, write unit tests if there is an established pattern of doing so in the project (e.g., an existing test suite, test directory, or tests alongside similar code). Match the existing testing style and framework.
 - NEVER give time estimates for implementations (e.g., "this will take 2 hours", "phase 1: 1 day"). You have no reliable basis for estimating how long work will take in human time. Describe scope, complexity, or ordering instead if needed.
+- Do not preserve backward compatibility unless the user explicitly asks for it.
+- No `any` types unless absolutely necessary.
 
 # Tooling
 
@@ -18,6 +20,7 @@
 - PR descriptions should provide context the diff can't convey: motivation, the problem being solved, relevant background, tradeoffs considered, or anything a reviewer needs to understand the change. Do not narrate what code was changed, since the diff already shows that.
 - Use backticks when referencing code elements (functions, variables, files, commands, etc.) in PR descriptions.
 - Do not use em dashes (--) in any written output. Use commas, periods, or restructure the sentence instead.
+- ONLY commit files YOU changed in THIS session.
 
 # Getting help
 
@@ -26,7 +29,7 @@
 
 # Knowledge Base
 
-A personal knowledge base exists at `~/knowledge-base/`. It contains a wiki of markdown articles managed by Claude, with source material in `raw/` and compiled articles in `wiki/`. Use `/kb-ingest` to process raw sources and `/kb-lint` to run health checks.
+A personal knowledge base exists at `~/knowledge-base/`. It contains a wiki of markdown articles managed by an Agent, with source material in `raw/` and compiled articles in `wiki/`. Use `/kb-ingest` to process raw sources and `/kb-lint` to run health checks.
 
 # Alerts
 
