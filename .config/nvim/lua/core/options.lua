@@ -69,6 +69,7 @@ o.splitbelow = true -- Open horizontal splits below
 o.splitkeep = 'screen' -- Reduce scroll during window split
 
 o.winborder = 'rounded' -- Use rounded borders
+require('vim._core.ui2').enable()
 
 opt.foldmethod = 'expr' -- Enable expression folding
 opt.foldexpr = 'v:vim.lsp.foldexpr()' -- LSP folding expression
