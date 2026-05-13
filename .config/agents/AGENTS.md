@@ -18,6 +18,7 @@
 - Use conventional commits for commits and pr titles.
 - Write PR descriptions as plain prose. Do not use sections like "Summary", "Changes Made", "Test Plan", or any other headers/structure.
 - PR descriptions should provide context the diff can't convey: motivation, the problem being solved, relevant background, tradeoffs considered, or anything a reviewer needs to understand the change. Do not narrate what code was changed, since the diff already shows that.
+- Keep PR descriptions concise. Before each sentence, ask whether a careful reviewer could infer it from the diff alone. If yes, cut it. Justify defaults only when the default is actually contested, and skip minor tradeoffs (config ignores, gitignore entries, import style) unless they affect review.
 - Use backticks when referencing code elements (functions, variables, files, commands, etc.) in PR descriptions.
 - Do not use em dashes (--) in any written output. Use commas, periods, or restructure the sentence instead.
 - ONLY commit files YOU changed in THIS session.
