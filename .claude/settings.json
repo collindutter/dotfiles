@@ -2,7 +2,7 @@
   "awsAuthRefresh": "aws sso login --profile Griptape",
   "env": {
     "ANTHROPIC_DEFAULT_HAIKU_MODEL": "global.anthropic.claude-haiku-4-5-20251001-v1:0",
-    "ANTHROPIC_DEFAULT_OPUS_MODEL": "anthropic.claude-opus-4-7",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "anthropic.claude-opus-4-8",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "global.anthropic.claude-sonnet-4-6",
     "AWS_PROFILE": "Griptape",
     "CLAUDE_CODE_USE_MANTLE": "1",
