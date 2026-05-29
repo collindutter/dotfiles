@@ -7,6 +7,7 @@
 /.config/fish/functions/*fzf*
 /.config/fish/conf.d/*
 !/.config/fish/conf.d/fzf-theme.fish
+!/.config/fish/conf.d/github-packages.fish
 /.config/fish/completions/
 /.config/stripe/
 /.config/github-copilot/
