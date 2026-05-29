@@ -1,6 +1,9 @@
 fish_add_path -gP ~/.local/bin /opt/homebrew/bin /opt/homebrew/sbin ~/.local/share
 
+set -gx XDG_CONFIG_HOME $HOME/.config
+
 if status --is-interactive
+
 	# https://fishshell.com/docs/current/interactive.html#vi-mode-commands
 	# Enable vi key bindings
 	fish_vi_key_bindings
