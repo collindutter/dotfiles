@@ -28,8 +28,8 @@ import type {
   ExtensionAPI,
   ExtensionContext,
   ToolResultEvent,
-} from "@mariozechner/pi-coding-agent";
-import { isBashToolResult } from "@mariozechner/pi-coding-agent";
+} from "@earendil-works/pi-coding-agent";
+import { isBashToolResult } from "@earendil-works/pi-coding-agent";
 
 const SSO_EXPIRED_PATTERNS: RegExp[] = [
   /Token is expired\.\s*To refresh this SSO session run ['"]?aws sso login['"]?/i,
