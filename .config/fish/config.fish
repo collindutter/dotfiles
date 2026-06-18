@@ -2,6 +2,9 @@ fish_add_path -gP ~/.local/bin /opt/homebrew/bin /opt/homebrew/sbin ~/.local/sha
 
 set -gx XDG_CONFIG_HOME $HOME/.config
 
+# Let self-updating casks (Chrome, etc.) manage their own versions
+set -gx HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS 1
+
 if status --is-interactive
 
 	# https://fishshell.com/docs/current/interactive.html#vi-mode-commands

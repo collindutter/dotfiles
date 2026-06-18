@@ -1,14 +1,17 @@
 # https://matthiasportzel.com/brewfile/
-tap "koekeishiya/formulae"
-tap "felixkratz/formulae"
-tap "charmbracelet/tap"
-tap "hashicorp/tap"
-tap "nikitabobko/tap"
-tap "smithy-lang/tap"
-tap "steipete/tap"
-tap "antoniorodr/memo"
-tap "vjeantet/tap"
-tap "morantron/tmux-fingers"
+tap "koekeishiya/formulae", trusted: true
+tap "felixkratz/formulae", trusted: true
+tap "charmbracelet/tap", trusted: true
+tap "hashicorp/tap", trusted: true
+tap "nikitabobko/tap", trusted: true
+tap "smithy-lang/tap", trusted: true
+tap "steipete/tap", trusted: true
+tap "antoniorodr/memo", trusted: true
+tap "vjeantet/tap", trusted: true
+tap "morantron/tmux-fingers", trusted: true
+tap "raine/workmux", trusted: true
+tap "raine/claude-history", trusted: true
+tap "raine/git-surgeon", trusted: true
 
 brew "bat"
 brew "eza"
@@ -48,9 +51,9 @@ brew "pnpm"
 brew "mkcert"
 brew "nss"
 brew "austin"
-brew "raine/workmux/workmux"
-brew "raine/claude-history/claude-history"
-brew "raine/git-surgeon/git-surgeon"
+brew "raine/workmux/workmux", trusted: true
+brew "raine/claude-history/claude-history", trusted: true
+brew "raine/git-surgeon/git-surgeon", trusted: true
 brew "bfg"
 brew "cloc"
 brew "gnupg"
