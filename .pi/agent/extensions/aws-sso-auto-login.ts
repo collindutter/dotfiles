@@ -14,6 +14,11 @@
  *      command, and replaces the error with the retry output — so the agent
  *      never sees the failure and resumes on its own.
  *
+ *   3. If the LLM provider request itself fails with an expired-token error
+ *      (e.g. Amazon Bedrock models authenticated via AWS SSO), it runs
+ *      `aws sso login` (you click the browser) and re-sends your last prompt,
+ *      so a mid-session expiry no longer forces you to quit pi and re-auth.
+ *
  * Profile resolution for the reactive path, in order:
  *   1. `AWS_PROFILE=foo ...` inline env var on the failing command
  *   2. `--profile foo` / `--profile=foo` flag anywhere in the command
@@ -72,6 +77,41 @@ function contentToText(content: ToolResultEvent["content"]): string {
 
 function profileLabel(profile: string | undefined): string {
   return profile ? `profile '${profile}'` : "default profile";
+}
+
+/** True when an assistant message ended in an SSO-expiry provider error. */
+function isSsoErroredAssistant(message: { role?: string }): boolean {
+  const m = message as {
+    role?: string;
+    stopReason?: string;
+    errorMessage?: string;
+  };
+  return (
+    m.role === "assistant" &&
+    m.stopReason === "error" &&
+    isSsoExpired(String(m.errorMessage ?? ""))
+  );
+}
+
+/** Plain text of a message, joining text parts when content is an array. */
+function messageText(message: { content?: unknown }): string | undefined {
+  const content = message.content;
+  if (typeof content === "string") return content.trim() || undefined;
+  if (Array.isArray(content)) {
+    const text = content
+      .filter(
+        (p): p is { type: "text"; text: string } =>
+          !!p &&
+          typeof p === "object" &&
+          (p as { type?: unknown }).type === "text" &&
+          typeof (p as { text?: unknown }).text === "string",
+      )
+      .map((p) => p.text)
+      .join("\n")
+      .trim();
+    return text || undefined;
+  }
+  return undefined;
 }
 
 function buildLoginArgs(profile: string | undefined): string[] {
@@ -221,6 +261,57 @@ export default function (pi: ExtensionAPI) {
         "error",
       );
       return undefined;
+    }
+  });
+
+  // Reactive: the LLM provider request itself failed with an expired-SSO token
+  // (e.g. Amazon Bedrock models authed via AWS SSO). The agent loop has ended
+  // in error, so we refresh the session and re-send the user's last prompt.
+  let ssoRecoveryInFlight = false;
+  let lastSsoRecoveryAt = 0;
+  pi.on("agent_end", async (event, ctx) => {
+    if (!ctx.hasUI) return;
+
+    const errored = [...event.messages]
+      .reverse()
+      .find((m) => isSsoErroredAssistant(m));
+    if (!errored) return;
+
+    if (ssoRecoveryInFlight) return;
+    // Guard against tight loops: if a fresh login still left us expired, stop.
+    if (Date.now() - lastSsoRecoveryAt < 30_000) {
+      ctx.ui.notify(
+        "AWS SSO is still failing right after a re-login; run `aws sso login` manually.",
+        "error",
+      );
+      return;
+    }
+
+    ssoRecoveryInFlight = true;
+    try {
+      const profile = process.env.AWS_PROFILE || undefined;
+      ctx.ui.notify(
+        `AWS SSO session expired during the model request (${profileLabel(profile)}); running \`aws sso login\` — approve in the browser…`,
+        "info",
+      );
+      if (!(await runSsoLogin(pi, ctx, profile))) return;
+      lastSsoRecoveryAt = Date.now();
+
+      const lastUser = [...event.messages]
+        .reverse()
+        .find((m) => m.role === "user");
+      const text = lastUser ? messageText(lastUser) : undefined;
+      if (text) {
+        ctx.ui.notify("AWS SSO refreshed; retrying your last message…", "info");
+        pi.sendUserMessage(text);
+      } else {
+        ctx.ui.notify(
+          "AWS SSO refreshed; re-send your last message to continue.",
+          "info",
+        );
+      }
+    } finally {
+      ssoRecoveryInFlight = false;
     }
   });
 }
