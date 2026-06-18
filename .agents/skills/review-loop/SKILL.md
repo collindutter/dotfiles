@@ -65,6 +65,3 @@ When the loop ends, summarize:
 - The final review verdict (what made it stop).
 - Any actionable findings left unaddressed and why.
 - Any findings you intentionally declined to fix, with reasoning.
-
-Then show a non-blocking alert that the loop finished:
-`alerter --title "Pi" --message "Review loop done: <verdict>" --timeout 30 >/dev/null 2>&1 &`

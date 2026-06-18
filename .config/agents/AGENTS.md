@@ -34,5 +34,4 @@ A personal knowledge base exists at `~/knowledge-base/`. It contains a wiki of m
 
 # Alerts
 
-- When you finish a task or need the user's attention without needing a response, show a non-blocking macOS alert: `alerter --title "Pi" --message "MESSAGE" --timeout 30 >/dev/null 2>&1 &` where MESSAGE describes what you finished or what you need.
-- When you need a response, it is okay for the alert to block. Use `alerter --title "Pi" --message "QUESTION" --actions "Yes,No" --json` or `alerter --title "Pi" --message "QUESTION" --reply "Type here..." --json`.
+- Finish-of-task notifications are automatic. The `alerter` extension (`~/.pi/agent/extensions/alerter.ts`) fires a macOS notification when the agent finishes a prompt, suppressed while the terminal is focused. Do not run `alerter` by hand for this.
