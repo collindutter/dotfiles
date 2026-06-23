@@ -303,7 +303,13 @@ export default function (pi: ExtensionAPI) {
       const text = lastUser ? messageText(lastUser) : undefined;
       if (text) {
         ctx.ui.notify("AWS SSO refreshed; retrying your last message…", "info");
-        pi.sendUserMessage(text);
+        // We are still inside the agent lifecycle here, so the runtime is not
+        // idle; queue the retry as a follow-up turn rather than sending now.
+        if (ctx.isIdle()) {
+          pi.sendUserMessage(text);
+        } else {
+          pi.sendUserMessage(text, { deliverAs: "followUp" });
+        }
       } else {
         ctx.ui.notify(
           "AWS SSO refreshed; re-send your last message to continue.",
