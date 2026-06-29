@@ -5,6 +5,7 @@
 	"description": "Global pi extensions. Deps exist solely to give the editor type resolution; extensions are loaded by pi via jiti at runtime.",
 	"devDependencies": {
 		"@earendil-works/pi-coding-agent": "^0.79.6",
+		"@earendil-works/pi-agent-core": "^0.79.6",
 		"@earendil-works/pi-ai": "^0.79.6",
 		"@earendil-works/pi-tui": "^0.79.6",
 		"typebox": "^1.1.34",
