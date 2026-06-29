@@ -11,19 +11,23 @@ sub-agent comes back with a reasonable level of satisfaction.
 
 Arguments (optional): $ARGUMENTS
 
-- May contain extra context to forward to the reviewer (e.g. a base branch, a
-  model override like `--provider/--model`, or areas to focus on).
+- May contain extra context to forward to the reviewer (e.g. a base branch or
+  areas to focus on).
 - If no arguments are given, review the diff against the base branch.
+- The review model is set in the `reviewer` agent's frontmatter
+  (`~/.pi/agent/agents/reviewer.md`), not per invocation.
 
 ## Loop
 
 Repeat the following until the stopping condition is met. Cap at **5
 iterations** to guarantee termination.
 
-1. **Review.** Invoke the `review` skill to spawn a review sub-agent over the
-   current changes (the diff against the base branch, which now includes any
-   fixes from prior iterations). Forward any context from `$ARGUMENTS`. Do not
-   review the code yourself; let the sub-agent do it.
+1. **Review.** Invoke the `review` skill, which calls the `subagent` tool with
+   the `reviewer` agent over the current changes (the diff against the base
+   branch, which now includes any fixes from prior iterations). The reviewer
+   runs in an isolated context and streams its progress into this session.
+   Forward any context from `$ARGUMENTS`. Do not review the code yourself; let
+   the reviewer subagent do it.
 
 2. **Triage findings.** Classify each finding by severity:
    - **Actionable**: bugs, logic errors, security issues, error-handling gaps,

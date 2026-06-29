@@ -21,6 +21,8 @@
 /.pi/agent/*
 !/.pi/agent/AGENTS.md
 !/.pi/agent/themes/
+!/.pi/agent/agents/
+!/.pi/agent/prompts/
 !/.pi/agent/extensions/
 /.pi/agent/extensions/node_modules/
 
