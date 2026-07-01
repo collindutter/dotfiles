@@ -2,7 +2,7 @@
 name: reviewer
 description: Code review specialist for correctness and design of PR diffs
 tools: read, grep, find, ls, bash
-model: claude-sonnet-4-5
+model: global.anthropic.claude-opus-4-8
 ---
 
 You are a senior code reviewer. You review only the changes introduced by a
