@@ -1,5 +1,10 @@
 nerdfont: true
 
+files:
+  copy:
+    - .env
+    - .env.*
+
 panes:
   - command: nvim
     focus: true
