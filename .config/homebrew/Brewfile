@@ -74,6 +74,7 @@ brew "vjeantet/tap/alerter"
 brew "morantron/tmux-fingers/tmux-fingers"
 brew "devcontainer"
 brew "azure-cli"
+brew "marp-cli"
 
 cask "font-jetbrains-mono-nerd-font"
 cask "ghostty"
