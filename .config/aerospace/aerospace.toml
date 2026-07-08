@@ -1,5 +1,12 @@
 # AeroSpace Configuration
+# See: https://nikitabobko.github.io/AeroSpace/guide#config-version
+config-version = 2
+
 start-at-login = true
+
+# Workspaces that stay alive even when empty and invisible.
+# With config-version = 2 this must be declared explicitly (v1 inferred it from keybindings).
+persistent-workspaces = ["1", "2", "3", "4", "5"]
 
 # Possible values: tiles|accordion
 default-root-container-layout = 'tiles'
