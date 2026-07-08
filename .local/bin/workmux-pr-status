@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# workmux-pr-status — fast tmux status segment. Prints the cached summary
+# instantly and kicks off a background refresh when the cache is stale.
+# Never blocks: gh/git work happens only in the detached poller.
+set -uo pipefail
+
+CACHE="${WORKMUX_PR_CACHE:-$HOME/.cache/workmux-pr}"
+TTL="${WORKMUX_PR_TTL:-300}"   # seconds before a background refresh is triggered
+POLLER="$HOME/.local/bin/workmux-pr-poll"
+STATUS="$CACHE/status.txt"
+DATA="$CACHE/data.json"
+
+# Print whatever we have cached (placeholder on first ever run).
+if [ -f "$STATUS" ]; then
+  cat "$STATUS"
+else
+  printf '…'
+fi
+
+# Trigger a refresh if the data is missing or older than the TTL. The poller's
+# own lock guarantees only one runs at a time.
+stale=1
+if [ -f "$DATA" ]; then
+  age=$(( $(date +%s) - $(stat -f %m "$DATA" 2>/dev/null || echo 0) ))
+  [ "$age" -le "$TTL" ] && stale=0
+fi
+
+if [ "$stale" -eq 1 ] && [ -x "$POLLER" ]; then
+  ( nohup "$POLLER" >/dev/null 2>&1 </dev/null & )
+fi

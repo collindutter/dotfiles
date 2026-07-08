@@ -37,3 +37,12 @@
 /.agents/*
 !/.agents/.skill-lock.json
 !/.agents/skills/
+
+# .local: deny by default, allow specific user-authored scripts
+!/.local/
+/.local/*
+!/.local/bin/
+/.local/bin/*
+!/.local/bin/workmux-pr
+!/.local/bin/workmux-pr-poll
+!/.local/bin/workmux-pr-status
