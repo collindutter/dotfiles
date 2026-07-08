@@ -1,0 +1,253 @@
+#!/usr/bin/env bash
+# workmux-pr-poll — scan workmux worktrees, classify each branch's PR, and
+# write a cache the tmux status segment and popup read from.
+#
+# Uses only GitHub's REST API (via `gh api`), which has its own request budget
+# separate from the GraphQL endpoint that `gh pr list`/`gh pr view` consume.
+#
+# Output (in $WORKMUX_PR_CACHE, default ~/.cache/workmux-pr):
+#   data.json   — array of per-worktree records with bucket + PR details
+#   status.txt  — compact drop-zero summary string for the status bar
+#   user        — cached GitHub login
+#
+# Buckets (per-worktree, priority order):
+#   review_you  👀  a review is requested of you (includes re-requests)
+#   your_turn   🔴  your PR: changes requested or checks failing
+#   mergeable   🟢  your PR: approved and checks not failing
+#   prunable    🟣  merged or closed — the worktree can be removed
+#   waiting     ⚪  open, nothing for you to do right now
+#   nopr        ⚫  worktree has no associated PR
+set -uo pipefail
+
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.local/bin:$PATH"
+
+ROOT="${WORKMUX_PR_ROOT:-$HOME/Projects}"
+CACHE="${WORKMUX_PR_CACHE:-$HOME/.cache/workmux-pr}"
+LOCK="$CACHE/poll.lock"
+STALE_LOCK=600   # seconds; a lock older than this is considered abandoned
+
+mkdir -p "$CACHE"
+
+# --- single-instance lock (mkdir is atomic; flock is absent on macOS) --------
+now() { date +%s; }
+if ! mkdir "$LOCK" 2>/dev/null; then
+  age=$(( $(now) - $(stat -f %m "$LOCK" 2>/dev/null || echo 0) ))
+  if [ "$age" -gt "$STALE_LOCK" ]; then
+    rmdir "$LOCK" 2>/dev/null || true
+    mkdir "$LOCK" 2>/dev/null || exit 0
+  else
+    exit 0
+  fi
+fi
+WORKDIR="$(mktemp -d)"
+: >"$WORKDIR/failed"   # ensure it exists even when no group fails
+RECORDS="$(mktemp)"
+PRTMP="$(mktemp)"
+: >"$RECORDS"
+trap 'rmdir "$LOCK" 2>/dev/null || true; rm -f "$RECORDS" "$PRTMP" 2>/dev/null || true; rm -rf "$WORKDIR" 2>/dev/null || true' EXIT
+
+# --- resolve GitHub identity -------------------------------------------------
+ME="$(cat "$CACHE/user" 2>/dev/null || true)"
+if [ -z "$ME" ]; then
+  ME="$(gh api user --jq .login 2>/dev/null || true)"
+  [ -n "$ME" ] && printf '%s' "$ME" >"$CACHE/user"
+fi
+[ -z "$ME" ] && ME="__unknown__"
+
+# --- jq snippets -------------------------------------------------------------
+# Normalize a REST PR object (list item or single GET) into a compact shape.
+JQ_NORM='
+def norm:
+  { number: .number, title: .title, url: .html_url,
+    headRef: .head.ref, headSha: .head.sha,
+    state: (if .merged_at != null then "MERGED"
+            elif .state == "closed" then "CLOSED" else "OPEN" end),
+    draft: (.draft // false), author: (.user.login // null),
+    reviewers: ([ (.requested_reviewers // [])[].login ]
+                + [ (.requested_teams // [])[].slug ]),
+    updatedAt: .updated_at };'
+
+# Reduce a check-runs response to pass / fail / pending / none.
+CHECKS_JQ='
+  (.check_runs // []) as $r
+  | if ($r | length) == 0 then "none"
+    elif any($r[]; (.conclusion // "" | ascii_downcase) as $c
+          | ($c == "failure" or $c == "timed_out" or $c == "cancelled"
+             or $c == "action_required" or $c == "startup_failure"))
+      then "fail"
+    elif any($r[]; (.status // "completed") != "completed") then "pending"
+    else "pass" end'
+
+# Reduce a reviews response to a single decision (latest state per reviewer).
+DECISION_JQ='
+  group_by(.user.login)
+  | map(max_by(.submitted_at) | .state)
+  | map(select(. == "APPROVED" or . == "CHANGES_REQUESTED")) as $s
+  | if ($s | index("CHANGES_REQUESTED")) then "CHANGES_REQUESTED"
+    elif ($s | index("APPROVED")) then "APPROVED"
+    else "REVIEW_REQUIRED" end'
+
+# Classify one normalized PR (or null) into a worktree record.
+JQ_CLASSIFY='
+def bucket:
+  if $pr == null then "nopr"
+  elif $pr.state == "MERGED" or $pr.state == "CLOSED" then "prunable"
+  elif ((($pr.reviewers // []) | index($me)) != null) and ($pr.author != $me)
+    then "review_you"
+  elif ($pr.author == $me)
+       and (($pr.decision == "CHANGES_REQUESTED") or ($pr.checks == "fail"))
+    then "your_turn"
+  elif ($pr.author == $me) and ($pr.decision == "APPROVED") and ($pr.checks != "fail")
+    then "mergeable"
+  else "waiting" end;
+{
+  repo: $repo, repo_path: $repo_path, handle: $handle, branch: $branch,
+  path: $path, bucket: bucket, checks: ($pr.checks // "none"),
+  number: ($pr.number // null), title: ($pr.title // null), url: ($pr.url // null),
+  state: ($pr.state // null), reviewDecision: ($pr.decision // null),
+  merged: ($pr.state == "MERGED"), isDraft: ($pr.draft // false),
+  author: ($pr.author // null), updatedAt: ($pr.updatedAt // null)
+}'
+
+# --- classify one worktree group; writes NDJSON records to $out -------------
+process_group() {
+  local wtdir="$1" out="$2"
+  local main_repo="${wtdir%__worktrees}"
+  local remote slug prfile sub handle branch pr sha num cand
+  local state0 num0 headsha0 author0 checks decision
+
+  remote="$(git -C "$main_repo" config --get remote.origin.url 2>/dev/null || true)"
+  slug="$(printf '%s' "$remote" | sed -E 's#^git@[^:]+:##; s#^ssh://git@[^/]+/##; s#^https?://[^/]+/##; s#\.git$##')"
+  [ -z "$slug" ] && return
+
+  prfile="$(mktemp)"
+  if ! gh api "repos/$slug/pulls?state=all&per_page=100&sort=updated&direction=desc" \
+        --jq "${JQ_NORM} map(norm)" >"$prfile" 2>/dev/null; then
+    # Record the failure so an all-failed poll (e.g. rate limit) doesn't clobber
+    # good cached data, and skip this group.
+    echo "$main_repo" >>"$WORKDIR/failed"
+    rm -f "$prfile"
+    return
+  fi
+  [ -s "$prfile" ] || echo '[]' >"$prfile"
+
+  for sub in "$wtdir"/*/; do
+    [ -d "$sub" ] || continue
+    sub="${sub%/}"
+    handle="$(basename "$sub")"
+    branch="$(git -C "$sub" symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
+
+    # Match the branch to a PR by head ref, with a commit-SHA fallback for
+    # fork/contributor branches whose local name differs from the PR head ref.
+    pr="null"
+    if [ -n "$branch" ]; then
+      pr="$(jq -c --arg b "$branch" '[.[] | select(.headRef == $b)] | .[0] // empty' "$prfile")"
+    fi
+    if [ -z "$pr" ] || [ "$pr" = "null" ]; then
+      sha="$(git -C "$sub" rev-parse HEAD 2>/dev/null || true)"
+      if [ -n "$sha" ]; then
+        num="$(gh api "repos/$slug/commits/$sha/pulls" --jq '.[0].number' 2>/dev/null || true)"
+        if [ -n "$num" ]; then
+          cand="$(jq -c --argjson n "$num" '[.[] | select(.number == $n)] | .[0] // empty' "$prfile")"
+          if [ -z "$cand" ]; then
+            cand="$(gh api "repos/$slug/pulls/$num" --jq "${JQ_NORM} norm" 2>/dev/null || true)"
+          fi
+          # Accept only when the PR is actually headed by this worktree's HEAD
+          # commit (true fork/contributor checkout), not when a merged PR merely
+          # contains the commit.
+          if [ -n "$cand" ] && [ "$cand" != "null" ]; then
+            [ "$(jq -r '.headSha // ""' <<<"$cand")" = "$sha" ] && pr="$cand"
+          fi
+        fi
+      fi
+    fi
+    [ -z "$pr" ] && pr="null"
+
+    # Enrich open PRs: check status for all, review decision for your own.
+    if [ "$pr" != "null" ]; then
+      state0="$(jq -r '.state // ""' <<<"$pr")"
+      num0="$(jq -r '.number // empty' <<<"$pr")"
+      headsha0="$(jq -r '.headSha // empty' <<<"$pr")"
+      author0="$(jq -r '.author // empty' <<<"$pr")"
+      checks="none"; decision=""
+      if [ "$state0" = "OPEN" ] && [ -n "$headsha0" ]; then
+        checks="$(gh api "repos/$slug/commits/$headsha0/check-runs?per_page=100" --jq "$CHECKS_JQ" 2>/dev/null || echo none)"
+        [ -z "$checks" ] && checks="none"
+        if [ "$author0" = "$ME" ] && [ -n "$num0" ]; then
+          decision="$(gh api "repos/$slug/pulls/$num0/reviews?per_page=100" --jq "$DECISION_JQ" 2>/dev/null || echo REVIEW_REQUIRED)"
+        fi
+      fi
+      pr="$(jq -c --arg c "$checks" --arg d "$decision" \
+              '.checks = $c | .decision = (if ($d | length) > 0 then $d else null end)' <<<"$pr")"
+    fi
+
+    jq -cn \
+      --arg repo "$(basename "$main_repo")" \
+      --arg repo_path "$main_repo" \
+      --arg handle "$handle" \
+      --arg branch "$branch" \
+      --arg path "$sub" \
+      --arg me "$ME" \
+      --argjson pr "$pr" \
+      "$JQ_CLASSIFY" >>"$out"
+  done
+
+  rm -f "$prfile"
+}
+
+# --- walk every worktree group in parallel ----------------------------------
+group_n=0
+while IFS= read -r wtdir; do
+  [ -d "$wtdir" ] || continue
+  group_n=$((group_n + 1))
+  process_group "$wtdir" "$WORKDIR/$group_n.ndjson" &
+done < <(find "$ROOT" -maxdepth 3 -type d -name '*__worktrees' 2>/dev/null)
+wait
+
+# If every repo group failed its PR list (e.g. GitHub rate limit or auth loss),
+# keep the last good cache instead of overwriting it with all-"nopr" records.
+failed_n=$(wc -l <"$WORKDIR/failed" 2>/dev/null | tr -d ' ')
+failed_n=${failed_n:-0}
+if [ "$group_n" -gt 0 ] && [ "$failed_n" -ge "$group_n" ]; then
+  echo "workmux-pr-poll: all $group_n repo groups failed (rate limit?); keeping cache" >&2
+  # Reset the staleness clock so callers back off for a full TTL instead of
+  # retrying (and hammering the API) on every status redraw.
+  [ -f "$CACHE/data.json" ] || echo '[]' >"$CACHE/data.json"
+  touch "$CACHE/data.json" 2>/dev/null || true
+  exit 0
+fi
+
+cat "$WORKDIR"/*.ndjson >"$RECORDS" 2>/dev/null || true
+
+# --- assemble data.json (sorted by bucket priority) -------------------------
+jq -s '
+  def rank:
+    {review_you:0, your_turn:1, mergeable:2, waiting:3, prunable:4, nopr:5}[.] // 9;
+  sort_by((.bucket | rank), .repo, .handle)
+' "$RECORDS" >"$PRTMP"
+mv "$PRTMP" "$CACHE/data.json"
+
+# --- render the compact status-bar string (drop zero buckets) ---------------
+read -r c_review c_turn c_merge c_prune < <(
+  jq -r '
+    [ (map(select(.bucket=="review_you")) | length),
+      (map(select(.bucket=="your_turn"))  | length),
+      (map(select(.bucket=="mergeable"))  | length),
+      (map(select(.bucket=="prunable"))   | length) ] | @tsv
+  ' "$CACHE/data.json"
+)
+
+parts=()
+[ "${c_review:-0}" -gt 0 ] && parts+=("👀${c_review}")
+[ "${c_turn:-0}"   -gt 0 ] && parts+=("🔴${c_turn}")
+[ "${c_merge:-0}"  -gt 0 ] && parts+=("🟢${c_merge}")
+[ "${c_prune:-0}"  -gt 0 ] && parts+=("🟣${c_prune}")
+
+if [ "${#parts[@]}" -eq 0 ]; then
+  status="✓"
+else
+  status="${parts[*]}"
+fi
+
+printf '%s' "$status" >"$CACHE/status.txt.tmp"
+mv "$CACHE/status.txt.tmp" "$CACHE/status.txt"
