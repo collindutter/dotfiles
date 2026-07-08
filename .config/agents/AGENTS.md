@@ -8,6 +8,24 @@
 - Do not preserve backward compatibility unless the user explicitly asks for it.
 - No `any` types unless absolutely necessary.
 
+# Delegating coding work to subagents
+
+For coding tasks, use your judgement to delegate implementation to a
+lower-power model via the `subagent` tool instead of doing it in the main
+loop:
+
+- `coder` (Sonnet): substantive implementation work with a clear spec.
+- `mechanic` (Haiku): trivial/mechanical edits (renames, copy changes, small
+  fixes, config tweaks).
+
+Give the subagent a self-contained prompt: the files involved, the exact
+change wanted, and any conventions to follow. Review the resulting diff in the
+main loop before considering the task done.
+
+Keep in the main loop: design decisions, debugging that requires judgement,
+code review, synthesis, and anything where the spec is still fuzzy. When in
+doubt, or when a delegated task comes back wrong twice, just do it yourself.
+
 # Tooling
 
 - Prefer `rg` over `grep` and `fd` over `find` for file searches. They are faster and respect `.gitignore` by default.
