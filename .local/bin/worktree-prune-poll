@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
-# worktree-prune-poll — find workmux worktrees whose PR has merged or closed,
-# so the worktree can be removed. Writes a cache for the tmux segment + popup.
+# worktree-prune-poll — index workmux worktrees and their PR state, and flag the
+# ones whose PR has merged/closed (prunable). Feeds both the tmux prune segment
+# and the worktree-aware attention popup (which joins github-attn items to local
+# worktrees by repo + PR number).
 #
 # This is the local counterpart to `github-attn`: it answers "which of my local
-# worktrees can I clean up," which is machine-local and outside github-attn's
-# GitHub-only scope. Uses REST via `gh api` (separate budget from GraphQL).
+# worktrees map to which PRs, and which can I clean up" — machine-local and
+# outside github-attn's GitHub-only scope. Uses REST via `gh api`.
 #
 # Output (in $WORKTREE_PRUNE_CACHE, default ~/.cache/worktree-prune):
-#   data.json   — array of prunable worktree records
-#   status.txt  — compact count for the status bar (🧹N, or ✓ when clean)
+#   data.json   — array of worktree records (slug, number, state, prunable, ...)
+#   status.txt  — compact count for the status bar (🧹N when prunable, else empty)
 set -uo pipefail
 
 export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.local/bin:$PATH"
@@ -89,19 +91,21 @@ process_group() {
     [ -z "$pr" ] && pr="null"
     [ "$pr" = "null" ] && continue
 
-    state="$(jq -r '.state // ""' <<<"$pr")"
-    if [ "$state" = "MERGED" ] || [ "$state" = "CLOSED" ]; then
-      jq -cn \
-        --arg repo "$(basename "$main_repo")" \
-        --arg repo_path "$main_repo" \
-        --arg handle "$handle" \
-        --arg path "$sub" \
-        --arg branch "$branch" \
-        --argjson pr "$pr" \
-        '{repo: $repo, repo_path: $repo_path, handle: $handle, path: $path,
-          branch: $branch, number: $pr.number, state: $pr.state,
-          title: $pr.title, url: $pr.url}' >>"$out"
-    fi
+    state="$(jq -r '.state // "NONE"' <<<"$pr")"
+    prunable=false
+    { [ "$state" = "MERGED" ] || [ "$state" = "CLOSED" ]; } && prunable=true
+    jq -cn \
+      --arg slug "$slug" \
+      --arg repo "$(basename "$main_repo")" \
+      --arg repo_path "$main_repo" \
+      --arg handle "$handle" \
+      --arg path "$sub" \
+      --arg branch "$branch" \
+      --argjson pr "$pr" \
+      --argjson prunable "$prunable" \
+      '{slug: $slug, repo: $repo, repo_path: $repo_path, handle: $handle, path: $path,
+        branch: $branch, number: $pr.number, state: $pr.state,
+        prunable: $prunable, title: $pr.title, url: $pr.url}' >>"$out"
   done
 
   rm -f "$prfile"
@@ -128,7 +132,7 @@ cat "$WORKDIR"/*.ndjson >"$RECORDS" 2>/dev/null || true
 jq -s 'sort_by(.repo, .handle)' "$RECORDS" >"$PRTMP"
 mv "$PRTMP" "$CACHE/data.json"
 
-count="$(jq 'length' "$CACHE/data.json")"
+count="$(jq '[.[] | select(.prunable)] | length' "$CACHE/data.json")"
 if [ "${count:-0}" -gt 0 ]; then
   printf ' 🧹%s ' "$count" >"$CACHE/status.txt.tmp"
 else
