@@ -43,6 +43,6 @@
 /.local/*
 !/.local/bin/
 /.local/bin/*
-!/.local/bin/workmux-pr
-!/.local/bin/workmux-pr-poll
-!/.local/bin/workmux-pr-status
+!/.local/bin/github-attn-tmux
+!/.local/bin/worktree-prune-poll
+!/.local/bin/worktree-prune-status

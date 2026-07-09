@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# github-attn-tmux — fast tmux status reader. Prints the cached status string
+# instantly and spawns a background `github-attn poll` when the cache is stale.
+# Never blocks: all network work happens in the detached poller.
+set -uo pipefail
+
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:$HOME/.local/bin:$PATH"
+
+CACHE="${GITHUB_ATTN_CACHE:-$HOME/.cache/github-attn}"
+TTL="${GITHUB_ATTN_TTL:-300}"
+STATUS="$CACHE/status.txt"
+DATA="$CACHE/data.json"
+
+if [ -f "$STATUS" ]; then
+  cat "$STATUS"
+else
+  printf '…'
+fi
+
+stale=1
+if [ -f "$DATA" ]; then
+  age=$(( $(date +%s) - $(stat -f %m "$DATA" 2>/dev/null || echo 0) ))
+  [ "$age" -le "$TTL" ] && stale=0
+fi
+
+if [ "$stale" -eq 1 ] && command -v github-attn >/dev/null 2>&1; then
+  ( nohup github-attn poll >/dev/null 2>&1 </dev/null & )
+fi
