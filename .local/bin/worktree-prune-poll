@@ -1,0 +1,137 @@
+#!/usr/bin/env bash
+# worktree-prune-poll — find workmux worktrees whose PR has merged or closed,
+# so the worktree can be removed. Writes a cache for the tmux segment + popup.
+#
+# This is the local counterpart to `github-attn`: it answers "which of my local
+# worktrees can I clean up," which is machine-local and outside github-attn's
+# GitHub-only scope. Uses REST via `gh api` (separate budget from GraphQL).
+#
+# Output (in $WORKTREE_PRUNE_CACHE, default ~/.cache/worktree-prune):
+#   data.json   — array of prunable worktree records
+#   status.txt  — compact count for the status bar (🧹N, or ✓ when clean)
+set -uo pipefail
+
+export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.local/bin:$PATH"
+
+ROOT="${WORKTREE_PRUNE_ROOT:-$HOME/Projects}"
+CACHE="${WORKTREE_PRUNE_CACHE:-$HOME/.cache/worktree-prune}"
+LOCK="$CACHE/poll.lock"
+STALE_LOCK=600
+
+mkdir -p "$CACHE"
+
+now() { date +%s; }
+if ! mkdir "$LOCK" 2>/dev/null; then
+  age=$(( $(now) - $(stat -f %m "$LOCK" 2>/dev/null || echo 0) ))
+  if [ "$age" -gt "$STALE_LOCK" ]; then
+    rmdir "$LOCK" 2>/dev/null || true
+    mkdir "$LOCK" 2>/dev/null || exit 0
+  else
+    exit 0
+  fi
+fi
+WORKDIR="$(mktemp -d)"
+: >"$WORKDIR/failed"
+RECORDS="$(mktemp)"
+PRTMP="$(mktemp)"
+: >"$RECORDS"
+trap 'rmdir "$LOCK" 2>/dev/null || true; rm -f "$RECORDS" "$PRTMP" 2>/dev/null || true; rm -rf "$WORKDIR" 2>/dev/null || true' EXIT
+
+# Normalize a REST pull object to the fields we need.
+NORM_ONE='{
+  number, headRef: .head.ref, headSha: .head.sha, title, url: .html_url,
+  state: (if .merged_at != null then "MERGED"
+          elif .state == "closed" then "CLOSED" else "OPEN" end)
+}'
+NORM="[.[] | $NORM_ONE]"
+
+process_group() {
+  local wtdir="$1" out="$2"
+  local main_repo="${wtdir%__worktrees}"
+  local remote slug prfile sub handle branch pr sha num cand state
+
+  remote="$(git -C "$main_repo" config --get remote.origin.url 2>/dev/null || true)"
+  slug="$(printf '%s' "$remote" | sed -E 's#^git@[^:]+:##; s#^ssh://git@[^/]+/##; s#^https?://[^/]+/##; s#\.git$##')"
+  [ -z "$slug" ] && return
+
+  prfile="$(mktemp)"
+  if ! gh api "repos/$slug/pulls?state=all&per_page=100&sort=updated&direction=desc" \
+        --jq "$NORM" >"$prfile" 2>/dev/null; then
+    echo "$main_repo" >>"$WORKDIR/failed"
+    rm -f "$prfile"
+    return
+  fi
+  [ -s "$prfile" ] || echo '[]' >"$prfile"
+
+  for sub in "$wtdir"/*/; do
+    [ -d "$sub" ] || continue
+    sub="${sub%/}"
+    handle="$(basename "$sub")"
+    branch="$(git -C "$sub" symbolic-ref --quiet --short HEAD 2>/dev/null || true)"
+
+    pr="null"
+    if [ -n "$branch" ]; then
+      pr="$(jq -c --arg b "$branch" '[.[] | select(.headRef == $b)] | .[0] // empty' "$prfile")"
+    fi
+    if [ -z "$pr" ] || [ "$pr" = "null" ]; then
+      sha="$(git -C "$sub" rev-parse HEAD 2>/dev/null || true)"
+      if [ -n "$sha" ]; then
+        num="$(gh api "repos/$slug/commits/$sha/pulls" --jq '.[0].number' 2>/dev/null || true)"
+        if [ -n "$num" ]; then
+          cand="$(jq -c --argjson n "$num" '[.[] | select(.number == $n)] | .[0] // empty' "$prfile")"
+          [ -z "$cand" ] && cand="$(gh api "repos/$slug/pulls/$num" --jq "$NORM_ONE" 2>/dev/null || true)"
+          if [ -n "$cand" ] && [ "$cand" != "null" ]; then
+            [ "$(jq -r '.headSha // ""' <<<"$cand")" = "$sha" ] && pr="$cand"
+          fi
+        fi
+      fi
+    fi
+    [ -z "$pr" ] && pr="null"
+    [ "$pr" = "null" ] && continue
+
+    state="$(jq -r '.state // ""' <<<"$pr")"
+    if [ "$state" = "MERGED" ] || [ "$state" = "CLOSED" ]; then
+      jq -cn \
+        --arg repo "$(basename "$main_repo")" \
+        --arg repo_path "$main_repo" \
+        --arg handle "$handle" \
+        --arg path "$sub" \
+        --arg branch "$branch" \
+        --argjson pr "$pr" \
+        '{repo: $repo, repo_path: $repo_path, handle: $handle, path: $path,
+          branch: $branch, number: $pr.number, state: $pr.state,
+          title: $pr.title, url: $pr.url}' >>"$out"
+    fi
+  done
+
+  rm -f "$prfile"
+}
+
+group_n=0
+while IFS= read -r wtdir; do
+  [ -d "$wtdir" ] || continue
+  group_n=$((group_n + 1))
+  process_group "$wtdir" "$WORKDIR/$group_n.ndjson" &
+done < <(find "$ROOT" -maxdepth 3 -type d -name '*__worktrees' 2>/dev/null)
+wait
+
+failed_n=$(wc -l <"$WORKDIR/failed" 2>/dev/null | tr -d ' ')
+failed_n=${failed_n:-0}
+if [ "$group_n" -gt 0 ] && [ "$failed_n" -ge "$group_n" ]; then
+  echo "worktree-prune-poll: all $group_n repo groups failed; keeping cache" >&2
+  [ -f "$CACHE/data.json" ] || echo '[]' >"$CACHE/data.json"
+  touch "$CACHE/data.json" 2>/dev/null || true
+  exit 0
+fi
+
+cat "$WORKDIR"/*.ndjson >"$RECORDS" 2>/dev/null || true
+jq -s 'sort_by(.repo, .handle)' "$RECORDS" >"$PRTMP"
+mv "$PRTMP" "$CACHE/data.json"
+
+count="$(jq 'length' "$CACHE/data.json")"
+if [ "${count:-0}" -gt 0 ]; then
+  printf ' 🧹%s ' "$count" >"$CACHE/status.txt.tmp"
+else
+  : >"$CACHE/status.txt.tmp"
+fi
+mv "$CACHE/status.txt.tmp" "$CACHE/status.txt"
