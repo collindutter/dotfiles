@@ -23,12 +23,21 @@ Steps:
        git merge-base HEAD origin/<base>
        git diff --stat "$(git merge-base HEAD origin/<base>)"..HEAD
 
+   Also detect whether the branch has an associated PR, and if so capture its
+   number/URL so the reviewer can read the intent behind the change:
+
+       gh pr view --json number,url,title 2>/dev/null
+
 3. Call the `subagent` tool once with `agent: "reviewer"` and a `task` that:
    - States the exact diff command to review:
      `git diff "$(git merge-base HEAD origin/<base>)"..HEAD`
    - Lists the changed files and instructs the reviewer to review only those,
      ignoring pre-existing issues in unchanged code, and only report problems
      the diff causes or newly exposes.
+   - When a PR exists, passes its number/URL and instructs the reviewer to read
+     the PR description and any linked issues or follow-up PRs (`gh pr view`,
+     `gh issue view`) so findings account for stated intent and deliberate
+     deviations.
    - Forwards any extra focus areas from the arguments above.
 
    The `subagent` tool has no per-call model override; the review model is set
