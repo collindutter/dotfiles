@@ -89,7 +89,7 @@ Start every AI-assisted finding with this disclosure callout, verbatim. Do not r
 
 ```markdown
 > [!NOTE]
-> AI-assisted review. Not my own words, but I reviewed and independently verified this finding.
+> Beep boop. AI-assisted review. Not my own words, but I reviewed and independently verified this finding.
 
 **Finding: <short title>.**
 
