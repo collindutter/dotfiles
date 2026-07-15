@@ -63,6 +63,7 @@ INLINE_RE = re.compile(
 
 def parse_inline(text: str) -> list[Run]:
     """Turn a fragment of markdown/HTML into styled runs."""
+    text = re.sub(r"!\[[^\]]*\]\([^)]*\)", "", text)  # md images -> drop (no raster)
     text = re.sub(r"<a\b[^>]*>(.*?)</a>", r"\1", text, flags=re.S)  # links -> text
     text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)  # md links -> text
     text = text.replace("<br>", "\n").replace("<br/>", "\n").replace("<br />", "\n")
@@ -128,6 +129,10 @@ def parse_slide(block: str) -> Slide:
     for raw in lines:
         line = raw.strip()
         if not line:
+            continue
+
+        # standalone markdown image -> skip (python-pptx can't embed SVG)
+        if re.fullmatch(r"!\[[^\]]*\]\([^)]*\)", line):
             continue
 
         if line == "\uE000LIST\uE000":
