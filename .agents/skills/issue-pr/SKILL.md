@@ -31,8 +31,9 @@ allowed-tools: Bash(git diff:*) Bash(git status:*) Bash(git log:*) Bash(git bran
 5. **Push** the branch to origin with `git push -u origin <branch>`.
 
 6. **Create a PR** using `gh pr create` that:
-   - Has a title summarizing what was done
-   - References the issue in the body with `Closes #<issue-number>`
-   - Summarizes the approach taken
+   - Has a title in conventional-commit format summarizing what was done
+   - Sets the body to only the functional issue link `Closes #<issue-number>`
+     (e.g. `gh pr create --title "<title>" --body "Closes #<issue-number>"`).
+     Do NOT write a description, summary, or approach; the human fills in the body.
 
 Do steps 3-6 in a single message after creating the issue.
