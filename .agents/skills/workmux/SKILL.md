@@ -196,7 +196,7 @@ step. This cleans up the worktree, tmux window, and branch.
 
 1. Commit changes
 2. `git push -u origin HEAD`
-3. Use `/skill:open-pr` to write a PR description and open in browser
+3. Use `/skill:open-pr` to open PR creation in the browser (you fill in the body)
 4. After PR is merged remotely, clean up with `workmux rm --gone`
 
 ### Delegating tasks
@@ -246,5 +246,5 @@ other projects by path and let the agent explore on its own.
 - **`/skill:rebase`**: rebase with smart conflict resolution
 - **`/skill:worktree`**: delegate tasks to parallel worktree agents
 - **`/skill:coordinator`**: orchestrate multiple agents (spawn, monitor, merge)
-- **`/skill:open-pr`**: write PR description and open in browser
+- **`/skill:open-pr`**: open PR creation in the browser (body left for you to fill in)
 - **`/skill:workmux-prune`**: remove worktrees whose PRs are merged or closed
