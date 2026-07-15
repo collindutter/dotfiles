@@ -19,6 +19,9 @@ if status --is-interactive
 
 	# Disable the default fish greeting
 	set fish_greeting
+
+	# Shorthand for workmux
+	abbr -a wm workmux
 	
 	# Improve fzf key bindings
 	fzf_configure_bindings --directory=\cf
