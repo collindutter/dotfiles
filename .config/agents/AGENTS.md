@@ -17,6 +17,12 @@ loop:
 - `coder` (Sonnet): substantive implementation work with a clear spec.
 - `mechanic` (Haiku): trivial/mechanical edits (renames, copy changes, small
   fixes, config tweaks).
+- `scout` (Haiku): fast read-only codebase recon that returns compressed
+  findings for handoff. Use it to gather context before designing or
+  delegating, instead of reading everything in the main loop.
+- `reviewer` (Sonnet): read-only code review of a specific diff/PR for
+  correctness and design. Use it to check work before committing or opening
+  a PR.
 
 Give the subagent a self-contained prompt: the files involved, the exact
 change wanted, and any conventions to follow. Review the resulting diff in the
