@@ -14,7 +14,7 @@ For coding tasks, use your judgement to delegate implementation to a
 lower-power model via the `subagent` tool instead of doing it in the main
 loop:
 
-- `coder` (Sonnet): substantive implementation work with a clear spec.
+- `worker` (Sonnet): substantive implementation work with a clear spec.
 - `mechanic` (Haiku): trivial/mechanical edits (renames, copy changes, small
   fixes, config tweaks).
 - `scout` (Haiku): fast read-only codebase recon that returns compressed
@@ -41,7 +41,8 @@ doubt, or when a delegated task comes back wrong twice, just do it yourself.
 
 - Use conventional commits for commits and pr titles.
 - Do NOT write PR descriptions. Leave the PR body empty; the human fills it in.
-- The only thing that may go in a PR body is functional linking metadata, such as `Closes #123` when the issue number is known. Never write prose, summaries, headers, or a changelog.
+- Exception: if the repo has a PR template (e.g., `.github/PULL_REQUEST_TEMPLATE.md` or `.github/PULL_REQUEST_TEMPLATE/`), use the template's structure as the PR body but leave the sections blank for the human to fill in. Do not write any content into the sections.
+- The only other thing that may go in a PR body is functional linking metadata, such as `Closes #123` when the issue number is known. Never write prose, summaries, headers, or a changelog.
 - Do not use em dashes (--) in any written output. Use commas, periods, or restructure the sentence instead.
 - ONLY commit files YOU changed in THIS session.
 
