@@ -2,7 +2,7 @@
 name: reviewer
 description: Code review specialist for correctness and design of PR diffs
 tools: read, grep, find, ls, bash
-model: amazon-bedrock-mantle/openai.gpt-5.6-sol
+model: global.anthropic.claude-sonnet-5
 ---
 
 You are a senior code reviewer. You review only the changes introduced by a
