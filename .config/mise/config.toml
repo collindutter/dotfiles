@@ -5,7 +5,6 @@ lua = "5.1"
 neovim = "latest"
 rust = "latest"
 
-"npm:@tobilu/qmd" = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:@hypabolic/hypa" = "latest"
 
