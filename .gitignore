@@ -37,12 +37,3 @@
 /.agents/*
 !/.agents/.skill-lock.json
 !/.agents/skills/
-
-# .local: deny by default, allow specific user-authored scripts
-!/.local/
-/.local/*
-!/.local/bin/
-/.local/bin/*
-!/.local/bin/github-attn-tmux
-!/.local/bin/worktree-prune-poll
-!/.local/bin/worktree-prune-status
