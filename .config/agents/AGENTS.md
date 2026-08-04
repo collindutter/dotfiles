@@ -49,6 +49,7 @@ doubt, or when a delegated task comes back wrong twice, just do it yourself.
 # Getting help
 
 - ALWAYS ask for clarification rather than making assumptions.
+- When using the `ask_user_question` tool, ALWAYS preserve a way for me to type a custom answer. The auto-appended "Type something." row is suppressed on multi-select questions and on any single-select question where an option carries a `preview`. So avoid `multiSelect` and option `preview`s unless they are truly necessary; if I need to type a custom answer, keep questions single-select with no previews.
 - If you're having trouble with something, it's ok to stop and ask for help. Especially if it's something your human might be better at.
 
 # Knowledge Base
