@@ -1,15 +1,6 @@
 {
   "version": 3,
   "skills": {
-    "find-skills": {
-      "source": "vercel-labs/skills",
-      "sourceType": "github",
-      "sourceUrl": "https://github.com/vercel-labs/skills.git",
-      "skillPath": "skills/find-skills/SKILL.md",
-      "skillFolderHash": "3013fdeb8a11b10b1eb795ec3ae8bfca38f7c26d",
-      "installedAt": "2026-04-06T20:53:46.706Z",
-      "updatedAt": "2026-04-06T20:53:46.706Z"
-    },
     "agent-browser": {
       "source": "vercel-labs/agent-browser",
       "sourceType": "github",
@@ -25,9 +16,17 @@
       "sourceUrl": "https://github.com/daymade/claude-code-skills.git",
       "skillPath": "capture-screen/SKILL.md",
       "skillFolderHash": "9ea5e19be7a1d26b4f4953fe12a94bab77fa1061",
-      "pluginName": "capture-screen",
       "installedAt": "2026-04-13T22:52:06.667Z",
       "updatedAt": "2026-04-13T22:52:06.667Z"
+    },
+    "gh-stack": {
+      "source": "github/gh-stack",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/github/gh-stack.git",
+      "skillPath": "skills/gh-stack/SKILL.md",
+      "skillFolderHash": "c95c8b5b4dd850f3fef007b304428f5684f2fb87",
+      "installedAt": "2026-08-04T22:33:38Z",
+      "updatedAt": "2026-08-04T22:33:39Z"
     }
   },
   "dismissed": {
