@@ -1,20 +1,51 @@
-/*/
+# Work tree is $HOME, so deny everything by default and allow only
+# user-authored config. A trailing-slash rule like /*/ matches directories
+# only, which would leave every top-level dotfile addable.
+/*
+!/.agents/
+!/.claude/
+!/.config/
+!/.pi/
+!/.gitconfig
+!/.gitignore
+!/.install.sh
+!/README.md
+
+# Never track the git database, at any depth.
 .dotfiles
 
-# .config: allow parent, deny specific noise
-!/.config/
-/.config/tmux/plugins/
-/.config/fish/functions/*fzf*
+# .config: deny by default, allow the directories we track
+/.config/*
+!/.config/.ignore
+!/.config/AGENTS.md
+!/.config/aerospace/
+!/.config/agents/
+!/.config/bat/
+!/.config/btop/
+!/.config/fish/
+!/.config/ghostty/
+!/.config/homebrew/
+!/.config/lazygit/
+!/.config/mise/
+!/.config/nvim/
+!/.config/starship/
+!/.config/tmux/
+!/.config/workmux/
+
+# Machine-local state inside otherwise-allowed .config directories
+/.config/bat/themes/*.1
+/.config/fish/completions/
 /.config/fish/conf.d/*
 !/.config/fish/conf.d/fzf-theme.fish
 !/.config/fish/conf.d/github-packages.fish
-/.config/fish/completions/
-/.config/stripe/
-/.config/github-copilot/
-/.config/gh/
+/.config/fish/functions/*fzf*
+/.config/fish/fish_variables
+/.config/ghostty/*.bak
+/.config/homebrew/trust.json
+/.config/homebrew/trust.json.lock
+/.config/tmux/plugins/
 
 # .pi: deny by default, allow specific user-authored config
-!/.pi/
 /.pi/*
 !/.pi/agent/
 !/.pi/web-search.json
@@ -26,14 +57,12 @@
 /.pi/agent/extensions/node_modules/
 
 # .claude: deny by default, allow specific user-authored config
-!/.claude/
 /.claude/*
 !/.claude/CLAUDE.md
 !/.claude/settings.json
 !/.claude/skills/
 
 # .agents: deny by default, allow specific user-authored skills (vercel skills cli)
-!/.agents/
 /.agents/*
 !/.agents/.skill-lock.json
 !/.agents/skills/
