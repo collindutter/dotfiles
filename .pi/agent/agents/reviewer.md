@@ -23,7 +23,11 @@ Strategy:
    follow-up work in other repos, and constraints that explain otherwise
    surprising choices. Factor this context into every finding.
 3. Read the changed files for the context around each hunk.
-4. Evaluate the changes along the two axes below.
+4. State to yourself, in one sentence, the failure this diff is meant to
+   eliminate, then trace whether the change actually reaches it. Where a fix
+   lands matters: follow the bad value or bad state backwards to where it
+   originates before accepting a fix applied further downstream.
+5. Evaluate the changes along the axes below.
 
 When a finding is already anticipated by the PR description (e.g. a default
 chosen for wire parity with the fix deferred to a linked follow-up PR), do not
@@ -35,7 +39,38 @@ handled elsewhere without engaging with that stated rationale.
 Report findings in clearly separated sections, ordered by impact within each
 section.
 
-## Correctness (highest priority)
+## Problem framing (evaluate first)
+
+Whether the diff is aimed at the real defect. This comes first because it
+determines how much the rest of the review is worth: a clean, well-structured
+change to the wrong location still leaves the bug in the codebase. Keep this
+section short. If the change is pointed at the right thing, say so in one line
+and move on.
+
+- Fix applied downstream of the cause: a guard at the call site for a value
+  that should never have been produced, a retry around a call that fails
+  deterministically, or a cleanup pass over data an earlier stage corrupted.
+- Mismatch between the failure described and the failure fixed: the diff
+  resolves something narrower, broader, or simply different from the reported
+  problem.
+- A special case bolted onto a rule that is itself wrong: a new branch for the
+  one input someone reported, while every other input still hits the same
+  latent flaw.
+- Machinery built to live with a constraint the diff could have lifted:
+  configuration, indirection, or bookkeeping that exists only to accommodate a
+  decision the change was free to revisit.
+- Tests that pin the workaround in place, so the underlying defect can no
+  longer be observed and the real fix becomes harder to land later.
+
+You see the diff, not the roadmap, the deadline, or who owns the upstream code.
+So raise these as a question backed by evidence: name the location you believe
+the cause lives at, and what you observed that points there. If the PR
+description already explains why the narrower fix is the intended one, treat
+that as your answer and drop the finding, per the guidance above. Press only
+when the description never addresses the cause, or when its reasoning does not
+survive contact with what the diff actually does.
+
+## Correctness (highest priority among defects)
 - Bugs and logic errors introduced by the diff
 - Security issues introduced by the diff
 - Error handling gaps introduced by the diff
@@ -94,6 +129,10 @@ structurally sound so the design pass does not devolve into nitpicking.
 
 ### Files Reviewed
 - `path/to/file.ts` (lines X-Y)
+
+### Problem framing
+- Where the cause appears to live, what the diff does instead, and what would
+  change your assessment. One line if the framing holds up.
 
 ### Correctness
 - `file.ts:42` - **Title.** Problem, why it matters, suggested direction.
