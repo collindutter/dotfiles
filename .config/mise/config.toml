@@ -10,3 +10,7 @@ rust = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = ["python", "node"]
+# Auto-load `.env` from the current directory and its parents, the way plain
+# dotenv tooling does. Unlike `[env] _.file`, this needs no per-repo mise.toml
+# and resolves against cwd rather than config_root.
+env_file = ".env"
