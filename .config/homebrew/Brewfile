@@ -76,6 +76,7 @@ brew "devcontainer"
 brew "azure-cli"
 brew "marp-cli"
 brew "hunk"
+brew "tuicr"
 
 cask "font-jetbrains-mono-nerd-font"
 cask "ghostty"
