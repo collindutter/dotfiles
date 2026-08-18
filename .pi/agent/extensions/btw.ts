@@ -14,8 +14,7 @@
  * Source: https://perrotta.dev/2026/07/pi-/btw-side-chat/
  */
 
-import { complete } from "@earendil-works/pi-ai/compat";
-import type { Message, UserMessage } from "@earendil-works/pi-ai";
+import type { ImageContent, Message, TextContent, UserMessage } from "@earendil-works/pi-ai";
 import type { ExtensionAPI, SessionEntry } from "@earendil-works/pi-coding-agent";
 import { convertToLlm, getMarkdownTheme } from "@earendil-works/pi-coding-agent";
 import {
@@ -32,6 +31,74 @@ import {
 interface BtwMessage {
 	role: "user" | "assistant";
 	text: string;
+}
+
+/**
+ * Rewrites a conversation so it carries no tool calls, tool results, or thinking
+ * blocks, since the side chat sends neither tool definitions nor the main thread's
+ * thinking configuration and providers reject replaying those blocks without them.
+ *
+ * Tool activity survives as labelled text, so the model still sees what ran and
+ * what it returned. Tool results fold into user turns and same-role turns merge,
+ * keeping roles alternating for providers that require it.
+ */
+function toTextOnlyHistory(messages: Message[]): Message[] {
+	const history: Message[] = [];
+
+	const pushUser = (content: (TextContent | ImageContent)[]): void => {
+		if (content.length === 0) return;
+		const last = history.at(-1);
+		if (last?.role === "user" && Array.isArray(last.content)) {
+			last.content.push(...content);
+			return;
+		}
+		history.push({ role: "user", content, timestamp: Date.now() });
+	};
+
+	for (const message of messages) {
+		if (message.role === "user") {
+			pushUser(
+				typeof message.content === "string"
+					? [{ type: "text", text: message.content }]
+					: [...message.content],
+			);
+			continue;
+		}
+
+		if (message.role === "toolResult") {
+			const label = message.isError ? "tool error" : "tool result";
+			pushUser([{ type: "text", text: `[${label}: ${message.toolName}]` }, ...message.content]);
+			continue;
+		}
+
+		const content: TextContent[] = [];
+		for (const block of message.content) {
+			if (block.type === "text") {
+				if (block.text.trim().length > 0) content.push({ type: "text", text: block.text });
+			} else if (block.type === "toolCall") {
+				const args = JSON.stringify(block.arguments ?? {});
+				content.push({ type: "text", text: `[tool call: ${block.name}(${args})]` });
+			}
+		}
+		if (content.length === 0) continue;
+
+		const last = history.at(-1);
+		if (last?.role === "assistant") {
+			last.content.push(...content);
+			continue;
+		}
+		// The rewritten turn no longer matches the provider-side response it came from.
+		history.push({
+			...message,
+			content,
+			stopReason: "stop",
+			errorMessage: undefined,
+			responseId: undefined,
+			deferred: undefined,
+		});
+	}
+
+	return history;
 }
 
 export default function btwExtension(pi: ExtensionAPI) {
@@ -53,8 +120,10 @@ export default function btwExtension(pi: ExtensionAPI) {
 			const mainMessages = branch
 				.filter((entry): entry is SessionEntry & { type: "message" } => entry.type === "message")
 				.map((entry) => entry.message);
-			const mainLlmMessages = convertToLlm(mainMessages);
+			const mainLlmMessages = toTextOnlyHistory(convertToLlm(mainMessages));
 			const systemPrompt = ctx.getSystemPrompt();
+			// Let the side chat reason at the same level as the main thread.
+			const thinkingLevel = ctx.thinkingLevel;
 
 			// Rendered transcript (role + text).
 			const btwHistory: BtwMessage[] = [];
@@ -160,39 +229,50 @@ export default function btwExtension(pi: ExtensionAPI) {
 					loadingAbort = new AbortController();
 					const signal = loadingAbort.signal;
 
-					const doComplete = async () => {
-						const auth = await ctx.modelRegistry.getApiKeyAndHeaders(ctx.model!);
-						if (!auth.ok || !auth.apiKey) {
-							throw new Error(auth.ok ? `No API key for ${ctx.model!.provider}` : auth.error);
-						}
+					// An unanswered turn must not stay in the LLM history: providers that
+					// enforce alternating roles reject a trailing user message.
+					const dropPendingUserTurn = () => {
+						const index = btwLlmFollowups.indexOf(userMessage);
+						if (index !== -1) btwLlmFollowups.splice(index);
+					};
 
-						const response = await complete(
+					const doComplete = async () => {
+						// modelRegistry.complete() resolves provider auth itself, so this works for
+						// providers without an API key (e.g. Bedrock SigV4) as well as keyed ones.
+						const response = await ctx.modelRegistry.complete(
 							ctx.model!,
 							{
 								systemPrompt,
 								messages: [...mainLlmMessages, ...btwLlmFollowups],
 							},
-							{
-								apiKey: auth.apiKey,
-								headers: auth.headers,
-								env: auth.env,
-								signal,
-							},
+							{ signal, reasoning: thinkingLevel },
 						);
 
-						if (response.stopReason === "aborted") return;
+						if (response.stopReason === "aborted") {
+							dropPendingUserTurn();
+							return;
+						}
+						// complete() reports failures on the returned message instead of throwing.
+						if (response.stopReason === "error") {
+							throw new Error(response.errorMessage ?? `Request to ${response.provider} failed`);
+						}
 
 						const answer = response.content
 							.filter((c): c is { type: "text"; text: string } => c.type === "text")
 							.map((c) => c.text)
-							.join("\n");
+							.join("\n")
+							.trim();
 
 						btwLlmFollowups.push(response);
-						btwHistory.push({ role: "assistant", text: answer });
+						btwHistory.push({
+							role: "assistant",
+							text: answer || `_(no text content, stop reason: ${response.stopReason})_`,
+						});
 					};
 
 					doComplete()
 						.catch((err: unknown) => {
+							dropPendingUserTurn();
 							if (signal.aborted) return;
 							const message = err instanceof Error ? err.message : String(err);
 							btwHistory.push({ role: "assistant", text: `Error: ${message}` });
