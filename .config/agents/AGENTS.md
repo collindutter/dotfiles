@@ -1,12 +1,7 @@
-# Writing code
+# Writing Comments
 
-- When modifying code, match the style and formatting of surrounding code, even if it differs from standard style guides. Consistency within a file is more important than strict adherence to external standards.
 - When writing comments, avoid referring to temporal context about refactors or recent changes. Comments should be evergreen and describe the code as it is, not how it evolved or was recently changed.
 - NEVER name things as 'improved' or 'new' or 'enhanced', etc. Code naming should be evergreen. What is new today will be "old" someday.
-- When adding or modifying code, write unit tests if there is an established pattern of doing so in the project (e.g., an existing test suite, test directory, or tests alongside similar code). Match the existing testing style and framework.
-- NEVER give time estimates for implementations (e.g., "this will take 2 hours", "phase 1: 1 day"). You have no reliable basis for estimating how long work will take in human time. Describe scope, complexity, or ordering instead if needed.
-- Do not preserve backward compatibility unless the user explicitly asks for it.
-- No `any` types unless absolutely necessary.
 
 # Delegating coding work to subagents
 
@@ -29,6 +24,19 @@ work in the main loop:
   give it file paths or a diff written to a file rather than a git command.
 - `oracle` (Opus): a second opinion before acting. Use it when the decision
   itself is risky, not when the work is merely large.
+
+The builtin `reviewer` is general purpose and carries no rubric of its own. When
+delegating a review, pass the absolute path of the relevant rubric in the task
+and tell it to read that first:
+
+- Code and diffs: `~/.agents/skills/review/references/code-review-rubric.md`
+- Documentation: `~/.agents/skills/docs-review/references/docs-review-rubric.md`
+
+Pass the path, never the file contents, so the rubric stays in one place. The
+`review` and `docs-review` skills already do this; the rule is for ad-hoc review
+delegation that does not go through them. Those rubrics are plain documents with
+no dependency on any agent harness, so they are equally usable for a review you
+do yourself in the main loop.
 
 Models are pinned per role in `subagents.agentOverrides`
 (`~/.pi/agent/settings.json`), not per call, so do not try to pass a model.
