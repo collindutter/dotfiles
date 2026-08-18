@@ -8,9 +8,6 @@ files:
 panes:
   - command: nvim
     focus: true
-  - command: lazygit
-    split: horizontal
-    percentage: 40
   - command: pi
-    split: vertical
+    split: horizontal
     percentage: 50
