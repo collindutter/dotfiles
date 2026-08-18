@@ -90,6 +90,11 @@ alt-shift-5 = ['move-node-to-workspace 5', 'workspace 5']
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 alt-tab = 'workspace-back-and-forth'
 
+# Send the focused workspace to the other monitor. 'next' is relative, so this
+# needs no monitor names and is a no-op with a single display.
+# See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
+alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
+
 alt-shift-semicolon = 'mode service'
 
 # 'service' binding mode declaration.
