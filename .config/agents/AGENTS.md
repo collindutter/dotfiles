@@ -10,23 +10,37 @@
 
 # Delegating coding work to subagents
 
-For coding tasks, use your judgement to delegate implementation to a
-lower-power model via the `subagent` tool instead of doing it in the main
-loop:
+Delegation runs through the `subagent` tool from `pi-subagents`. For coding
+tasks, use your judgement to delegate to a cheaper agent instead of doing the
+work in the main loop:
 
-- `worker` (Sonnet): substantive implementation work with a clear spec.
-- `mechanic` (Haiku): trivial/mechanical edits (renames, copy changes, small
-  fixes, config tweaks).
 - `scout` (Haiku): fast read-only codebase recon that returns compressed
   findings for handoff. Use it to gather context before designing or
   delegating, instead of reading everything in the main loop.
-- `reviewer` (Sonnet): read-only code review of a specific diff/PR for
-  correctness and design. Use it to check work before committing or opening
-  a PR.
+- `researcher` (Sonnet): web and docs research that returns a sourced brief.
+  Use it before trusting external facts.
+- `worker` (Sonnet): substantive implementation work with a clear spec. It
+  escalates unapproved decisions instead of guessing.
+- `delegate` (Haiku): trivial/mechanical edits (renames, copy changes, small
+  fixes, config tweaks) and anything that just needs a cheap second pair of
+  hands close to the parent session.
+- `reviewer` (Sonnet): read-only review of a diff, plan, or proposed solution.
+  Use it to check work before committing or opening a PR. It has no shell, so
+  give it file paths or a diff written to a file rather than a git command.
+- `oracle` (Opus): a second opinion before acting. Use it when the decision
+  itself is risky, not when the work is merely large.
+
+Models are pinned per role in `subagents.agentOverrides`
+(`~/.pi/agent/settings.json`), not per call, so do not try to pass a model.
 
 Give the subagent a self-contained prompt: the files involved, the exact
 change wanted, and any conventions to follow. Review the resulting diff in the
 main loop before considering the task done.
+
+Multi-step delegation is code-driven. Use `workflowScript` with
+`await runs.run(key, {...})` for sequential steps and `await runs.all([...])`
+for parallel fanout. There are no top-level `chain`, `tasks`, or `parallel`
+parameters.
 
 Keep in the main loop: design decisions, debugging that requires judgement,
 code review, synthesis, and anything where the spec is still fuzzy. When in
@@ -40,9 +54,10 @@ doubt, or when a delegated task comes back wrong twice, just do it yourself.
 # Committing Code / Pull Requests
 
 - Use conventional commits for commits and pr titles.
-- Do NOT write PR descriptions. Leave the PR body empty; the human fills it in.
-- Exception: if the repo has a PR template (e.g., `.github/PULL_REQUEST_TEMPLATE.md` or `.github/PULL_REQUEST_TEMPLATE/`), use the template's structure as the PR body but leave the sections blank for the human to fill in. Do not write any content into the sections.
-- The only other thing that may go in a PR body is functional linking metadata, such as `Closes #123` when the issue number is known. Never write prose, summaries, headers, or a changelog.
+- By default, do NOT write PR descriptions. Leave the PR body empty; the human fills it in.
+- If the human explicitly asks you to write the description, write it.
+- Default behavior when the repo has a PR template (e.g., `.github/PULL_REQUEST_TEMPLATE.md` or `.github/PULL_REQUEST_TEMPLATE/`): use the template's structure as the PR body but leave the sections blank for the human to fill in. Do not write any content into the sections unless asked to.
+- Otherwise, the only thing that may go in a PR body is functional linking metadata, such as `Closes #123` when the issue number is known. Do not write prose, summaries, headers, or a changelog unless asked to.
 - Do not use em dashes (--) in any written output. Use commas, periods, or restructure the sentence instead.
 - ONLY commit files YOU changed in THIS session.
 
