@@ -29,7 +29,7 @@ export default function (pi: ExtensionAPI) {
   }
 
   // Answering, cancelling, or erroring out returns the run to "working";
-  // workmux-status.ts then settles it to "done" on agent_end.
+  // workmux-status.ts then settles it to "done" on agent_settled.
   pi.events.on(ASK_USER_BLOCKED_EVENT, (data) => {
     const active = (data as { active?: unknown } | null)?.active;
     setStatus(active === true ? "waiting" : "working");
