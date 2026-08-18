@@ -14,8 +14,8 @@ Arguments (optional): $ARGUMENTS
 - May contain extra context to forward to the reviewer (e.g. a base branch or
   areas to focus on).
 - If no arguments are given, review the diff against the base branch.
-- The review model is set in the `reviewer` agent's frontmatter
-  (`~/.pi/agent/agents/reviewer.md`), not per invocation.
+- The review model is pinned in `subagents.agentOverrides.reviewer.model`
+  (`~/.pi/agent/settings.json`), not per invocation.
 
 ## Loop
 
@@ -28,6 +28,10 @@ iterations** to guarantee termination.
    runs in an isolated context and streams its progress into this session.
    Forward any context from `$ARGUMENTS`. Do not review the code yourself; let
    the reviewer subagent do it.
+
+   `pi-subagents` also ships a `/review-loop` prompt and a `/parallel-review`
+   prompt. Those are separate, parent-orchestrated workflows. This skill is the
+   merge-base-scoped commit loop; do not mix the two in one run.
 
 2. **Triage findings.** Classify each finding by severity:
    - **Actionable**: bugs, logic errors, security issues, error-handling gaps,
