@@ -9,6 +9,11 @@
  * at pi: the host terminal is frontmost AND (inside tmux) pi's window is the
  * active window. Being in a different tmux window still notifies.
  *
+ * Clicking the notification jumps to the pane that sent it: the most recently
+ * active tmux client is switched to pi's session/window/pane, then the host
+ * terminal app is activated. That makes the alert a working "take me to this
+ * agent" button across workmux worktree windows and sessions.
+ *
  * Configuration (environment variables):
  *   PI_ALERTER_DISABLED            Any non-empty value disables auto-notify.
  *   PI_ALERTER_NOTIFY_WHEN_FOCUSED Notify even when the terminal is frontmost.
@@ -75,14 +80,42 @@ function assistantText(assistant: AssistantLike): string {
 }
 
 /**
- * App display names that mean "the terminal pi is running in is frontmost".
+ * Waits for alerter's verdict on stdout and, when the alert was clicked rather
+ * than dismissed or timed out, brings pi's pane back on screen. Runs detached
+ * so the click still works after pi exits. Inputs arrive as env vars
+ * (PI_ALERTER_TARGET_*); alerter's own arguments arrive as "$@".
+ */
+const CLICK_HANDLER = `
+result=$(alerter "$@" 2>/dev/null) || exit 0
+case "$result" in
+  @TIMEOUT|@CLOSED|'') exit 0 ;;
+esac
+
+if [ -n "$PI_ALERTER_TARGET_PANE" ]; then
+  # The most recently active client is the one you are looking at.
+  client=$(tmux list-clients -F '#{client_activity} #{client_name}' 2>/dev/null |
+    sort -rn | head -n1 | cut -d' ' -f2-)
+  [ -n "$client" ] &&
+    tmux switch-client -c "$client" -t "$PI_ALERTER_TARGET_PANE" 2>/dev/null
+  tmux select-window -t "$PI_ALERTER_TARGET_PANE" 2>/dev/null
+  tmux select-pane -t "$PI_ALERTER_TARGET_PANE" 2>/dev/null
+fi
+
+[ -n "$PI_ALERTER_TARGET_BUNDLE_ID" ] &&
+  open -b "$PI_ALERTER_TARGET_BUNDLE_ID" >/dev/null 2>&1 && exit 0
+[ -n "$PI_ALERTER_TARGET_APP" ] && open -a "$PI_ALERTER_TARGET_APP" >/dev/null 2>&1
+exit 0
+`;
+
+/**
+ * App display names of the terminal pi is running in, most specific first.
  * Derived from TERM_PROGRAM, TERM (covers tmux/screen where TERM_PROGRAM is the
  * multiplexer), and terminal-specific env vars. Empty when undetectable.
  */
-function frontmostTerminalNames(): Set<string> {
-  const names = new Set<string>();
+function terminalAppNames(): string[] {
+  const names: string[] = [];
   const add = (...values: string[]) => {
-    for (const value of values) names.add(value.toLowerCase());
+    for (const value of values) if (!names.includes(value)) names.push(value);
   };
 
   switch (process.env.TERM_PROGRAM) {
@@ -127,6 +160,22 @@ function frontmostTerminalNames(): Set<string> {
   if (process.env.VSCODE_INJECTION || process.env.VSCODE_PID) add("Code", "Cursor");
 
   return names;
+}
+
+/** Where a click should take you: pi's tmux pane plus its host terminal app. */
+function focusTarget(): Record<string, string> {
+  const target: Record<string, string> = {};
+  // TMUX_PANE is a pane id (%7), stable across window renumbering and moves.
+  if (process.env.TMUX && process.env.TMUX_PANE) {
+    target.PI_ALERTER_TARGET_PANE = process.env.TMUX_PANE;
+  }
+  // Set by LaunchServices on the app that started this process tree; the most
+  // precise handle on the terminal, and it disambiguates VS Code from Cursor.
+  const bundleId = process.env.__CFBundleIdentifier;
+  if (bundleId) target.PI_ALERTER_TARGET_BUNDLE_ID = bundleId;
+  const app = terminalAppNames()[0];
+  if (app) target.PI_ALERTER_TARGET_APP = app;
+  return target;
 }
 
 export default function (pi: ExtensionAPI) {
@@ -178,7 +227,7 @@ export default function (pi: ExtensionAPI) {
    * true = watching (suppress), false = not watching (notify), undefined = can't tell.
    */
   async function isTerminalFocused(signal?: AbortSignal): Promise<boolean | undefined> {
-    const expected = frontmostTerminalNames();
+    const expected = new Set(terminalAppNames().map((name) => name.toLowerCase()));
     let appFocused: boolean | undefined;
     if (expected.size === 0) {
       appFocused = undefined;
@@ -206,6 +255,7 @@ export default function (pi: ExtensionAPI) {
   function notify(body: string, subtitle?: string): void {
     const timeout = String(Math.max(0, Math.round(envNumber("PI_ALERTER_TIMEOUT", 30))));
     const group = `pi:${pi.getSessionName() ?? process.cwd()}`;
+    const target = focusTarget();
     const args = [
       "--title",
       NOTIFY_TITLE,
@@ -217,9 +267,16 @@ export default function (pi: ExtensionAPI) {
       group,
     ];
     if (subtitle) args.push("--subtitle", subtitle);
+    // No --sender: impersonating another bundle id (even the terminal's own)
+    // makes macOS drop the notification, so alerter hangs forever waiting on an
+    // alert that was never delivered and clicks are never reported.
 
     try {
-      const child = spawn("alerter", args, { detached: true, stdio: "ignore" });
+      const child = spawn("sh", ["-c", CLICK_HANDLER, "pi-alerter", ...args], {
+        detached: true,
+        stdio: "ignore",
+        env: { ...process.env, ...target },
+      });
       child.on("error", () => {});
       child.unref();
     } catch {
@@ -263,14 +320,15 @@ export default function (pi: ExtensionAPI) {
   pi.registerCommand("alerter-test", {
     description: "Fire a test macOS notification and report detected focus state",
     handler: async (_args, ctx) => {
-      const expected = frontmostTerminalNames();
+      const expected = terminalAppNames();
       const front = await frontmostAppName(ctx.signal);
       const windowActive = await isTmuxWindowActive(ctx.signal);
       const focused = await isTerminalFocused(ctx.signal);
       notify("Test notification from Pi.", subtitleForCwd());
       ctx.ui.notify(
         `Sent test alert. frontmost=${front ?? "unknown"}, ` +
-          `terminalNames=[${[...expected].join(", ") || "none"}], ` +
+          `terminalNames=[${expected.join(", ") || "none"}], ` +
+          `clickTarget=${JSON.stringify(focusTarget())}, ` +
           `tmuxWindowActive=${windowActive === undefined ? "n/a" : windowActive}, ` +
           `focused=${focused === undefined ? "unknown" : focused}`,
         "info",
