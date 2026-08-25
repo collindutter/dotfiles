@@ -71,6 +71,22 @@ Banned constructions (flag on sight):
 - Three-item filler lists ("fast, reliable, and scalable") where one true item
   would do. Glued adjective pairs ("simple and effective," "robust and scalable").
 
+Banned narrator intrusions (the writer commenting on the doc instead of writing it):
+- Editorial ranking of the content: "X is the big one," "this is the important part,"
+  "the interesting case here is." Just describe X; put it first if it matters most.
+- Comparing sections or platforms as prose: "the Windows uninstaller cleans up more
+  than the other platforms do." Say what it removes.
+- Narrating the reader's mental state: "that also means they're still there after you
+  think you're done," "you might be wondering." State the fact.
+- Coaching flourishes on plain steps: "to finish the job," "and that's all there is
+  to it," "nothing here blocks you." Delete.
+- Rhetorical question openers: "Need to go the other way?", "Want the short
+  version?" Lead with the statement: "To remove X, see Y."
+- Warmth padding on outcomes: "your projects are waiting where you left them,"
+  "you're all set." Say what is true: "your projects are where you left them."
+- Restating a cross-reference's purpose: "which is why it's worth noting the path
+  first." Give the instruction: "Note the path before you uninstall."
+
 Banned structural patterns:
 - Every paragraph ending in a takeaway ("And so, X matters"). End on the last fact.
 - Hollow transitions: "Moreover," "Furthermore," "Additionally," "It's
