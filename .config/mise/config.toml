@@ -8,6 +8,9 @@ rust = "latest"
 "npm:@earendil-works/pi-coding-agent" = "latest"
 "npm:@hypabolic/hypa" = "latest"
 
+# Rolling prerelease tag; run `mise install --force github:wez/wiff` to pull a newer build.
+"github:wez/wiff" = "continuous"
+
 [settings]
 idiomatic_version_file_enable_tools = ["python", "node"]
 # Auto-load `.env` from the current directory and its parents, the way plain
