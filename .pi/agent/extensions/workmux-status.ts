@@ -12,7 +12,7 @@
  *
  *   run lifecycle          agent_start / agent_settled
  *   pending question       rpiv:ask-user:blocked (@juicesharp/rpiv-ask-user-question)
- *   async subagents        subagent:async-started / subagent:async-complete
+ *   async subagents        launch receipts + subagent:async-started / -complete
  *   subagent attention     subagent:control-event (pi-subagents)
  *
  * State priority is waiting > working > done. A question on screen or an async
@@ -55,6 +55,9 @@ const SUBAGENT_ASYNC_STARTED_EVENT = "subagent:async-started";
 const SUBAGENT_ASYNC_COMPLETE_EVENT = "subagent:async-complete";
 const SUBAGENT_CONTROL_EVENT = "subagent:control-event";
 
+/** Tool pi-subagents registers; its results carry the launch receipts read below. */
+const SUBAGENT_TOOL = "subagent";
+
 /**
  * An async completion normally wakes the parent with a queued turn, so settling
  * the pane the instant the last run finishes flashes done before that turn
@@ -78,6 +81,22 @@ function id(value: unknown, ...keys: string[]): string | undefined {
     if (typeof candidate === "string" && candidate) return candidate;
   }
   return undefined;
+}
+
+/**
+ * Run id from a `subagent` launch receipt. `asyncDir` marks a run that outlives
+ * the tool call; a `management` result carries one for a run it only reports on.
+ *
+ * Async workflows run inside this process and publish no
+ * `subagent:async-started`, so the receipt is their only launch signal. Async
+ * single and chain runs emit both, and the run id is the same in each.
+ */
+function launchedRunId(event: unknown): string | undefined {
+  const data = record(event);
+  if (!data || data.toolName !== SUBAGENT_TOOL || data.isError === true) return undefined;
+  const details = record(data.details);
+  if (!details || details.mode === "management" || typeof details.asyncDir !== "string") return undefined;
+  return id(details, "runId", "asyncId");
 }
 
 /** Async run whose child stalled: an idle child, repeated tool failures, or an explicit supervisor request. */
@@ -148,6 +167,10 @@ export default function (pi: ExtensionAPI) {
   pi.on("session_start", async (_event, ctx) => {
     if (ctx.mode !== "tui") return;
     paneOwner = true;
+    // Completion delivery is session-scoped, so runs from a replaced session
+    // never resolve here and would strand the pane on "working".
+    activeRuns.clear();
+    attentionRuns.clear();
     // Makes the pi process visible to `workmux dashboard`, `send`, `capture`,
     // and `reap-agents`.
     await pi.exec("workmux", ["register-agent"]).then(
@@ -171,6 +194,14 @@ export default function (pi: ExtensionAPI) {
     // pane working rather than settling it.
     if (!ctx.isIdle()) return;
     running = false;
+    publish();
+  });
+
+  pi.on("tool_result", async (event, ctx) => {
+    if (ctx.mode !== "tui") return;
+    const runId = launchedRunId(event);
+    if (!runId) return;
+    activeRuns.add(runId);
     publish();
   });
 
