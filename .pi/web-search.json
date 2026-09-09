@@ -1,3 +1,7 @@
 {
-  "workflow": "none"
+  "workflow": "none",
+  "fetch": {
+    "answerProvider": "amazon-bedrock",
+    "answerModel": "global.openai.gpt-5.6-sol"
+  }
 }
