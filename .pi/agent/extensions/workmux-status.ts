@@ -16,9 +16,9 @@
  *   subagent attention     subagent:control-event (pi-subagents)
  *
  * State priority is waiting > working > done. A question on screen or an async
- * child that needs attention outranks in-flight work, and in-flight work
- * includes detached subagent runs: the parent settling while children still run
- * is not a finished pane.
+ * child blocked on a reply outranks in-flight work, and in-flight work includes
+ * detached subagent runs: the parent settling while children still run is not a
+ * finished pane.
  *
  * "done" comes from `agent_settled`, not `agent_end`. `agent_end` fires at the
  * end of every low-level run, including runs pi follows with an auto-retry, an
@@ -48,12 +48,28 @@ const ASK_USER_BLOCKED_EVENT = "rpiv:ask-user:blocked";
 
 /**
  * pi-subagents lifecycle channels, inlined for the same reason. Payload fields
- * used here (`id`, `runId`, and `{ source, event: { type, runId } }`) are the
- * ones its own Herdr status bridge consumes.
+ * used here (`id`, `runId`, and `{ source, event: { type, reason, runId } }`) are
+ * the ones its own Herdr status bridge consumes.
  */
 const SUBAGENT_ASYNC_STARTED_EVENT = "subagent:async-started";
 const SUBAGENT_ASYNC_COMPLETE_EVENT = "subagent:async-complete";
 const SUBAGENT_CONTROL_EVENT = "subagent:control-event";
+
+/**
+ * `needs_attention` reasons that mean the pane wants a human. A child blocked on
+ * a supervisor reply and a child that failed its completion guard both sit until
+ * someone answers. The rest (`idle`, `tool_open_threshold`, `tool_failures`) are
+ * watchdog nudges the parent handles on its own turn, and a long poll loop trips
+ * them while the pane is working exactly as intended.
+ */
+const INPUT_REASONS = new Set(["supervisor_request", "completion_guard"]);
+
+/**
+ * Attention is latched from one event and no counterpart clears it, so a notice
+ * that lands after the parent settles would strand the pane. The latch expires
+ * on its own; a child that is still blocked re-notifies.
+ */
+const ATTENTION_TTL_MS = 90_000;
 
 /** Tool pi-subagents registers; its results carry the launch receipts read below. */
 const SUBAGENT_TOOL = "subagent";
@@ -99,12 +115,13 @@ function launchedRunId(event: unknown): string | undefined {
   return id(details, "runId", "asyncId");
 }
 
-/** Async run whose child stalled: an idle child, repeated tool failures, or an explicit supervisor request. */
+/** Async run waiting on someone: a child blocked on a supervisor reply, or one that failed its completion guard. */
 function attentionRunId(value: unknown): string | undefined {
   const data = record(value);
   if (!data || data.source !== "async") return undefined;
   const event = record(data.event);
   if (!event || event.type !== "needs_attention") return undefined;
+  if (typeof event.reason !== "string" || !INPUT_REASONS.has(event.reason)) return undefined;
   return id(event, "runId");
 }
 
@@ -113,11 +130,34 @@ export default function (pi: ExtensionAPI) {
   let running = false;
   let questionActive = false;
   const activeRuns = new Set<string>();
-  const attentionRuns = new Set<string>();
+  const attentionRuns = new Map<string, ReturnType<typeof setTimeout>>();
 
   let desired: Status | undefined;
   let writing = false;
   let settleTimer: ReturnType<typeof setTimeout> | undefined;
+
+  function dropAttention(runId: string): boolean {
+    const timer = attentionRuns.get(runId);
+    if (timer === undefined) return false;
+    clearTimeout(timer);
+    attentionRuns.delete(runId);
+    return true;
+  }
+
+  function clearAttention() {
+    for (const timer of attentionRuns.values()) clearTimeout(timer);
+    attentionRuns.clear();
+  }
+
+  function raiseAttention(runId: string) {
+    dropAttention(runId);
+    const timer = setTimeout(() => {
+      attentionRuns.delete(runId);
+      publish();
+    }, ATTENTION_TTL_MS);
+    timer.unref?.();
+    attentionRuns.set(runId, timer);
+  }
 
   function write(status: Status) {
     desired = status;
@@ -170,7 +210,7 @@ export default function (pi: ExtensionAPI) {
     // Completion delivery is session-scoped, so runs from a replaced session
     // never resolve here and would strand the pane on "working".
     activeRuns.clear();
-    attentionRuns.clear();
+    clearAttention();
     // Makes the pi process visible to `workmux dashboard`, `send`, `capture`,
     // and `reap-agents`.
     await pi.exec("workmux", ["register-agent"]).then(
@@ -184,7 +224,7 @@ export default function (pi: ExtensionAPI) {
     paneOwner = true;
     running = true;
     // The turn is the parent acting on whatever a child raised.
-    attentionRuns.clear();
+    clearAttention();
     publish();
   });
 
@@ -221,15 +261,15 @@ export default function (pi: ExtensionAPI) {
     const runId = id(data, "runId", "id");
     if (!runId) return;
     const wasActive = activeRuns.delete(runId);
-    const wasStalled = attentionRuns.delete(runId);
-    if (!wasActive && !wasStalled) return;
+    const wasBlocked = dropAttention(runId);
+    if (!wasActive && !wasBlocked) return;
     publish(activeRuns.size === 0 && !running ? COMPLETION_WAKE_GRACE_MS : 0);
   });
 
   pi.events.on(SUBAGENT_CONTROL_EVENT, (data) => {
     const runId = attentionRunId(data);
     if (!runId) return;
-    attentionRuns.add(runId);
+    raiseAttention(runId);
     publish();
   });
 }
