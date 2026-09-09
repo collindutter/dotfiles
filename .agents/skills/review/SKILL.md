@@ -12,9 +12,14 @@ session. It is a general-purpose reviewer, so this skill supplies the rubric:
     ~/.agents/skills/review/references/code-review-rubric.md
 
 That file is the standing definition of what a good review looks like here
-(problem framing, correctness, design and structure, LLMisms, output format). It
-is deliberately independent of any agent or harness. This skill scopes the diff,
-hands over the rubric, and reports the result.
+(problem framing, correctness, design and structure, LLMisms, yap, output
+format). It is deliberately independent of any agent or harness. This skill
+scopes the diff, hands over the rubric, and reports the result.
+
+The rubric delegates comment, docstring, and prose bloat to the yap field guide
+(`~/.agents/skills/yap/references/yap-field-guide.md`) and tells the reviewer to
+read it, so yap has one definition. The reviewer only reports yap. To have it
+cut, run the `yap` skill, which edits in place.
 
 The reviewer has `read`, `grep`, `find`, and `ls` but **no shell**. It cannot
 run `git diff` or `gh` itself, so this skill captures that output to a file and
