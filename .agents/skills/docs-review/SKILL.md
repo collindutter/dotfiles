@@ -2,11 +2,10 @@
 name: docs-review
 description: Run a documentation review sub-agent that checks docs for accuracy against the code and for human, non-LLM voice. Use when the user asks to review docs, a README, a guide, or documentation changes.
 ---
-Run a documentation review using the `subagent` tool with the builtin `reviewer`
+Run a documentation review using the `subagent` tool with the `docs-reviewer`
 agent: $@
 
-The reviewer is a general-purpose review agent, so this skill supplies the
-rubric:
+The agent is a thin persona, so this skill supplies the rubric:
 
     ~/.agents/skills/docs-review/references/docs-review-rubric.md
 
@@ -57,7 +56,7 @@ Steps:
    When the scope is a set of files rather than a diff, skip the diff capture and
    just pass the file paths.
 
-5. Call the `subagent` tool once with `agent: "reviewer"` and a `task` that:
+5. Call the `subagent` tool once with `agent: "docs-reviewer"` and a `task` that:
    - Points at the rubric with its absolute path and states that it is the review
      rubric, to be read first and followed for both axes and the output format:
      `/Users/collindutter/.agents/skills/docs-review/references/docs-review-rubric.md`
@@ -74,8 +73,9 @@ Steps:
    Do not paste the rubric into the task. Pass the path and let the reviewer read
    it, so the rubric stays in one place.
 
-   The review model is pinned in `subagents.agentOverrides.reviewer.model`
-   (`~/.pi/agent/settings.json`), not per call. To change it, edit that.
+   The review model is pinned in the `docs-reviewer` frontmatter
+   (`~/.pi/agent/agents/docs-reviewer.md`), not per call. To change it, edit
+   that.
 
 Do not read or grade the docs yourself. Let the reviewer subagent do that. When
 it finishes, report its findings.
