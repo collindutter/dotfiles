@@ -6,7 +6,6 @@ neovim = "latest"
 rust = "latest"
 
 "npm:@earendil-works/pi-coding-agent" = "latest"
-"npm:@hypabolic/hypa" = "latest"
 
 # Rolling prerelease tag; run `mise install --force github:wez/wiff` to pull a newer build.
 "github:wez/wiff" = "continuous"
