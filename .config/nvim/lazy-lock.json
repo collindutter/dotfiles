@@ -23,7 +23,7 @@
   "mini.surround": { "branch": "main", "commit": "33a2ebe5df8eb4751828fcba133e18ed0fbbdfab" },
   "neotest": { "branch": "master", "commit": "27bf921498043f7ecd821d6db68d05de244bbd02" },
   "neotest-python": { "branch": "master", "commit": "1b56ca4ba51c6014f986d6548ee629bdc95589d1" },
-  "no-neck-pain.nvim": { "branch": "main", "commit": "dd9ce1331878717176503065c36a28fdf4165618" },
+  "no-neck-pain.nvim": { "branch": "main", "commit": "98acce8669e518b34b71aed93aba6bca42ec528e" },
   "nvim-autopairs": { "branch": "master", "commit": "430522f95fe4fb7c511ec64f8c1a90cc6a66c05c" },
   "nvim-lint": { "branch": "master", "commit": "3d55c8f67c6ae5c15e1042571e107c7a3d5c5f4e" },
   "nvim-lspconfig": { "branch": "master", "commit": "046b1a797af1effe8e0474b9af9657a3761ec58a" },
