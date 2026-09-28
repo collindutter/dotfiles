@@ -1,4 +1,5 @@
 nerdfont: true
+base_branch: auto
 
 files:
   copy:
