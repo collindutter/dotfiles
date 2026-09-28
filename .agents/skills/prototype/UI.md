@@ -51,7 +51,9 @@ Draft each variant. Hold each one to:
 - The project's component library / styling system (TailwindCSS, shadcn, MUI, plain CSS, whatever).
 - A clear exported component name, e.g. `VariantA`, `VariantB`, `VariantC`.
 
-Variants must be **structurally different**: different layout, different information hierarchy, different primary affordance, not just different colours. Three slightly-tweaked card grids isn't a UI prototype, it's wallpaper. If two drafts come out too similar, redo one with explicit "do not use a card grid" guidance.
+Variants must be **structurally different**: different layout, different information hierarchy, different primary affordance, not just different colours. Three slightly-tweaked card grids isn't a UI prototype, it's wallpaper. If two drafts come out too similar, redo one and name the pattern it must drop (e.g. "no card grid").
+
+Without design direction, generated UI drifts to the same few defaults, and "avoid a generic look" just swaps one default for another. Name what to avoid instead. Unless the project's design system already uses them, skip: cream or off-white backgrounds, italic accent words in headlines, numbered "01/02/03" section labels, monospace labels, pill-shaped buttons, and purple-to-blue gradients. After the first pass, note which defaults showed up anyway and add them to this list for the next variant.
 
 ### 3. Wire them together
 

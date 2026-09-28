@@ -5,65 +5,44 @@ disable-model-invocation: true
 allowed-tools: read bash
 ---
 
-<!-- Customize the commit style and rebase behavior to match your workflow. -->
+Finish the current branch: commit, rebase onto the base, `workmux merge`.
 
-**Arguments:** any flags are provided in the user's message.
+Flags from the user's message:
 
-Check the arguments for flags:
+- `--keep`, `-k`: pass `--keep` (keep the worktree and tmux window)
+- `--no-verify`, `-n`: pass `--no-verify`
 
-- `--keep`, `-k` → pass `--keep` to `workmux merge` (keeps the worktree and tmux window after merging)
-- `--no-verify`, `-n` → pass `--no-verify` to `workmux merge`
+## 1. Commit
 
-Strip all flags from arguments.
+If anything is staged, commit it: lowercase, imperative, no conventional-commit
+prefix. Nothing staged: skip.
 
-Commit, rebase, and merge the current branch.
+## 2. Rebase
 
-This command finishes work on the current branch by:
-
-1. Committing any staged changes
-2. Rebasing onto the base branch
-3. Running `workmux merge` to merge and clean up
-
-## Step 1: Commit
-
-If there are staged changes, commit them. Use lowercase, imperative mood, no conventional commit prefixes. Skip if nothing is staged.
-
-## Step 2: Rebase
-
-Get the base branch from git config:
+Base branch:
 
 ```
 git config --local --get "branch.$(git branch --show-current).workmux-base"
 ```
 
-If no base branch is configured, default to "main".
+Default `main` when unset.
 
-Rebase onto the local base branch (do NOT fetch from origin first):
+`workmux merge` merges into the local base branch, so rebase onto that local
+branch (`git rebase main`). Skip `git fetch` and `origin/<branch>`.
+
+Conflicts: keep both the base's changes and this branch's.
+
+1. For each conflicting file, read what the base changed first:
+   `git log -p -n 3 <base> -- <file>`.
+2. Resolve, `git add <file>`, `git rebase --continue`.
+3. If a conflict's intent is unclear from both histories, stop and ask before
+   resolving it.
+
+## 3. Merge
 
 ```
-git rebase <base-branch>
+workmux merge --rebase --notification [--keep] [--no-verify]
 ```
 
-IMPORTANT: Do NOT run `git fetch`. Do NOT rebase onto `origin/<branch>`. Only rebase onto the local branch name (e.g., `git rebase main`, not `git rebase origin/main`).
-
-If conflicts occur:
-
-- BEFORE resolving any conflict, understand what changes were made to each
-  conflicting file in the base branch
-- For each conflicting file, run `git log -p -n 3 <base-branch> -- <file>` to
-  see recent changes to that file in the base branch
-- The goal is to preserve BOTH the changes from the base branch AND our branch's
-  changes
-- After resolving each conflict, stage the file and continue with
-  `git rebase --continue`
-- If a conflict is too complex or unclear, ask for guidance before proceeding
-
-## Step 3: Merge
-
-Run: `workmux merge --rebase --notification [--keep] [--no-verify]`
-
-Include `--keep` only if the `--keep` flag was passed in arguments.
-Include `--no-verify` only if the `--no-verify` flag was passed in arguments.
-
-This will merge the branch into the base branch and clean up the worktree and
-tmux window (unless `--keep` is used).
+Include each optional flag only when the user passed it. This merges into the
+base and removes the worktree and tmux window unless `--keep`.
