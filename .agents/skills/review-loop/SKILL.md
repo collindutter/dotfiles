@@ -6,83 +6,84 @@ allowed-tools: Bash Read Edit Write Grep Glob
 
 # Review Loop
 
-Run an automated yap-review-fix-commit loop on the current changes until a
-review sub-agent comes back with a reasonable level of satisfaction.
+Loop yap, review, fix, commit on the current changes until a stopping condition
+below holds.
 
 Arguments (optional): $ARGUMENTS
 
-- May contain extra context to forward to the reviewer (e.g. a base branch or
-  areas to focus on).
-- If no arguments are given, review the diff against the base branch.
+- Extra context for the reviewer, e.g. a base branch or focus areas.
+- None given: review the diff against the base branch.
 - The review model is pinned in `subagents.agentOverrides.reviewer.model`
-  (`~/.pi/agent/settings.json`), not per invocation.
+  (`~/.pi/agent/settings.json`).
+
+## Running unattended
+
+The loop runs to a stopping condition without check-ins. Ending a turn with no
+tool call stops the loop, so avoid these:
+
+- A summary of an iteration that announces the next step instead of taking it.
+- Offering to continue, or asking whether to fix a finding you can triage
+  yourself.
+- Stopping to report because an iteration or milestone finished.
+
+Put status notes in the same message as the next tool call. Stop only on a
+stopping condition, or when a decision truly needs the user. While a subagent
+runs, wait for its result; a running subagent means the iteration isn't done.
 
 ## Loop
 
-Repeat the following until the stopping condition is met. Cap at **5
-iterations** to guarantee termination.
+Cap at 5 iterations.
 
-1. **Cut yap.** Invoke the `yap` skill, which calls the `subagent` tool with the
-   `yap-cutter` agent over the same diff. It edits comments, docstrings, and
-   prose only, so the reviewer spends its budget on correctness instead of
-   comment bloat. Let it finish before step 2; it writes to the same tree the
-   reviewer reads. Skip it on an iteration whose fixes added no comments or
-   prose.
+1. **Cut yap.** Run the `yap` skill (`yap-cutter` over the same diff). It edits
+   comments, docstrings, and prose only, so the reviewer spends its budget on
+   correctness. Let it finish first, since both read the same tree. Skip it on
+   iterations whose fixes added no comments or prose.
 
-2. **Review.** Invoke the `review` skill, which calls the `subagent` tool with
-   the `reviewer` agent over the current changes (the diff against the base
-   branch, which now includes any fixes from prior iterations). The reviewer
-   runs in an isolated context and streams its progress into this session.
-   Forward any context from `$ARGUMENTS`. Do not review the code yourself; let
-   the reviewer subagent do it.
+2. **Review.** Run the `review` skill (`reviewer` over the diff against the
+   base branch, which now includes earlier fixes). Forward `$ARGUMENTS`. Leave
+   the grading to the reviewer.
 
-   `pi-subagents` also ships a `/review-loop` prompt and a `/parallel-review`
-   prompt. Those are separate, parent-orchestrated workflows. This skill is the
-   merge-base-scoped commit loop; do not mix the two in one run.
+   `pi-subagents` also ships `/review-loop` and `/parallel-review` prompts.
+   Those are separate parent-orchestrated workflows; don't mix them into this
+   run.
 
-3. **Triage findings.** Classify each finding by severity:
+3. **Triage.** The reviewer reports everything; you filter.
    - **Actionable**: bugs, logic errors, security issues, error-handling gaps,
-     or correctness problems introduced by the changes.
-   - **Non-actionable**: subjective style preferences, nitpicks, out-of-scope
-     suggestions, or comments about pre-existing code not touched by the diff.
+     or correctness problems the changes introduce, plus design findings you
+     agree with.
+   - **Non-actionable**: style preferences, nitpicks, out-of-scope suggestions,
+     comments on code the diff didn't touch.
 
-   Residual yap findings are actionable only if the yap pass left something the
-   reviewer can point at concretely. Do not relitigate comment wording.
+   Residual yap is actionable only when the reviewer points at something
+   concrete. Don't relitigate comment wording.
 
-4. **Check the stopping condition** (see below). If met, stop and report.
+4. **Check the stopping condition.** If met, stop and report.
 
-5. **Fix.** Address every actionable finding. Make focused edits that resolve
-   the underlying problem, not just the symptom the reviewer named. If a
-   finding is unclear or you disagree, note your reasoning instead of making a
-   change you believe is wrong.
+5. **Fix.** Address each actionable finding at its cause, not just the symptom
+   named. If you disagree with one, note why instead of making a change you
+   think is wrong.
 
-6. **Commit.** Stage only the files you changed in this iteration, including the
-   yap pass edits, and commit with a conventional-commit message describing the
-   fixes (e.g. `fix: handle nil response in parser`). When the yap pass was the
-   only change, commit it on its own as `docs: cut yap`. Do not commit unrelated
-   files.
+6. **Commit.** Stage only files changed this iteration, including yap edits.
+   Conventional-commit message describing the fixes
+   (`fix: handle nil response in parser`). A yap-only iteration commits as
+   `docs: cut yap`.
 
-7. **Repeat** from step 1 so the next review sees the updated diff.
+7. **Repeat** from step 1.
 
 ## Stopping condition
 
-Stop the loop when any of these is true:
-
-- The reviewer reports **no actionable findings** (only non-actionable items,
-  or nothing at all). This is the target "reasonable satisfaction" state.
-- The remaining findings are all ones you have deliberately declined to fix,
-  with reasoning, and re-reviewing would not change that.
-- You hit the **5-iteration cap**.
-- The same finding recurs unchanged after you attempted a fix twice, or the
-  reviewer oscillates between contradictory suggestions. In that case, stop and
-  surface the disagreement rather than churning.
+- No actionable findings remain.
+- Remaining findings are all ones you declined, with reasons, and another
+  review wouldn't change that.
+- 5 iterations are spent.
+- The same finding survives two fix attempts, or the reviewer oscillates
+  between contradictory suggestions. Surface the disagreement.
 
 ## Report
 
-When the loop ends, summarize:
+Lead with the verdict that ended the loop, then:
 
-- How many iterations ran and the commits created in each.
-- What the yap pass cut, in one line per iteration.
-- The final review verdict (what made it stop).
-- Any actionable findings left unaddressed and why.
-- Any findings you intentionally declined to fix, with reasoning.
+- Iterations run and each one's commits.
+- What yap passes cut, one line per iteration.
+- Actionable findings left open, and why.
+- Findings declined, with reasons.

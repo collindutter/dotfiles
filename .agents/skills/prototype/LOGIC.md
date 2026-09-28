@@ -47,7 +47,7 @@ Lay it out with a clean hierarchy, top to bottom:
 
 Choose scenarios that demonstrate the awkward cases, the ones hard to reason about on paper: the happy path, a tricky edge case, an attempt at something that should be illegal.
 
-Keep it beautiful but restrained: clean typography, generous spacing, one accent colour. No animations, no gimmicks: nothing that competes with the state and the buttons.
+Keep it beautiful but restrained: clean typography, generous spacing, one accent colour. No animations or gimmicks competing with the state and the buttons. Skip the usual generated-page defaults too: cream or off-white backgrounds, italic accent words in headlines, numbered "01/02/03" section labels, monospace labels, pill-shaped buttons.
 
 ### 4. Hand it over
 

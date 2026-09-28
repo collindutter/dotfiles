@@ -5,30 +5,29 @@ disable-model-invocation: true
 allowed-tools: read bash
 ---
 
-Commit any work, push the branch, and open PR creation in the browser. Do NOT
-write the PR body; leave it empty for the human to fill in.
+Commit, push, and open PR creation in the browser. The human writes the body,
+so leave it empty.
 
 ## Gather context
 
-1. Get the base branch (usually `main` or `master`).
-2. Get the commit messages: `git log <base>...HEAD --format="%s"` (used only to
-   craft a concise title).
+1. Find the base branch (usually `main` or `master`).
+2. Read commit subjects for the title: `git log <base>...HEAD --format="%s"`.
 
 ## Commit and push
 
-1. Run `git status`. If there are uncommitted changes you made in this session,
-   commit them. Only commit files you changed; do not sweep in unrelated edits.
-2. Use a conventional-commit message (e.g. `feat:`, `fix:`, `refactor:`),
-   lowercase, imperative mood.
-3. Push the branch: `git push -u origin HEAD`.
+1. `git status`. Commit uncommitted changes you made this session, and only
+   those files.
+2. Conventional-commit message (`feat:`, `fix:`, `refactor:`), lowercase,
+   imperative.
+3. `git push -u origin HEAD`.
 
-## Create the PR
+## Open the PR
 
-1. Write a short PR title in conventional-commit format (e.g.
-   `fix: handle missing library metadata on proxy nodes`), max 72 characters.
-2. Open PR creation in the browser with the title set and the body left empty.
-   Do NOT create it directly and do NOT write a description; let the browser
-   form (and any repo PR template) show for the human to fill in:
+1. Title in conventional-commit format, max 72 characters, e.g.
+   `fix: handle missing library metadata on proxy nodes`.
+2. Open the browser form with the title set, so the human sees any repo
+   template and fills in the body:
+
    ```bash
    gh pr create --web --title "<title>"
    ```

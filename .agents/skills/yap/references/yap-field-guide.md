@@ -80,8 +80,8 @@ No temporal references. Length is never the offense; emptiness is.
    unless the change made them false.
 2. Prefer deleting over rewriting, and moving over rewriting. Rewrite only when
    the content is worth keeping and badly placed or badly phrased.
-3. Never change code, tests, or behavior. If a comment is wrong because the code
-   is wrong, report it and leave both alone.
+3. Leave code, tests, and behavior alone. If a comment is wrong because the
+   code is wrong, report it and leave both.
 4. Leave anything genuinely ambiguous and report it as a judgment call.
 
 ## Output format
