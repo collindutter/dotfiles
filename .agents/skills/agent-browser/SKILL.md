@@ -117,7 +117,7 @@ See [references/authentication.md](references/authentication.md) for OAuth, 2FA,
 ## Essential Commands
 
 ```bash
-# Batch: ALWAYS use batch for 2+ sequential commands. Commands run in order.
+# Batch: use batch for 2+ sequential commands. Commands run in order.
 agent-browser batch "open https://example.com" "snapshot -i"
 agent-browser batch "open https://example.com" "screenshot"
 agent-browser batch "click @e1" "wait 1000" "screenshot"
@@ -239,7 +239,7 @@ Every session automatically starts a WebSocket stream server on an OS-assigned p
 
 ## Batch Execution
 
-ALWAYS use `batch` when running 2+ commands in sequence. Batch executes commands in order, so dependent commands (like navigate then screenshot) work correctly. Each quoted argument is a separate command.
+Use `batch` when running 2+ commands in sequence; one call is cheaper than several. Batch executes commands in order, so dependent commands (like navigate then screenshot) work correctly. Each quoted argument is a separate command.
 
 ```bash
 # Navigate and take a snapshot
@@ -651,7 +651,7 @@ Refs (`@e1`, `@e2`, etc.) are invalidated when the page changes. Always re-snaps
 
 ```bash
 agent-browser click @e5              # Navigates to new page
-agent-browser snapshot -i            # MUST re-snapshot
+agent-browser snapshot -i            # re-snapshot for fresh refs
 agent-browser click @e1              # Use new refs
 ```
 
@@ -674,6 +674,8 @@ Use annotated screenshots when:
 - You need to verify visual layout or styling
 - Canvas or chart elements are present (invisible to text snapshots)
 - You need spatial reasoning about element positions
+
+For dense charts or small text, screenshot just the element (`agent-browser screenshot <selector>`) or raise resolution (`set viewport 1280 720 2`) instead of reading detail off a full-page shot.
 
 ## Semantic Locators (Alternative to Refs)
 

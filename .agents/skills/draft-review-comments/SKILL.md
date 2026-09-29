@@ -19,7 +19,7 @@ or discard it on the PR page first.
 - "Link to the code with deep links so the snippet shows up."
 - "Suggest the fix inline so I can commit it."
 - After running the `review` skill, to publish the findings as a pending review.
-- "Resolve the review comments that are now fixed" — a re-review round on a PR this skill
+- "Resolve the review comments that are now fixed": a re-review round on a PR this skill
   already commented on. See [Re-review rounds](#re-review-rounds-resolve-threads-you-already-posted).
 
 ## Prerequisites
@@ -185,7 +185,7 @@ prints how to inspect the anchors.
 
 When you GET review comments back to verify, GitHub returns `line` / `side` / `start_line` as
 `null` and stores the real anchor in `position` / `original_position`. Check `position`, not
-`line` — a null `line` does **not** mean the anchor failed. Note that a sent-vs-landed match
+`line`. A null `line` does not mean the anchor failed. Note that a sent-vs-landed match
 confirms nothing was dropped, but a mismatch cannot distinguish a rejected anchor from a comment
 a human deleted after posting; re-inspect the anchors either way.
 
