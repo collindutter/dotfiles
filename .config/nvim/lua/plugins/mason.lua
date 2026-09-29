@@ -5,8 +5,7 @@ return {
     opts = {},
   },
   {
-    -- Automatically install LSPs, formatters, linters, and debuggers
-    -- This is a better, consolidated version of the ensure_installed functionality in mason-lspconfig.nvim and mason-nvim-dap.nvim
+    -- Automatically install LSPs, formatters, and linters
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     opts = {
       auto_update = true,
@@ -32,8 +31,6 @@ return {
         'luacheck',
         'eslint',
         'djlint',
-        -- Debuggers
-        'debugpy',
       },
     },
     init = function()

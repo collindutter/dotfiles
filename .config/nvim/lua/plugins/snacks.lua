@@ -33,9 +33,7 @@ return {
       function()
         Snacks.picker.smart {
           filter = {
-            paths = {
-              cwd = true,
-            },
+            cwd = true,
           },
         }
       end,

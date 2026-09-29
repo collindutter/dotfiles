@@ -25,26 +25,6 @@ return {
       desc = '[t]est [n]earest',
     },
     {
-      '<leader>td',
-      function()
-        require('neotest').run.run {
-          suite = false,
-          strategy = 'dap',
-        }
-      end,
-      desc = '[t]est [d]ebug',
-    },
-    {
-      '<leader>dt',
-      function()
-        require('neotest').run.run {
-          suite = false,
-          strategy = 'dap',
-        }
-      end,
-      desc = '[t]est [d]ebug',
-    },
-    {
       '<leader>ts',
       function()
         require('neotest').run.stop()
@@ -63,7 +43,6 @@ return {
     return {
       adapters = {
         require 'neotest-python' {
-          dap = { justMyCode = false },
           args = { '-vv' },
         },
       },
