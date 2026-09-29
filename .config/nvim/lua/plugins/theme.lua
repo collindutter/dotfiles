@@ -34,8 +34,6 @@ return {
       },
     },
     integrations = {
-      dap = true,
-      dap_ui = true,
       flash = true,
       mason = true,
       blink_cmp = true,

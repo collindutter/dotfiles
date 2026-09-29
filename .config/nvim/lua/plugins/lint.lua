@@ -16,17 +16,15 @@ return {
     }
 
     lint.linters_by_ft = {
-      python = { 'ruff' },
       lua = { 'luacheck' },
-      typescriptreact = { 'eslint' },
-      typescript = { 'eslint' },
-      javascript = { 'eslint' },
-      javascriptreact = { 'eslint' },
     }
 
     vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
-      callback = function()
-        require('lint').try_lint()
+      callback = function(event)
+        local linters = lint.linters_by_ft[vim.bo[event.buf].filetype]
+        if linters and #linters > 0 then
+          lint.try_lint()
+        end
       end,
     })
   end,
