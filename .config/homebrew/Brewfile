@@ -12,6 +12,7 @@ tap "morantron/tmux-fingers", trusted: true
 tap "raine/workmux", trusted: true
 tap "raine/claude-history", trusted: true
 tap "raine/git-surgeon", trusted: true
+tap "raine/aven", trusted: true
 tap "collindutter/local", trusted: true # patched formulae, not on GitHub
 
 brew "bat"
@@ -53,6 +54,7 @@ brew "mkcert"
 brew "nss"
 brew "austin"
 brew "raine/workmux/workmux", trusted: true
+brew "raine/aven/aven", trusted: true
 brew "raine/claude-history/claude-history", trusted: true
 brew "raine/git-surgeon/git-surgeon", trusted: true
 brew "bfg"
