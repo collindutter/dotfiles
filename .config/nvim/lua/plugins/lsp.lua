@@ -10,11 +10,17 @@ return {
     },
   },
   {
-    -- Automatically enables LSPs for installed servers
+    -- Automatically enables installed LSPs, except project-selected Python checkers
     'mason-org/mason-lspconfig.nvim',
     dependencies = {
       'neovim/nvim-lspconfig',
     },
-    opts = {},
+    opts = {
+      automatic_enable = { exclude = require('core.python_lsp').servers },
+    },
+    config = function(_, opts)
+      require('mason-lspconfig').setup(opts)
+      require('core.python_lsp').setup()
+    end,
   },
 }

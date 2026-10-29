@@ -13,6 +13,8 @@ return {
         -- LSPs
         'jsonls',
         'pyright',
+        'pyrefly',
+        'ty',
         'ts_ls',
         'typos_lsp',
         'yamlls',
