@@ -1,8 +1,21 @@
 return {
-  -- Better window resizing, navigation (integrates with tmux)
-  'mrjones2014/smart-splits.nvim',
-  opts = {},
-  event = 'VimEnter',
+  -- Better window resizing and multiplexer navigation
+  'smart-splits-nvim/smart-splits.nvim',
+  dependencies = {
+    { 'smart-splits-nvim/backend-tmux', main = 'smart-splits-backend-tmux' },
+    { 'rawnly/smart-splits-backend-rex', main = 'smart-splits-backend-rex' },
+  },
+  opts = {
+    mux = {
+      backend = function()
+        if vim.env.REX_SESSION and vim.env.REX_BLOCK then
+          return 'smart-splits-backend-rex'
+        end
+        return 'smart-splits-backend-tmux'
+      end,
+    },
+  },
+  lazy = false,
   keys = {
     {
       '<C-h>',
