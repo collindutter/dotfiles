@@ -15,6 +15,7 @@ return {
       end,
     },
   },
+  -- Must not lazy load: the backend tells the multiplexer which panes run Neovim.
   lazy = false,
   keys = {
     {
