@@ -1,3 +1,23 @@
+vim.api.nvim_create_autocmd({ 'FileType', 'BufEnter', 'BufWinEnter' }, {
+  group = vim.api.nvim_create_augroup('prose_options', { clear = true }),
+  callback = function(event)
+    if event.buf ~= vim.api.nvim_get_current_buf() or vim.bo[event.buf].buftype ~= '' then
+      return
+    end
+    local ft = vim.bo[event.buf].filetype
+    local prose = ft == 'markdown' or ft == 'text'
+    vim.wo.wrap = prose
+    vim.wo.linebreak = prose
+    vim.wo.breakindent = prose
+    vim.wo.spell = prose
+    if prose then
+      vim.bo[event.buf].spelllang = 'en_us'
+      vim.bo[event.buf].textwidth = 0
+      vim.bo[event.buf].wrapmargin = 0
+    end
+  end,
+})
+
 -- Highlight on yank
 vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('highlight_yank', { clear = true }),
