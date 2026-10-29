@@ -20,6 +20,8 @@ All keys below follow `Ctrl+a`:
 | `w`, `W` | Command palette, not tmux's window picker |
 | `/` | Native Find, not reverse vi copy-mode search |
 | `g` | Lazygit in a 90% floating layer; quit Lazygit to close |
+| `D` | Workmux dashboard in a 90% floating layer |
+| `A` | Aven tasks across all projects in a 90% floating layer |
 
 Choose **Use Catppuccin Macchiato** in the command palette to apply the theme.
 Client appearance settings live in Rex, not this Lua config:

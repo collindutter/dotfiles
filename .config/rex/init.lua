@@ -50,13 +50,19 @@ rex.action({
 })
 
 rex.action({
-	name = "lazygit_popup",
-	title = "Lazygit in Current Directory",
-	run = function(ctx)
+	name = "popup",
+	title = "Command in Floating Layer",
+	args = {
+		type = "object",
+		properties = { command = { type = "array", items = { type = "string" }, minItems = 1 } },
+		required = { "command" },
+		additionalProperties = false,
+	},
+	run = function(ctx, args)
 		return checked(rex.session.new_layer({
 			bounds = { 0.05, 0.05, 0.9, 0.9 },
 			focus = true,
-			layout = shell(ctx, { "lazygit" }),
+			layout = shell(ctx, args.command),
 		}))
 	end,
 })
@@ -100,7 +106,9 @@ bind("\\", "split_here", { direction = "vertical" })
 bind("r", "client.config.reload")
 bind("m", "pane.zoom")
 bind("z", "pane.zoom")
-bind("g", "lazygit_popup")
+bind("g", "popup", { command = { "lazygit" } })
+bind("shift+d", "popup", { command = { "workmux", "dashboard" } })
+bind("shift+a", "popup", { command = { "aven", "-A" } })
 
 bind("n", "client.tab.next")
 bind("p", "client.tab.previous")
