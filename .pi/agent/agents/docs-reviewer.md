@@ -1,7 +1,7 @@
 ---
 name: docs-reviewer
 description: Documentation reviewer that verifies claims against the source and flags LLM voice
-model: amazon-bedrock/global.openai.gpt-5.6-sol
+model: openai/gpt-6.1-sol
 tools: read, grep, find, ls, contact_supervisor
 thinking: high
 systemPromptMode: replace

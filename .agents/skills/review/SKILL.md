@@ -1,8 +1,9 @@
 ---
 name: review
-description: Run a code review sub-agent
+description: Run an adversarial code review sub-agent that tries to break the current changes and returns a ship/iterate/rethink verdict
 ---
-Review the current changes with the `subagent` tool and the `reviewer` agent:
+Adversarially review the current changes with the `subagent` tool and the
+`reviewer` agent:
 $@
 
 The builtin `reviewer` from `pi-subagents` runs in an isolated context and
@@ -11,9 +12,10 @@ it the rubric:
 
     ~/.agents/skills/review/references/code-review-rubric.md
 
-The rubric defines a good review here (problem framing, correctness, design,
-LLMisms, yap, output format) and points the reviewer at the yap field guide, so
-yap has one definition. The reviewer only reports yap; the `yap` skill cuts it.
+The rubric sets the adversarial stance, attack surface, finding bar, and
+output format. The reviewer's value comes from independence. It must judge the
+diff without your reasoning about it, so don't explain or defend the change in
+the task.
 
 The reviewer has `read`, `grep`, `find`, and `ls` but no shell, so it can't run
 `git` or `gh`. Capture that output to a file and pass the path.
@@ -45,18 +47,30 @@ Steps:
    PRs it links (`gh issue view`, `gh pr view`).
 
 4. Call `subagent` once with `agent: "reviewer"` and a `task` that:
-   - Names the rubric by absolute path as the review rubric, to read first and
-     follow for axes and output format:
+   - Frames the job as adversarial: find the strongest reasons this diff
+     should not ship, and return `SHIP` with no findings if none hold up.
+   - Names the rubric by absolute path, to read first and follow for method
+     and output format:
      `/Users/collindutter/.agents/skills/review/references/code-review-rubric.md`
    - Gives the context file's absolute path, to read after the rubric.
    - Lists changed files by absolute path, for context around each hunk.
    - Limits the review to problems the diff causes or newly exposes.
    - When a PR exists, says its description and linked issues are in the
-     context file, so findings account for stated intent.
-   - Forwards extra focus areas from the arguments.
+     context file, as the claims to attack.
+   - Forwards extra focus areas from the arguments, to weight heavily without
+     ignoring other material issues.
+   - Contains no summary of the change, its rationale, or your confidence in
+     it.
 
    Pass the rubric path rather than pasting it, so it stays in one place. The
    model is pinned in `subagents.agentOverrides.reviewer.model`
    (`~/.pi/agent/settings.json`).
 
-Leave the grading to the reviewer. When it finishes, report its findings.
+5. Spot-check findings before reporting them. Reviewers can sound certain
+   about problems that aren't there. For each `high` or `medium` finding,
+   read the cited lines and confirm the scenario is reachable. Report what
+   you couldn't confirm as disputed, with the evidence, rather than dropping
+   it silently. The review itself changes no code.
+
+Report the verdict first, then confirmed findings by severity, then disputed
+ones, then the reviewer's coverage gaps.

@@ -1,7 +1,7 @@
 ---
 name: yap-cutter
 description: Cuts yap from a change, meaning empty comments, padded docstrings, bloated prose
-model: amazon-bedrock/global.openai.gpt-5.6-sol
+model: openai/gpt-6.1-sol
 tools: read, grep, find, ls, edit, write, contact_supervisor
 thinking: high
 systemPromptMode: replace

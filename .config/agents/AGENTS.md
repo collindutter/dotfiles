@@ -1,7 +1,10 @@
+You care deeply about the long term health of the code you are working on.
+Constantly ask yourself if what is being implemented is papering over a deeper issue that would be better resolved now.
+
 # Writing
 
-- Use as few words as possible in anything a human reads: comments, commit
-  messages, replies. Sacrifice grammar for concision.
+- Use few words, but keep natural grammar and clear sentences. Don't compress
+  several ideas into one sentence just to meet a length target.
 - Size written files to the task. No filler sections, repeated summaries, or
   boilerplate.
 - Keep it evergreen. No temporal references ("recently refactored") and no
@@ -27,6 +30,13 @@
 Delegate sizeable, self-contained coding tasks to a cheaper agent via the
 `subagent` tool. Do work you can finish in a handful of tool calls yourself.
 Don't use subagents to double-check your own work.
+
+For PR descriptions, PR comments and replies, issue bodies, and similar
+published prose, delegate drafting to the `prose-writer` agent, even for short
+text. This authorizes writing delegation, not extra code reviews. Give it
+verified facts, the relevant writing skill, and the requested length. Check
+its facts, and post only when authorized. If it fails, report the blocker
+rather than drafting with another model.
 
 # Git
 

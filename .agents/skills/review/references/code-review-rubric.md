@@ -1,161 +1,200 @@
-# Code review rubric
+# Adversarial code review rubric
 
-A standing definition of what a good code review of a diff looks like. It is
-independent of any agent harness, delegation mechanism, or tool: apply it as a
-reviewing agent, hand it to a delegated reviewer, or work through it by hand.
+How to review a diff adversarially. It does not depend on any agent harness or
+tool, so a delegated reviewer, a reviewing agent, or a person can follow it.
 
-You are a senior code reviewer. You review only the changes introduced by a
-specific diff, not the whole codebase. Ignore pre-existing issues in unchanged
-code. Only report problems that the changes under review cause or newly expose.
+Your job is to break confidence in the change, not to validate it. Review as if
+you are looking for the strongest reasons this diff should not ship. Assume it
+fails in some subtle, costly, or user-visible way until the code shows
+otherwise.
 
-The review is read-only: no edits, staging, or builds. Check claims by reading
-the source rather than executing it.
+Be aggressive but grounded. A finding you cannot support from the code is
+worse than no finding, because it costs the author time and erodes trust in the
+next real one. If the diff holds up, say so and return no findings. Never
+manufacture weak findings to satisfy the framing.
 
-Report every real problem the diff causes, at any severity. Don't hold a
-finding back for being minor or uncertain; say how confident you are and let
-the caller filter.
+## Scope
 
-Strategy:
-1. Obtain the diff for the scope you were given, whether that means running the
-   diff command you were handed, diffing against the stated merge-base, or
-   reading a diff that was captured for you.
-2. Read the PR description and any issues or follow-up PRs it links, when a PR
-   is in play. The description carries intent
-   the diff can't: deliberate deviations from the linked issue, coordinated
-   follow-up work in other repos, and constraints that explain otherwise
-   surprising choices. Factor this context into every finding.
-3. Read the changed files for the context around each hunk.
-4. Identify the failure this diff is meant to eliminate, then trace whether
-   the change actually reaches it. Where a fix
-   lands matters: follow the bad value or bad state backwards to where it
-   originates before accepting a fix applied further downstream.
-5. Evaluate the changes along the axes below.
+- Review only what the diff introduces or newly exposes. Ignore pre-existing
+  issues in unchanged code, unless the diff now depends on them or makes them
+  reachable.
+- The review is read-only: no edits, staging, or builds. Check claims by
+  reading source. When a claim can only be confirmed by running code, say so.
+- Unfamiliar APIs, libraries, or versions are not evidence of a bug. Your
+  training data may be stale. Mark such findings `unverifiable` instead of
+  inventing deprecations or misuse.
 
-When a finding is already anticipated by the PR description (e.g. a default
-chosen for wire parity with the fix deferred to a linked follow-up PR), do not
-present it as an unqualified defect. Either drop it, or raise it while
-explicitly acknowledging the stated plan and explaining why it still warrants
-attention. When flagging missing work the description says is handled
-elsewhere, engage with that stated rationale.
+## Method
 
-Report findings in clearly separated sections, ordered by impact within each
-section.
+1. Read the diff, then the PR description and any linked issues or PRs. The
+   description states what the change claims to do, and that claim is what you
+   attack.
+2. Read the changed files around each hunk. Also read callers and callees the
+   diff touches, since regressions often surface in unchanged code that
+   depends on changed code.
+3. In two or three sentences, state what the change is trying to do and why
+   the approach is plausible. This is the steelman. It keeps you from
+   attacking a change the author didn't make.
+4. Identify the failure the diff is meant to eliminate. Follow the bad value or
+   state back to where it originates, then check whether the fix reaches it.
+5. Try to break it. For each changed path, trace hostile and degraded inputs:
+   empty, null, huge, malformed, duplicated, out of order, concurrent, retried,
+   timed out, partially applied. Look for violated invariants, missing guards,
+   and assumptions that stop holding under stress.
+6. Try to refute each candidate finding before you report it. Look for the
+   guard, validation, test, or caller contract that would make it a non-issue.
+   Drop the finding if you find one. If you can't settle it, report it with
+   honest confidence and say what would settle it.
 
-## Problem framing (evaluate first)
+### Attack surface
 
-Whether the diff is aimed at the real defect. This comes first because it
-determines how much the rest of the review is worth: a clean, well-structured
-change to the wrong location still leaves the bug in the codebase. Keep this
-section short. If the change is pointed at the right thing, say so in one line
-and move on.
+Weight expensive, dangerous, or hard-to-detect failures:
 
-- Fix applied downstream of the cause: a guard at the call site for a value
-  that should never have been produced, a retry around a call that fails
-  deterministically, or a cleanup pass over data an earlier stage corrupted.
-- Mismatch between the failure described and the failure fixed: the diff
-  resolves something narrower, broader, or simply different from the reported
-  problem.
-- A special case bolted onto a rule that is itself wrong: a new branch for the
-  one input someone reported, while every other input still hits the same
-  latent flaw.
-- Machinery built to live with a constraint the diff could have lifted:
-  configuration, indirection, or bookkeeping that exists only to accommodate a
-  decision the change was free to revisit.
-- Tests that pin the workaround in place, so the underlying defect can no
-  longer be observed and the real fix becomes harder to land later.
+- Auth, permissions, tenant isolation, trust boundaries, injection
+- Data loss, corruption, duplication, irreversible state changes
+- Partial failure, retries, idempotency, rollback safety
+- Races, ordering assumptions, stale state, re-entrancy
+- Empty state, null, timeouts, degraded dependencies
+- Version skew, schema drift, migrations, breaking API or wire changes
+- Failures that are masked, such as broad exception handlers, silent
+  defaults, or retries that let a broken path report success
+- Observability gaps that hide failure or block recovery
+- Tests that pass without exercising the change, or that assert internal
+  calls instead of behavior
 
-You see the diff, not the roadmap, the deadline, or who owns the upstream code.
-So raise these as a question backed by evidence: name the location you believe
-the cause lives at, and what you observed that points there. If the PR
-description already explains why the narrower fix is the intended one, treat
-that as your answer and drop the finding, per the guidance above. Press only
-when the description never addresses the cause, or when its reasoning does not
-survive contact with what the diff actually does.
+### Stated intent
 
-## Correctness (highest priority among defects)
-- Bugs and logic errors introduced by the diff
-- Security issues introduced by the diff
-- Error handling gaps introduced by the diff
+Give no credit for good intent, partial fixes, or follow-up work that is only
+promised. If the description defers something to a linked PR or issue that
+exists, acknowledge the plan and judge whether shipping this half alone is
+safe. If the follow-up is only mentioned, treat the gap as real. When the
+description explains a surprising choice, engage with its reasoning. Press
+only when the reasoning doesn't hold up against what the diff actually does.
 
-## Design and structure (maintainability of the new code)
-- Wrong abstraction: class-as-namespace / stateless classes, class-vs-module
-  choice, dataclass misuse, misuse of static/class methods or properties
-- Cohesion / single responsibility: unrelated responsibilities welded into one
-  unit
-- Non-idiomatic patterns a seasoned developer in this language would write
-  differently
-- Inconsistent usage across call sites
-- State modeling / parameter threading: the same args passed through many
-  helpers that should be grouped or held as state
-- Duplicated structure or sequences that should be unified
-- Over- or under-engineering, awkward or leaky APIs
+## Finding bar
 
-## LLMisms (lowest priority)
+Report only material findings. Every finding must answer:
 
-Patterns characteristic of machine-authored diffs. Judge only added or modified
-lines. Report each pattern once with a few representative `file:line` examples
-rather than one finding per occurrence, so this section never outweighs the two
-above. If a diff is clean here, say so in one line and move on.
+1. **Scenario.** The concrete input, sequence, or state that triggers it.
+2. **Trace.** How that scenario moves through the cited code to the failure.
+3. **Impact.** What breaks, for whom, and how visibly.
+4. **Fix.** The concrete change that removes the risk, at its cause.
+
+If you can't fill in the scenario and trace, the finding isn't ready. Drop it
+or mark it `unverifiable`. When a step rests on inference rather than code
+you read, say so.
+
+Rate each finding:
+
+- **Severity:** `high` (exploitable, data-losing, or breaks a core path),
+  `medium` (wrong behavior on a realistic path), `low` (an edge case with
+  limited impact), or `unverifiable`.
+- **Confidence:** `high`, `medium`, or `low`.
+
+Skip style, formatting, naming preferences, generic "add tests" advice,
+speculative performance concerns, and suggestions to switch libraries. One
+strong finding beats five weak ones. LLMisms and Yap below are the exception.
+They have their own lighter bar and never affect the verdict.
+
+## Sections
+
+### Problem framing
+
+Is the diff aimed at the real defect? A clean change in the wrong place still
+leaves the bug. Look for:
+
+- A fix applied downstream of the cause, such as a guard for a value that
+  should never have been produced, or a retry around a deterministic failure.
+- A mismatch between the reported failure and the fixed one.
+- A special case bolted onto a rule that is itself wrong.
+- Machinery built to live with a constraint the diff could have lifted.
+- Tests that pin the workaround, so the real defect can't be observed.
+
+Name where you believe the cause lives and the evidence that points there. If
+the framing holds up, say so in one line.
+
+### Breakage
+
+Bugs, security holes, and failure-handling gaps from the attack surface. This
+is the core of the review.
+
+### Maintainability
+
+Only structural problems that will cause defects or block change, such as a
+wrong abstraction, class-as-namespace, unrelated responsibilities in one unit,
+duplicated logic that will drift, inconsistent call sites, the same arguments
+threaded through many helpers, over- or under-engineering, or a leaky API.
+
+### LLMisms
+
+Patterns characteristic of machine-authored diffs, judged on added or modified
+lines only. Report each pattern once with a few representative `file:line`
+examples, not once per occurrence. If the diff is clean, say so in one line.
 
 - Superiority naming: `enhanced_*`, `improved_*`, `*_v2`, `NewFooManager`.
   Whatever is new today will be old later.
-- Unrequested backwards compatibility: shims, aliases, or dual code paths
-  preserving an interface that has no remaining callers in the repo, absent a
-  stated need to keep it.
+- Unrequested backward compatibility: shims, aliases, or dual code paths for
+  interfaces with no remaining callers, absent a stated need.
 - Defensive fallbacks that mask failure: broad exception handlers, silent
-  defaults, or retries that let a broken path report success.
+  defaults, or retries. Report under Breakage instead when you can show a
+  scenario where they hide a real failure.
 - Tests coupled to the implementation: asserting internal calls instead of
   observable behavior, or mocking the unit under test.
 
-## Yap (lowest priority)
+### Yap
 
 Yap is comment, docstring, and prose bloat: words written for the writer, not
-the reader. Its definition lives in one place, not here:
+the reader. Its definition lives in one place:
 
     /Users/collindutter/.agents/skills/yap/references/yap-field-guide.md
 
-Read that file for the patterns and the keep test. Report yap as a single
-finding titled **Yap** with a handful of representative `file:line` examples and
-the pattern each one hits. One finding total, not one per comment, and it never
-outranks correctness or design. A separate yap pass
-may already have cleaned the diff; when it reads clean, say so in one line.
+Read that file for the patterns and the keep test. Report yap as one finding
+with a handful of representative `file:line` examples and the pattern each
+hits. A separate yap pass may already have cleaned the diff. When it reads
+clean, say so in one line. The reviewer only reports yap. The `yap` skill cuts
+it.
 
-A comment made false by the diff is a correctness finding, not yap.
-
-## Every finding
-
-For each finding, give: `file:line(s)`, a short title, the problem, why it
-matters, and a concrete suggested direction. Skip pure style, formatting, and
-naming preferences unless they reflect a real structural problem or fall under
-LLMisms or Yap above. Also call out sections
-that are structurally sound so the design pass does not devolve into nitpicking.
+A comment the diff made false is a breakage finding, not yap.
 
 ## Output format
 
-### Files Reviewed
-- `path/to/file.ts` (lines X-Y)
+### Verdict
+`SHIP`, `ITERATE`, or `RETHINK`, then one or two sentences in the voice of a
+ship/no-ship call, not a neutral recap.
+
+- `SHIP`: no `high` or `medium` findings.
+- `ITERATE`: at least one `high` or `medium` finding, fixable in place.
+- `RETHINK`: the problem framing is wrong, or the approach can't be made safe
+  without redesign.
+
+### Understanding
+The two- or three-sentence steelman from the method.
 
 ### Problem framing
-- Where the cause appears to live, what the diff does instead, and what would
-  change your assessment. One line if the framing holds up.
+One line if it holds up. Otherwise the suspected cause location and evidence.
 
-### Correctness
-- `file.ts:42` - **Title.** Problem, why it matters, suggested direction.
+### Breakage
+Ordered by severity, then confidence:
 
-### Design and structure
-- `file.ts:100` - **Title.** Problem, why it matters, suggested direction.
+- `file.ts:42-48` **Title** (`high`, confidence `medium`)
+  Scenario, trace, impact, fix.
+
+### Maintainability
+Same shape, or "None."
 
 ### LLMisms
-- **Pattern name.** What the pattern is and why it hurts, with representative
-  locations (`file.ts:12`, `file.ts:88`). One entry per pattern, not per
-  occurrence.
+- **Pattern name.** Why it hurts, with representative locations
+  (`file.ts:12`, `file.ts:88`). One entry per pattern, or one line if clean.
 
 ### Yap
-- **Yap.** Representative locations and the guide pattern each hits, or one line
-  saying the diff reads clean.
+- **Yap.** Representative locations and the guide pattern each hits, or one
+  line saying the diff reads clean.
 
-### Structurally sound
-- Brief notes on parts of the diff that are well designed.
+### Refuted
+Candidate findings you investigated and dropped, one line each with the
+evidence that cleared them. This shows what was checked.
 
-### Summary
-Overall assessment in 2-3 sentences.
+### Coverage
+Files and paths you read in full, and anything relevant you didn't examine,
+such as unread callers, generated code, or behavior that needs execution to
+confirm.

@@ -43,16 +43,12 @@ Cap at 5 iterations.
    base branch, which now includes earlier fixes). Forward `$ARGUMENTS`. Leave
    the grading to the reviewer.
 
-   `pi-subagents` also ships `/review-loop` and `/parallel-review` prompts.
-   Those are separate parent-orchestrated workflows; don't mix them into this
-   run.
-
-3. **Triage.** The reviewer reports everything; you filter.
-   - **Actionable**: bugs, logic errors, security issues, error-handling gaps,
-     or correctness problems the changes introduce, plus design findings you
-     agree with.
-   - **Non-actionable**: style preferences, nitpicks, out-of-scope suggestions,
-     comments on code the diff didn't touch.
+3. **Triage.** The reviewer is adversarial and reports only material
+   findings, but it can be wrong.
+   - **Actionable**: confirmed breakage and framing findings, plus
+     maintainability and LLMism findings you agree with.
+   - **Non-actionable**: disputed findings you refuted against the code, and
+     anything outside the diff's scope.
 
    Residual yap is actionable only when the reviewer points at something
    concrete. Don't relitigate comment wording.
@@ -72,7 +68,7 @@ Cap at 5 iterations.
 
 ## Stopping condition
 
-- No actionable findings remain.
+- The verdict is `SHIP`, or no actionable findings remain.
 - Remaining findings are all ones you declined, with reasons, and another
   review wouldn't change that.
 - 5 iterations are spent.
@@ -83,7 +79,7 @@ Cap at 5 iterations.
 
 Lead with the verdict that ended the loop, then:
 
-- Iterations run and each one's commits.
+- Iterations run, each one's verdict, and its commits.
 - What yap passes cut, one line per iteration.
 - Actionable findings left open, and why.
 - Findings declined, with reasons.
