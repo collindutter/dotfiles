@@ -93,6 +93,7 @@ rex.action({
 })
 
 bind("ctrl+a", "pane.send_key", { key = "ctrl+a" })
+bind("c", "new_tab_here")
 -- Rex spells shifted characters using their unshifted keys.
 bind("shift+\\", "split_here", { direction = "horizontal" })
 bind("\\", "split_here", { direction = "vertical" })
