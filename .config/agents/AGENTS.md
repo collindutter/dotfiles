@@ -32,7 +32,6 @@ Don't use subagents to double-check your own work.
 
 - Conventional commits for commit and PR titles.
 - Open PRs as drafts (`gh pr create --draft`).
-- Only commit files you changed this session.
 - Leave the PR body empty unless asked to write it. Exceptions: linking
   metadata like `Closes #123`, and repo PR templates, which you copy with all
   sections left blank.
