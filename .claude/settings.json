@@ -1,12 +1,10 @@
 {
   "awsAuthRefresh": "aws sso login --profile Griptape",
   "env": {
-    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "global.anthropic.claude-haiku-4-5-20251001-v1:0",
-    "ANTHROPIC_DEFAULT_OPUS_MODEL": "anthropic.claude-opus-4-8",
-    "ANTHROPIC_DEFAULT_SONNET_MODEL": "global.anthropic.claude-sonnet-4-6",
     "AWS_PROFILE": "Griptape",
     "CLAUDE_CODE_USE_MANTLE": "1",
-    "CLAUDE_CODE_USE_BEDROCK": "1"
+    "CLAUDE_CODE_USE_BEDROCK": "1",
+    "AWS_REGION": "us-east-1"
   },
   "attribution": {
     "pr": ""
@@ -15,7 +13,7 @@
     "allow": [],
     "deny": [],
     "ask": [],
-    "defaultMode": "default"
+    "defaultMode": "auto"
   },
   "model": "opus",
   "hooks": {
@@ -72,11 +70,24 @@
       }
     ]
   },
+  "enabledPlugins": {
+    "nodes-devbox@griptape-nodes-devbox": true
+  },
+  "extraKnownMarketplaces": {
+    "griptape-nodes-devbox": {
+      "source": {
+        "source": "github",
+        "repo": "griptape-ai/griptape-nodes-devbox"
+      }
+    }
+  },
   "alwaysThinkingEnabled": true,
+  "effortLevel": "medium",
+  "tui": "fullscreen",
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "vim",
+  "agentPushNotifEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754413195459
-  },
-  "agentPushNotifEnabled": true
+  }
 }
