@@ -22,34 +22,6 @@ local function shell(ctx, command)
 end
 
 rex.action({
-	name = "new_tab_here",
-	title = "New Tab in Current Directory",
-	run = function(ctx)
-		return checked(rex.session.new_window({ layout = shell(ctx) }))
-	end,
-})
-
-rex.action({
-	name = "split_here",
-	title = "Split in Current Directory",
-	args = {
-		type = "object",
-		properties = { direction = { type = "string", enum = { "horizontal", "vertical" } } },
-		required = { "direction" },
-		additionalProperties = false,
-	},
-	run = function(ctx, args)
-		return checked(rex.session.new_split({
-			anchor_id = ctx.block_id,
-			direction = args.direction,
-			side = "after",
-			focus = true,
-			layout = shell(ctx),
-		}))
-	end,
-})
-
-rex.action({
 	name = "popup",
 	title = "Command in Floating Layer",
 	args = {
@@ -67,53 +39,43 @@ rex.action({
 	end,
 })
 
-rex.action({
-	name = "swap_pane",
-	title = "Swap Pane",
-	args = {
-		type = "object",
-		properties = { offset = { type = "integer", enum = { -1, 1 } } },
-		required = { "offset" },
-		additionalProperties = false,
-	},
-	run = function(ctx, args)
-		local view = checked(rex.session.view({}))
-		for _, window in ipairs(view.windows or {}) do
-			for _, layer in ipairs(window.layers or {}) do
-				local blocks = layer.blocks or {}
-				for i, block in ipairs(blocks) do
-					if block.block_id == ctx.block_id then
-						if #blocks < 2 then
-							return
-						end
-						local target = blocks[(i - 1 + args.offset) % #blocks + 1]
-						return checked(rex.session.swap_blocks({
-							block_id = ctx.block_id,
-							other_block_id = target.block_id,
-						}))
-					end
-				end
-			end
-		end
+-- Runs command in a login shell that stays open after the command exits.
+local function worktree_pane(path, command)
+	local sh = os.getenv("SHELL") or "/bin/zsh"
+	return rex.layout.block({
+		flavor = "com.superlogical.terminal.shell",
+		options = { cwd = path, command = { sh, "-lic", command .. "; exec " .. sh .. " -l" } },
+	})
+end
+
+-- Worktree windows in the current session. `wt switch` and `wt remove` from
+-- the CLI open and close them through the hooks in ~/.config/worktrunk/config.toml.
+require("rex-worktrunk").setup({
+	target = "window",
+	-- Nerd Font git-branch glyph, matching workmux's nerdfont window prefix.
+	prefix = "\239\144\152 ",
+	layout = function(_, path)
+		return rex.layout.horizontal(0.5, worktree_pane(path, "nvim"), worktree_pane(path, "pi"))
 	end,
 })
 
 bind("ctrl+a", "pane.send_key", { key = "ctrl+a" })
-bind("c", "new_tab_here")
+bind("c", "client.tab.new")
 -- Rex spells shifted characters using their unshifted keys.
-bind("shift+\\", "split_here", { direction = "horizontal" })
-bind("\\", "split_here", { direction = "vertical" })
+bind("shift+\\", "pane.split", { direction = "right" })
+bind("\\", "pane.split", { direction = "down" })
 bind("r", "client.config.reload")
 bind("m", "pane.zoom")
-bind("z", "pane.zoom")
 bind("g", "popup", { command = { "lazygit" } })
-bind("shift+d", "popup", { command = { "workmux", "dashboard" } })
+local pickers = os.getenv("HOME") .. "/.config/rex/pickers/"
+bind("shift+o", "popup", { command = { pickers .. "sesh.sh" } })
+bind("shift+w", "popup", { command = { pickers .. "activity.sh" } })
 bind("shift+a", "popup", { command = { "aven", "-A" } })
 
 bind("n", "client.tab.next")
 bind("p", "client.tab.previous")
-bind("shift+[", "swap_pane", { offset = -1 })
-bind("shift+]", "swap_pane", { offset = 1 })
+bind("shift+[", "pane.move", { direction = "left" })
+bind("shift+]", "pane.move", { direction = "right" })
 bind(",", "client.tab.rename")
 bind("shift+4", "session.rename")
 bind("x", "pane.close")
@@ -124,16 +86,15 @@ for i = 1, 9 do
 end
 
 bind("s", "session.switch")
-bind("shift+o", "session.switch")
--- Native palette replaces the tmux window pickers, not a window-only list.
-bind("w", "client.palette.toggle")
-bind("shift+w", "client.palette.toggle")
--- Native Find replaces reverse copy-mode search.
 bind("/", "client.find.open")
 
--- Amount is percent of the split, not tmux's cell count.
+-- An arrow after the prefix enters resize mode. Arrows then resize until
+-- Escape or Enter. Amount is percent of the split.
+rex.mode("resize", { exclusive = true })
+rex.bind("resize/enter", "client.mode.exit")
 for _, direction in ipairs({ "left", "down", "up", "right" }) do
-	bind(direction, "pane.resize", { direction = direction, amount = 5 })
+	bind(direction, "client.mode.enter", { name = "resize" })
+	rex.bind("resize/" .. direction, "pane.resize", { direction = direction, amount = 5 })
 end
 -- Prefix navigation remains an escape hatch. Direct navigation lets Neovim
 -- receive Ctrl+h/j/k/l, while other foreground programs move Rex panes.
