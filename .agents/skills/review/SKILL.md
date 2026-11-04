@@ -42,6 +42,22 @@ Steps:
          echo '```'
        } > "$ctx"
 
+   Append the repo's rules from the base branch: `REVIEW.md`, `AGENTS.md`, and
+   `CLAUDE.md` at the root or in a directory above a changed file, skipping
+   symlinks. Also append any file a root `REVIEW.md` includes with an
+   `@<file>` line.
+
+       changed=$(git diff --name-only "$base"..HEAD)
+       git ls-tree -r origin/<base> \
+         | awk '$1 != "120000" && $4 ~ /(^|\/)(REVIEW|AGENTS|CLAUDE)\.md$/ {print $4}' \
+         | while read -r f; do
+             d=$(dirname "$f")
+             if [ "$d" = . ] || grep -q "^$d/" <<<"$changed"; then
+               printf '\n# Repo rules: %s\n\n' "$f"
+               git show "origin/<base>:$f"
+             fi
+           done >> "$ctx"
+
    If the branch has a PR, append its description
    (`gh pr view --json number,url,title,body`) plus any issues and follow-up
    PRs it links (`gh issue view`, `gh pr view`).
@@ -52,7 +68,9 @@ Steps:
    - Names the rubric by absolute path, to read first and follow for method
      and output format:
      `/Users/collindutter/.agents/skills/review/references/code-review-rubric.md`
-   - Gives the context file's absolute path, to read after the rubric.
+   - Gives the context file's absolute path, to read after the rubric. Says
+     any repo rules in it calibrate the rubric as its "Repository rules"
+     section describes.
    - Lists changed files by absolute path, for context around each hunk.
    - Limits the review to problems the diff causes or newly exposes.
    - When a PR exists, says its description and linked issues are in the

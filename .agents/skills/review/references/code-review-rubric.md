@@ -24,8 +24,22 @@ manufacture weak findings to satisfy the framing.
   training data may be stale. Mark such findings `unverifiable` instead of
   inventing deprecations or misuse.
 
+## Repository rules
+
+A repo can commit rules that calibrate this rubric: `REVIEW.md` for
+review-only rules, and `AGENTS.md` or `CLAUDE.md` for project standards, where
+a change that breaks a rule is a finding. They come from the base branch, so a
+diff can't loosen its own review.
+
+- They can add checks, skip paths such as generated code, and drop or cap
+  maintainability, LLMism, and yap findings.
+- They can't silence a breakage or framing finding outside a skipped path.
+  Where a rule says otherwise, this rubric wins.
+- Where they define what blocks a merge, use that to set severity.
+
 ## Method
 
+1. Read the repository rules, if any came with the diff.
 1. Read the diff, then the PR description and any linked issues or PRs. The
    description states what the change claims to do, and that claim is what you
    attack.
