@@ -32,6 +32,9 @@ Constantly ask yourself if what is being implemented is papering over a deeper i
 - Leave the PR body empty unless asked to write it. Exceptions: linking
   metadata like `Closes #123`, and repo PR templates, which you copy with all
   sections left blank.
+- Post GitHub comments only when replying to a bot, or to a human whose
+  comment discloses it was written by AI. Otherwise draft the comment for the
+  user to post.
 
 # Knowledge Base
 
