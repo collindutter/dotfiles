@@ -103,11 +103,11 @@ Helper:
 
 ## Step 4 - Write each comment body
 
-Delegate prose drafting to the `prose-writer` agent. Pass verified findings,
-exact links, and the format below. Keep suggestion code out of its hands; add it
-yourself. Verify facts, anchors, and patches before posting. If the agent
-fails, report the blocker rather than drafting with another model. Use plain
-sentences; don't repeat the same point under each label.
+Write each body from the verified findings and exact links, in the format
+below. Explain the specific concern and its consequence. Don't add findings,
+overstate certainty, or claim verification you didn't do. Verify facts,
+anchors, and patches before posting. Use plain sentences; don't repeat the
+same point under each label.
 
 Start every AI-assisted finding with this disclosure callout, verbatim. Do not reword it:
 

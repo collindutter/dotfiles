@@ -1,7 +1,7 @@
 ---
 name: pr-description
 description: Write or update a PR description in my voice. Use when asked to write, fill in, tighten, or update a PR body.
-allowed-tools: read bash subagent
+allowed-tools: read bash
 ---
 
 Write the PR description for the current branch: $@
@@ -18,14 +18,8 @@ only when the PR fully addresses the issue; otherwise use `Refs`.
 
 ## Draft
 
-Give `prose-writer` the verified facts, existing body, requested length, and
-the writing guidance below. Include a template or user-provided wording when
-available. Ask for only the proposed body, not an explanation of its choices.
-The model is configured in `~/.pi/agent/agents/prose-writer.md`.
-
-If the agent fails, report the blocker rather than switching models.
-
-### Writing guidance
+Write the body from the verified facts, following the guidance below. Use a
+repo template or user-provided wording when available.
 
 Write like a teammate explaining why the change matters. Usually one or two
 sentences is enough: what changes, and why. A bug fix can explain what was

@@ -34,10 +34,9 @@ runs, wait for its result; a running subagent means the iteration isn't done.
 
 Cap at 5 iterations.
 
-1. **Cut yap.** Run the `yap` skill (`yap-cutter` over the same diff). It edits
-   comments, docstrings, and prose only, so the reviewer spends its budget on
-   correctness. Let it finish first, since both read the same tree. Skip it on
-   iterations whose fixes added no comments or prose.
+1. **Cut yap.** Apply the `yap` skill to the diff. It touches comments,
+   docstrings, and prose only, so the reviewer spends its budget on
+   correctness. Skip it on iterations whose fixes added no comments or prose.
 
 2. **Review.** Run the `review` skill (`reviewer` over the diff against the
    base branch, which now includes earlier fixes). Forward `$ARGUMENTS`. Leave
