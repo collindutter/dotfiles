@@ -31,6 +31,8 @@ for open GitHub-linked tasks:
   without merging.
 - `check`: a `waiting` task's PR merged. Check whether a release includes it
   (`gh release list`, or the release notes) before proposing `done`.
+- `re-review`: an `awaiting-author` PR has a review re-request or commits
+  since your last review. Propose swapping the label back to `review`.
 - `keep`: leave the task alone.
 
 For open Slack tasks (`aven list -A --open --label slack`), read the thread
@@ -41,33 +43,36 @@ replied or the ask was handled. When unsure, keep the task.
 
 Run `scripts/gather.sh`. It prints untracked, unignored GitHub items as JSON
 with `kind` of `review`, `my-pr`, `issue`, or `mention`, and reports skipped
-stale issues on stderr. Archived repos are excluded.
+stale issues on stderr. Archived repos and the user's own draft PRs are
+excluded.
 
-For Slack, search since the last run, stored in
-`~/.local/state/aven-triage/last-run` (default: 3 days ago):
+For Slack, run `scripts/slack-gather.sh`. It lists every thread with activity
+since the last run, read or not, in the user's channels, DMs, and followed threads.
+It drops bots, tracked threads, ignored messages, threads where only the user
+posted, and channels in `~/.local/state/aven-triage/skip-channels.txt`.
 
-```sh
-slacker search-messages --format json -- "to:me after:<date>"
-slacker search-messages --format json -- "<@USER_ID> after:<date>"
-```
-
-Get `USER_ID` from `slacker auth test`. Drop messages whose permalink is
-already tracked (`scripts/tracked.sh`) or listed in
-`~/.local/state/aven-triage/ignored.txt`. Drop bot messages, GitHub
-notifications, and chatter. Keep direct asks, questions waiting on the user,
-and requests with a deadline. Read the thread before deciding.
+Read every thread it returns, and fetch the full thread with `slacker
+read-thread` when the excerpt isn't enough. Keep a thread only when it needs
+the user: a direct ask or question to them, or to a group they answer for,
+that hasn't been answered or done, or a request with a deadline. Most channel
+traffic is chatter and needs nothing. `last_from_me` means the user spoke
+last, so the thread usually needs nothing until someone replies. When a
+channel is nothing but noise, propose adding it to the skip list.
 
 ## 3. Decide
 
 - **review:** one task per PR, label `review`, project from the repo. Draft
   PRs get priority `low`.
-- **my-pr:** skip drafts the user is still writing. For a stack, read `base`
+- **my-pr:** For a stack, read `base`
   and `head`: make an epic, one child per PR, and `aven dep add` each child on
   the PR below it. Order by branch, never by PR number.
 - **issue:** one task each, status `todo` if recently active, else `backlog`.
   Group many stale issues into one triage task instead of importing each.
 - **mention:** most are auto-mentions. Propose a task only when someone asks
   the user something directly.
+- **Reviewed, awaiting author:** when the user has reviewed a PR and is
+  waiting on its author, swap `review` for `awaiting-author` and keep the task
+  open. Otherwise reconcile closes it once the review request clears.
 - **Blocked work:** when a task waits on someone else's PR, add a task labeled
   `waiting` for that PR and `aven dep add <blocked> <waiting>`. Say in its
   description what actually unblocks it, such as a release.
@@ -90,5 +95,6 @@ Then:
 - Apply the approved changes.
 - Record each item the user chose to skip with `scripts/ignore.sh <url> <reason>`
   so later runs stop proposing it.
-- Write today's date to `~/.local/state/aven-triage/last-run`.
+- Write `as_of` from the `slack-gather.sh` output to
+  `~/.local/state/aven-triage/last-run`.
 - Report what changed, with refs.

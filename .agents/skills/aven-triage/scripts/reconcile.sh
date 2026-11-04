@@ -6,6 +6,7 @@
 #   close   the source is resolved (merged, closed, review submitted, unassigned)
 #   keep    the source is still open and waiting on you
 #   check   a waiting task's PR merged; confirm a release includes it before closing
+#   re-review  an awaiting-author PR has a re-request or commits since your review
 set -euo pipefail
 WS=${AVEN_TRIAGE_WORKSPACE:-work}
 here=$(dirname "$0")
@@ -15,7 +16,7 @@ me=$(gh api user -q .login)
   case $status in done | canceled) continue ;; esac
   case $url in
   https://github.com/*/pull/*)
-    pr=$(gh pr view "$url" --json state,reviewRequests,author,isDraft,reviewDecision)
+    pr=$(gh pr view "$url" --json state,reviewRequests,author,isDraft,reviewDecision,reviews,commits)
     state=$(jq -r .state <<<"$pr")
     if [ "$state" = MERGED ] && [[ $labels == *waiting* ]]; then
       printf '%s\t%s\tcheck\tPR merged, confirm it shipped\t%s\n' "$ref" "$labels" "$url"
@@ -23,6 +24,16 @@ me=$(gh api user -q .login)
       printf '%s\t%s\tclose\tPR %s\t%s\n' "$ref" "$labels" "$(tr A-Z a-z <<<"$state")" "$url"
     elif [[ $labels == *waiting* ]]; then
       printf '%s\t%s\tkeep\tstill open\t%s\n' "$ref" "$labels" "$url"
+    elif [[ $labels == *awaiting-author* ]]; then
+      if jq -e --arg me "$me" '.reviewRequests | any(.login == $me)' <<<"$pr" >/dev/null; then
+        printf '%s\t%s\tre-review\treview re-requested\t%s\n' "$ref" "$labels" "$url"
+      elif jq -e --arg me "$me" '
+        ([.reviews[] | select(.author.login == $me) | .submittedAt] | max) as $last
+        | $last != null and ([.commits[].committedDate] | max) > $last' <<<"$pr" >/dev/null; then
+        printf '%s\t%s\tre-review\tcommits since your review\t%s\n' "$ref" "$labels" "$url"
+      else
+        printf '%s\t%s\tkeep\tawaiting author\t%s\n' "$ref" "$labels" "$url"
+      fi
     elif [[ $labels == *review* ]]; then
       if jq -e --arg me "$me" '.reviewRequests | any(.login == $me)' <<<"$pr" >/dev/null; then
         printf '%s\t%s\tkeep\treview still requested\t%s\n' "$ref" "$labels" "$url"

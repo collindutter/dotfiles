@@ -5,7 +5,8 @@
 #
 # kind is one of: review, my-pr, issue, mention.
 # Assigned issues untouched for STALE_DAYS (default 60) are left out; the count
-# is printed to stderr so the agent can mention it.
+# is printed to stderr so the agent can mention it. Your own draft PRs are left
+# out until they're marked ready, so they never need ignoring.
 set -euo pipefail
 here=$(dirname "$0")
 STALE_DAYS=${STALE_DAYS:-60}
@@ -26,7 +27,7 @@ norm='map({url, title, repo: .repository.nameWithOwner, updated: .updatedAt[:10]
 reviews=$(gh search prs --review-requested=@me --state=open --archived=false --json $fields,isDraft --limit 50 |
   jq "$norm | map(. + {kind: \"review\"})")
 mine=$(gh search prs --author=@me --state=open --archived=false --json $fields,isDraft --limit 50 |
-  jq "$norm | map(. + {kind: \"my-pr\"})")
+  jq "$norm | map(select(.draft | not) | . + {kind: \"my-pr\"})")
 issues=$(gh search issues --assignee=@me --state=open --archived=false --json $fields --limit 100 |
   jq "$norm | map(. + {kind: \"issue\"})")
 mentions=$(gh search issues --mentions=@me --state=open --archived=false --updated=">$(date -v-"${MENTION_DAYS}"d +%F)" \
