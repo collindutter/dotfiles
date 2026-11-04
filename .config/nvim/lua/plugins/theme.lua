@@ -7,6 +7,7 @@ return {
     vim.cmd.colorscheme 'catppuccin-nvim'
   end,
   opts = {
+    background = { light = 'latte', dark = 'macchiato' },
     transparent_background = true, -- disables setting the background color.
     float = {
       transparent = true, -- enable transparent floating windows
