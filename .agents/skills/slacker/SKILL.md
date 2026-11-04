@@ -21,10 +21,12 @@ instead of asking the user to paste them.
 - Thread by permalink: `slacker read-thread --url <permalink> --format text`
 - Thread by IDs: `slacker read-thread --channel <C...> --ts <1700000000.000100> --format text`
 - Search: `slacker search-messages --format text -- <query>`
+- Look up users by ID: `slacker user <U...>... --format text`
 - Download files: `slacker download-file <target>... --dir <path>`
 - Check auth: `slacker auth test`
 
 `--format json` for structured output. `--limit` on `read-thread` caps replies.
+`read-thread` JSON includes a `users` map from user ID to handle.
 
 ## Reading well
 
