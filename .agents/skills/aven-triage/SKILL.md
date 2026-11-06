@@ -33,6 +33,10 @@ for open GitHub-linked tasks:
   (`gh release list`, or the release notes) before proposing `done`.
 - `re-review`: an `awaiting-author` PR has a review re-request or commits
   since your last review. Propose swapping the label back to `review`.
+- `awaiting-review`: your PR has no human review since its last commit.
+  Propose adding the `awaiting-review` label.
+- `act`: an `awaiting-review` PR was approved, got changes requested, or has
+  a human review since its last commit. Propose removing the label.
 - `keep`: leave the task alone.
 
 For open Slack tasks (`aven list -A --open --label slack`), read the thread
