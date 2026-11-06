@@ -1,5 +1,3 @@
-fish_add_path -gP ~/.local/bin /opt/homebrew/bin /opt/homebrew/sbin ~/.local/share
-
 set -gx XDG_CONFIG_HOME $HOME/.config
 
 # Let self-updating casks (Chrome, etc.) manage their own versions

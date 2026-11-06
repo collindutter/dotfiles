@@ -37,6 +37,7 @@
 /.config/bat/themes/*.1
 /.config/fish/completions/
 /.config/fish/conf.d/*
+!/.config/fish/conf.d/00-path.fish
 !/.config/fish/conf.d/fzf-theme.fish
 !/.config/fish/conf.d/github-packages.fish
 /.config/fish/functions/*fzf*
