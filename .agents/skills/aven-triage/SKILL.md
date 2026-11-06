@@ -55,8 +55,9 @@ since the last run, read or not, in the user's channels, DMs, and followed threa
 It drops bots, tracked threads, ignored messages, threads where only the user
 posted, and channels in `~/.local/state/aven-triage/skip-channels.txt`.
 
-Read every thread it returns, and fetch the full thread with `slacker
-read-thread` when the excerpt isn't enough. Keep a thread only when it needs
+Read every thread it returns. The excerpt often shows only the first message,
+so before proposing a task, fetch the full thread with `slacker read-thread`
+to confirm nobody has answered or handled it. Keep a thread only when it needs
 the user: a direct ask or question to them, or to a group they answer for,
 that hasn't been answered or done, or a request with a deadline. Most channel
 traffic is chatter and needs nothing. `last_from_me` means the user spoke
