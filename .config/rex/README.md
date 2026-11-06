@@ -17,10 +17,9 @@ All keys below follow `Ctrl+a`:
 | `m` | Zoom pane |
 | Arrows | Resize by 5% of split and enter resize mode; arrows keep resizing until Escape or Enter |
 | `h/j/k/l`, `o` | Focus direction, next pane |
-| `s` | Session picker |
+| `s`, `O` | Session picker (same as Cmd+K) |
 | `/` | Find |
 | `g` | Lazygit in a 90% floating layer; quit Lazygit to close |
-| `O` | Session picker in the style of sesh: opens on sessions, `^a` adds zoxide directories; Enter connects or opens a session, `^y` copies the path |
 | `W` | Activity picker: programs that report a status, most urgent first; Enter jumps to the pane |
 | `A` | Aven tasks across all projects in a 90% floating layer |
 
@@ -38,16 +37,12 @@ scrollback limit (about 64 MiB).
 
 ## Worktrees
 
-[rex-worktrunk](https://github.com/haxybaxy/rex-worktrunk) gives each
-[worktrunk](https://worktrunk.dev) worktree its own window in the current
-session, with Neovim and Pi side by side. `wt switch -c <branch>` and `wt remove`
-from the CLI open and close windows through the hooks in
-`~/.config/worktrunk/config.toml`. The local copy adds the `target` and `prefix`
-options for this. Its fzf picker is unused; `wt switch` has its own.
+`worktrees.lua` gives each [worktrunk](https://worktrunk.dev) worktree its own
+window in the current session, with Neovim and Pi side by side.
+`wt switch -c <branch>` and `wt remove` open and close windows through the
+`open_dir` and `close_dir` hooks in `~/.config/worktrunk/config.toml`.
 
 ## Pickers
 
-`pickers/` holds the fzf pickers on `O` and `W`. `status.lua` and `sessions.lua`
-list programs and sessions, and `go.lua` shows a session in the app.
-Directories open as sessions through rex-worktrunk's `worktree_go`, so they get
-the Neovim and Pi layout.
+`pickers/` holds the fzf activity picker on `W`. `status.lua` lists programs
+that report a status, and `go.lua` shows a pane in the app.

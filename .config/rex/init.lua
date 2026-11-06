@@ -39,25 +39,7 @@ rex.action({
 	end,
 })
 
--- Runs command in a login shell that stays open after the command exits.
-local function worktree_pane(path, command)
-	local sh = os.getenv("SHELL") or "/bin/zsh"
-	return rex.layout.block({
-		flavor = "com.superlogical.terminal.shell",
-		options = { cwd = path, command = { sh, "-lic", command .. "; exec " .. sh .. " -l" } },
-	})
-end
-
--- Worktree windows in the current session. `wt switch` and `wt remove` from
--- the CLI open and close them through the hooks in ~/.config/worktrunk/config.toml.
-require("rex-worktrunk").setup({
-	target = "window",
-	-- Nerd Font git-branch glyph, matching workmux's nerdfont window prefix.
-	prefix = "\239\144\152 ",
-	layout = function(_, path)
-		return rex.layout.horizontal(0.5, worktree_pane(path, "nvim"), worktree_pane(path, "pi"))
-	end,
-})
+require("worktrees")
 
 bind("ctrl+a", "pane.send_key", { key = "ctrl+a" })
 bind("c", "client.tab.new")
@@ -68,7 +50,6 @@ bind("r", "client.config.reload")
 bind("m", "pane.zoom")
 bind("g", "popup", { command = { "lazygit" } })
 local pickers = os.getenv("HOME") .. "/.config/rex/pickers/"
-bind("shift+o", "popup", { command = { pickers .. "sesh.sh" } })
 bind("shift+w", "popup", { command = { pickers .. "activity.sh" } })
 bind("shift+a", "popup", { command = { "aven", "-A" } })
 
@@ -86,6 +67,7 @@ for i = 1, 9 do
 end
 
 bind("s", "session.switch")
+bind("shift+o", "session.switch")
 bind("/", "client.find.open")
 
 -- An arrow after the prefix enters resize mode. Arrows then resize until
