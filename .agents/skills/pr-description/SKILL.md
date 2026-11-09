@@ -37,7 +37,24 @@ reader. Don't claim tests passed or behavior is supported without evidence.
 No em dashes, sales language, or boilerplate headings. Follow the user's
 wording and length preferences over these defaults.
 
-Keep paragraphs unwrapped and issue links at the end. For a repo template,
+The opener is what a human reader is promised is worth their time, so keep it
+short even when there is more to say. Put longer detail that would help a
+reviewer, such as design decisions, alternatives considered, or verification
+steps, in a collapsed block after the opener. Label it with the model and
+reasoning level from `PI_MODEL` and `PI_REASONING_LEVEL`, so readers know an
+agent wrote it:
+
+    <details>
+    <summary>claude-opus-5-5 medium</summary>
+
+    Longer detail here, as Markdown.
+
+    </details>
+
+Keep the blank lines inside the block so GitHub renders the Markdown. Omit the
+block when the opener already covers everything a reviewer needs.
+
+Keep paragraphs unwrapped and issue links at the end, after any details block. For a repo template,
 preserve its structure, fill the description section, and leave other sections
 blank unless asked. Don't mark checkboxes without evidence.
 
