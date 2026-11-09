@@ -1,0 +1,12 @@
+# Rex opens each worktree in its own window, so the current shell stays put.
+[switch]
+cd = false
+
+[pre-start]
+env = "for f in {{ primary_worktree_path }}/.env {{ primary_worktree_path }}/.env.*; do [ -e \"$f\" ] && cp -Rn \"$f\" .; done; true"
+
+[post-switch]
+rex = "if [ -n \"$REX_SESSION\" ]; then rex do open_dir path={{ worktree_path }}; fi"
+
+[post-remove]
+rex = "if [ -n \"$REX_SESSION\" ]; then rex do close_dir path={{ worktree_path }}; fi"

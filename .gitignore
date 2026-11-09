@@ -23,19 +23,28 @@
 !/.config/aws/
 !/.config/bat/
 !/.config/btop/
+!/.config/delta/
 !/.config/fish/
+!/.config/gh/
+!/.config/gh-dash/
+!/.config/git/
 !/.config/ghostty/
 !/.config/homebrew/
 !/.config/lazygit/
 !/.config/mise/
 !/.config/nvim/
+!/.config/pi/
+!/.config/rex/
 !/.config/starship/
 !/.config/tmux/
 !/.config/workmux/
+!/.config/worktrunk/
 
 # Machine-local state inside otherwise-allowed .config directories
 /.config/bat/themes/*.1
 /.config/fish/completions/
+/.config/gh/hosts.yml
+/.config/pi/web-search-cache/
 /.config/fish/conf.d/*
 !/.config/fish/conf.d/00-path.fish
 !/.config/fish/conf.d/fzf-theme.fish
@@ -50,7 +59,6 @@
 # .pi: deny by default, allow specific user-authored config
 /.pi/*
 !/.pi/agent/
-!/.pi/web-search.json
 /.pi/agent/*
 !/.pi/agent/AGENTS.md
 !/.pi/agent/settings.json
