@@ -14,9 +14,6 @@
         "clientName": "Claude Code"
       }
     },
-    "atlassian": {
-      "url": "https://mcp.atlassian.com/v2/mcp"
-    },
     "superlogical": {
       "url": "https://www.superlogical.com/rex/community-mcp"
     }
