@@ -5,15 +5,6 @@
       "description": "Web search and page fetching",
       "exposure": "direct"
     },
-    "artiflect": {
-      "url": "https://artiflect.griptape.ai/mcp"
-    },
-    "datadog": {
-      "url": "https://mcp.us5.datadoghq.com/api/unstable/mcp-server/mcp",
-      "oauth": {
-        "clientName": "Claude Code"
-      }
-    },
     "superlogical": {
       "url": "https://www.superlogical.com/rex/community-mcp"
     }
