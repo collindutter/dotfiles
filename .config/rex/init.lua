@@ -21,6 +21,14 @@ local function shell(ctx, command)
 	})
 end
 
+local function popup(ctx, command)
+	return checked(rex.session.new_layer({
+		bounds = { 0.05, 0.05, 0.9, 0.9 },
+		focus = true,
+		layout = shell(ctx, command),
+	}))
+end
+
 rex.action({
 	name = "popup",
 	title = "Command in Floating Layer",
@@ -31,11 +39,15 @@ rex.action({
 		additionalProperties = false,
 	},
 	run = function(ctx, args)
-		return checked(rex.session.new_layer({
-			bounds = { 0.05, 0.05, 0.9, 0.9 },
-			focus = true,
-			layout = shell(ctx, args.command),
-		}))
+		return popup(ctx, args.command)
+	end,
+})
+
+rex.action({
+	name = "urls",
+	title = "Find URLs in Pane",
+	run = function(ctx)
+		return popup(ctx, { "fish", "-c", "rex capture --unwrap --block " .. ctx.block_id .. " | urls" })
 	end,
 })
 
@@ -49,6 +61,7 @@ bind("\\", "pane.split", { direction = "down" })
 bind("r", "client.config.reload")
 bind("m", "pane.zoom")
 bind("g", "popup", { command = { "lazygit" } })
+bind("u", "urls")
 local pickers = os.getenv("HOME") .. "/.config/rex/pickers/"
 bind("shift+w", "popup", { command = { pickers .. "activity.sh" } })
 bind("shift+a", "popup", { command = { "aven", "-A" } })
