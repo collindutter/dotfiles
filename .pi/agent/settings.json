@@ -1,0 +1,71 @@
+{
+  "$schema": "https://pi.dev/schemas/settings.schema.json",
+  "lastChangelogVersion": "1.5.0",
+  "defaultProjectTrust": "always",
+  "defaultProvider": "anthropic",
+  "defaultModel": "claude-opus-5-5",
+  "defaultThinkingLevel": "medium",
+  "enableSkillCommands": true,
+  "packages": [
+    "npm:@juicesharp/rpiv-ask-user-question",
+    {
+      "source": "git:github.com/nicobailon/pi-subagents@main",
+      "prompts": [
+        "!prompts/review-loop.md"
+      ]
+    },
+    "../../Projects/griptape/griptape-nodes-devbox"
+  ],
+  "subagents": {
+    "agentOverrides": {
+      "gpt-pro": {
+        "disabled": true
+      }
+    },
+    "agentOverridesByProvider": {
+      "anthropic": {
+        "scout": {
+          "model": "anthropic/claude-haiku-5-5"
+        },
+        "delegate": {
+          "model": "anthropic/claude-haiku-5-5"
+        },
+        "worker": {
+          "model": "anthropic/claude-sonnet-5-5"
+        },
+        "reviewer": {
+          "model": "anthropic/claude-sonnet-5-5"
+        },
+        "researcher": {
+          "model": "anthropic/claude-sonnet-5-5"
+        },
+        "oracle": {
+          "model": "anthropic/claude-opus-5-5"
+        }
+      }
+    }
+  },
+  "externalEditor": "nvim",
+  "httpIdleTimeoutMs": 30000,
+  "retry": {
+    "enabled": true,
+    "maxRetries": 5,
+    "baseDelayMs": 2000
+  },
+  "enabledModels": [
+    "openai/gpt-6-astra",
+    "openai/gpt-6-sol",
+    "anthropic/claude-opus-5-5"
+  ],
+  "defaultTools": [
+    "+codemode"
+  ],
+  "extensionChangelogVersions": {
+    "{\"source\":\"git:github.com/nicobailon/pi-subagents@main\",\"scope\":\"user\"}": "0.87.0"
+  },
+  "showHardwareCursor": true,
+  "terminal": {
+    "showImages": false
+  },
+  "tuiMode": "regular"
+}

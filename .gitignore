@@ -53,6 +53,9 @@
 !/.pi/web-search.json
 /.pi/agent/*
 !/.pi/agent/AGENTS.md
+!/.pi/agent/settings.json
+!/.pi/agent/mcp.json
+!/.pi/agent/skills/
 !/.pi/agent/themes/
 !/.pi/agent/agents/
 !/.pi/agent/extensions/
