@@ -1,13 +1,14 @@
 ---
 name: draft-review-comments
-description: Post a DRAFT (pending) GitHub PR review made of separate inline review comments anchored to the diff, each with an AI-assisted disclosure, GitHub deep-link permalinks that render as code snippets, and one-click suggestion blocks for mechanical fixes. Also resolves threads the skill posted in an earlier round once their findings are fixed. Use when the user asks to "add a draft review comment", "post review findings as separate comments", "leave inline review comments", "suggest a change on the diff", "resolve the review comments that are fixed", or wants reviewer findings turned into a pending PR review with deep links to the code.
+description: Post a DRAFT (pending) GitHub PR review made of separate inline review comments anchored to the diff, each with the finding in a collapsed block labeled with the model so the user can write their own words on top, GitHub deep-link permalinks that render as code snippets, and one-click suggestion blocks for mechanical fixes. Also resolves threads the skill posted in an earlier round once their findings are fixed. Use when the user asks to "add a draft review comment", "post review findings as separate comments", "leave inline review comments", "suggest a change on the diff", "resolve the review comments that are fixed", or wants reviewer findings turned into a pending PR review with deep links to the code.
 ---
 
 # Draft Review Comments
 
 Turn a set of review findings into a **PENDING (draft) GitHub PR review** composed of
-**separate inline comments** anchored to lines in the diff. Each comment can open with an
-AI-assisted disclosure and embed GitHub permalinks (deep links) that render as code snippets.
+**separate inline comments** anchored to lines in the diff. Each comment holds the finding in a
+collapsed block labeled with the model, leaving room above it for the user's own words, and can
+embed GitHub permalinks (deep links) that render as code snippets.
 
 The review stays a draft (visible only to its author) until submitted, so the user can edit
 or discard it on the PR page first.
@@ -109,11 +110,14 @@ overstate certainty, or claim verification you didn't do. Verify facts,
 anchors, and patches before posting. Use plain sentences; don't repeat the
 same point under each label.
 
-Start every AI-assisted finding with this disclosure callout, verbatim. Do not reword it:
+Put the whole finding in a collapsed `<details>` block labeled with the model and reasoning
+level from `PI_MODEL` and `PI_REASONING_LEVEL`, the same label the `pr-description` skill uses.
+Write nothing above the block: the user writes their own words there before submitting, so
+don't add a placeholder. Keep the blank lines inside the block so GitHub renders the Markdown.
 
 ```markdown
-> [!NOTE]
-> Beep boop. AI-assisted review. Not my own words, but I reviewed and independently verified this finding.
+<details>
+<summary>claude-opus-5-5 medium</summary>
 
 **Finding: <short title>.**
 
@@ -124,7 +128,11 @@ Start every AI-assisted finding with this disclosure callout, verbatim. Do not r
 **Impact:** ...
 
 **Suggested fix:** ...
+
+</details>
 ```
+
+Put any `suggestion` block after `</details>` so it stays visible without expanding the finding.
 
 Write each body to its own file (e.g. `/tmp/f1.md`, `/tmp/f2.md`) to avoid shell-escaping issues.
 
