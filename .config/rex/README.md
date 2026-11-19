@@ -11,16 +11,17 @@ All keys below follow `Ctrl+a`:
 | `c` | New tab |
 | `\|`, `\` | Split right, split down |
 | `n`, `p`, `1`–`9` | Next, previous, numbered tab |
-| `{`, `}` | Move pane left, right |
+| `{`, `}` | Swap pane with previous, next in layout order, wrapping (tmux `swap-pane`) |
 | `,`, `$` | Rename tab, session |
-| `x`, `&` | Close pane, tab |
+| `x`, `&` | Close pane, tab; `&` on a worktree's tab offers to remove the worktree |
 | `m` | Zoom pane |
-| Arrows | Resize by 5% of split and enter resize mode; arrows keep resizing until Escape or Enter |
 | `h/j/k/l`, `o` | Focus direction, next pane |
-| `s`, `O` | Session picker (same as Cmd+K) |
+| `s`, `O` | Session picker; opens the session on its first tab (Cmd+K keeps the last tab) |
 | `/` | Find |
+| `[` | Copy mode |
+| `u` | URLs in the pane, in a floating layer |
 | `g` | Lazygit in a 90% floating layer; quit Lazygit to close |
-| `W` | Activity picker: programs that report a status, most urgent first; Enter jumps to the pane |
+| `w` | Worktree picker: switch to a worktree or branch, or create one |
 | `A` | Aven tasks across all projects in a 90% floating layer |
 
 `themes/` holds the official Catppuccin Ghostty themes. Rex follows the system
@@ -37,12 +38,9 @@ scrollback limit (about 64 MiB).
 
 ## Worktrees
 
-`worktrees.lua` gives each [worktrunk](https://worktrunk.dev) worktree its own
-window in the current session, with Neovim and Pi side by side.
-`wt switch -c <branch>` and `wt remove` open and close windows through the
-`open_dir` and `close_dir` hooks in `~/.config/worktrunk/config.toml`.
-
-## Pickers
-
-`pickers/` holds the fzf activity picker on `W`. `status.lua` lists programs
-that report a status, and `go.lua` shows a pane in the app.
+[workmux](https://workmux.dev/guide/rex/) gives each worktree its own window in
+the current session, with the Neovim and Pi layout from
+`~/.config/workmux/config.yaml`. `workmux add`, `open` and `remove` work from
+any Rex terminal. The `w` and `&` bindings in `worktrees.lua` run workmux and
+show the window themselves, so they don't need Remote Control. Switching
+windows from the CLI does.
