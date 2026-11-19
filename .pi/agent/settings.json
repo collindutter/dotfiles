@@ -1,6 +1,6 @@
 {
   "$schema": "https://pi.dev/schemas/settings.schema.json",
-  "lastChangelogVersion": "1.5.0",
+  "lastChangelogVersion": "1.5.2",
   "defaultProjectTrust": "always",
   "defaultProvider": "anthropic",
   "defaultModel": "claude-opus-5-5",
@@ -61,11 +61,8 @@
     "+codemode"
   ],
   "extensionChangelogVersions": {
-    "{\"source\":\"git:github.com/nicobailon/pi-subagents@main\",\"scope\":\"user\"}": "0.87.0"
+    "{\"source\":\"git:github.com/nicobailon/pi-subagents@main\",\"scope\":\"user\"}": "0.89.0"
   },
   "showHardwareCursor": true,
-  "terminal": {
-    "showImages": false
-  },
   "tuiMode": "regular"
 }
