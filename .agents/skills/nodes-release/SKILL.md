@@ -8,12 +8,23 @@ description: Release Griptape Nodes from local checkouts, from the engine (gript
 A release goes through four repos. Each later layer installs the earlier ones
 by an exact version pin:
 
-| Stage | Repo | Local checkout | Publishes | Pinned by |
-| --- | --- | --- | --- | --- |
-| 1 | `griptape-nodes-engine` | `~/Projects/griptape/griptape-nodes` | `griptape-nodes-engine` on PyPI, Docker images | the app's `pyproject.toml` |
-| 1 | `griptape-vsl-gui` (editor) | `~/Projects/griptape/griptape-vsl-gui` | the hosted editor and parent app, `griptape-nodes-editor-dist` on PyPI, `@griptape-ai/nodes-editor-dist` and `@griptape-ai/nodes-manage-ui` on GitHub Packages | the app's `editor` extra, the desktop's `package.json` |
-| 2 | `griptape-nodes-app` (private) | `~/Projects/griptape/griptape-nodes-app` | `griptape-nodes` wheels on PyPI | the desktop's `src/common/config/versions.ts` |
-| 3 | `griptape-nodes-desktop` | `~/Projects/griptape/griptape-nodes-desktop` | installers and the Velopack auto-update feed in S3 | nothing |
+| Stage | Repo | Publishes | Pinned by |
+| --- | --- | --- | --- |
+| 1 | `griptape-nodes-engine` | `griptape-nodes-engine` on PyPI, Docker images | the app's `pyproject.toml` |
+| 1 | `griptape-vsl-gui` (editor) | the hosted editor and parent app, `griptape-nodes-editor-dist` on PyPI, `@griptape-ai/nodes-editor-dist` and `@griptape-ai/nodes-manage-ui` on GitHub Packages | the app's `editor` extra, the desktop's `package.json` |
+| 2 | `griptape-nodes-app` (private) | `griptape-nodes` wheels on PyPI | the desktop's `src/common/config/versions.ts` |
+| 3 | `griptape-nodes-desktop` | installers and the Velopack auto-update feed in S3 | nothing |
+
+## Requirements
+
+- A local checkout of each repo you release, with `origin` pointing at
+  `griptape-ai/<repo>`. Checkout directory names vary, so ask the user where
+  each one is if it isn't obvious. Commands below write it as `<engine>`,
+  `<editor>`, `<app>` and `<desktop>`.
+- `gh` (authenticated), `git`, `jq`, `curl`, `make`, `uv`, `mise` and `npm`.
+- An `.npmrc` in the desktop checkout that authenticates to GitHub Packages.
+- Access to the private app repo, and rights to push tags, `release/*`
+  branches and `stable`, and to run release workflows.
 
 The engine and the editor don't depend on each other, so either can go first.
 Don't start a later stage until what it pins is published. A pin to a version
@@ -31,7 +42,7 @@ entries. Pass their allow-empty flag only if the user says to.
 A release is public and can't be taken back. Before each command that tags,
 publishes, or dispatches a release workflow, show the repo, the version, the
 branch and HEAD SHA it runs from, and the exact command. Then ask with
-`ask_user_question` and run it only on an explicit yes. One yes covers one
+the user and wait. Run it only on an explicit yes. One yes covers one
 command. Pushing a branch needs no yes.
 
 ## Start each repo clean
@@ -40,7 +51,7 @@ Each stage works in the local checkout. Before touching one, fetch and switch
 to the branch you'll release from, `main` or the release branch for a patch:
 
 ```bash
-cd ~/Projects/griptape/<checkout>
+cd <checkout>
 git status --short
 git fetch --tags origin
 git switch <branch> && git pull --ff-only
@@ -52,8 +63,7 @@ ship.
 
 ## Pull requests
 
-PRs follow the usual rules: conventional-commit title, `gh pr create --draft`,
-empty body. Each PR needs an approval before it merges.
+Use conventional-commit titles. Each PR needs an approval before it merges.
 
 ## Wait on CI, then check what it published
 
@@ -74,7 +84,7 @@ publishes after PyPI. Check both packages from the desktop checkout, whose
 `.npmrc` authenticates:
 
 ```bash
-cd ~/Projects/griptape/griptape-nodes-desktop
+cd <desktop>
 npm view @griptape-ai/nodes-editor-dist@<version> version
 npm view @griptape-ai/nodes-manage-ui@<version> version
 ```
@@ -85,7 +95,7 @@ If `uv lock` rejects a just-published pin, its index cache is stale. Run
 ## Stage 1: engine
 
 ```bash
-cd ~/Projects/griptape/griptape-nodes
+cd <engine>
 make version/get
 git tag -l 'v*' --sort=-version:refname | head -1
 make changelog
@@ -159,8 +169,10 @@ The desktop's version isn't automated. Use the next minor after the latest
 1. On a branch off `main`, make the bump PR, titled like
    `chore: bump v<desktop>, app to <app>, editor to <editor>`:
    - add `[Unreleased]` entries to `CHANGELOG.md` if it has none. They show in
-     the app's release notes window, so write them for end users: the bundled
-     app version, then the changes they'll notice from every stage;
+     the app's release notes window, so write them for end users. List the
+     bundled app, engine, and editor versions in one line, plus any desktop
+     changes. Don't copy entries from the engine, editor, or app changelogs:
+     those are collected in a separate aggregator changelog;
    - run `npm version --no-git-tag-version <desktop>`, which also rolls
      `[Unreleased]` into the version. It refuses an empty section, but only
      after it has already bumped `package.json`;
