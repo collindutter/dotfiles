@@ -25,8 +25,9 @@ if status --is-interactive
 	fzf_configure_bindings --directory=\cf
 	
 	fish_config theme choose "catppuccin-macchiato"
-	
-	zoxide init fish | source
-	starship init fish | source
+
+	__source_cached zoxide (command -s zoxide) zoxide init fish
+	__source_cached starship (command -s starship) starship init fish --print-full-init
+	# Not cached: mise bakes the current $PATH into its init script.
 	mise activate fish | source
 end
