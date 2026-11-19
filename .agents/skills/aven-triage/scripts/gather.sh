@@ -24,7 +24,9 @@ trap 'rm -f "$tracked"' EXIT
 
 norm='map({url, title, repo: .repository.nameWithOwner, updated: .updatedAt[:10], draft: (.isDraft // false)})'
 
-reviews=$(gh search prs --review-requested=@me --state=open --archived=false --json $fields,isDraft --limit 50 |
+# Direct requests only. Team requests are handed out by auto-assign, and
+# reconcile closes a review task once you aren't directly requested.
+reviews=$(gh search prs "user-review-requested:@me" --state=open --archived=false --json $fields,isDraft --limit 50 |
   jq "$norm | map(. + {kind: \"review\"})")
 mine=$(gh search prs --author=@me --state=open --archived=false --json $fields,isDraft --limit 50 |
   jq "$norm | map(select(.draft | not) | . + {kind: \"my-pr\"})")
